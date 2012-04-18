@@ -77,7 +77,11 @@
   
   With fail-safe, build continues even if integration tests fail. It runs after 
   "package", so if you run "mvn verify", "mvn install", or "mvn deploy", 
-  integration tests will be run along the way. 
+  integration tests will be run along the way.
+  
+  But with mvn-install and mvn-deploy, only integration-test is run and not post-
+  integration tests are run. So, its better to have failsafe:verify goal, which 
+  does pre and post integration test phases as well.
   
   
   ## With tomcat maven plugin:
