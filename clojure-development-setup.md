@@ -244,3 +244,26 @@ Backtrace:
   3:        Compiler.java:6477 clojure.lang.Compiler.eval
 ```
 
+### Auto Complete
+
+See a nice video demo of the feature here:
+[http://www.youtube.com/watch?v=kH0gOE7rj7g](http://www.youtube.com/watch?v=kH0gOE7rj7g)
+
+Install:
+
+    A-x package-list-packages
+
+select `ac-slime` and `auto-complete`
+
+Inside your emacs init file (`~/.emacs` or `~/.emacs.d/init.el`) put
+the following:
+
+```
+(require 'auto-complete-config)
+(add-to-list 'ac-dictionary-directories "~/.emacs.d/dict")
+(ac-config-default)
+
+(require 'ac-slime)
+(add-hook 'slime-mode-hook 'set-up-slime-ac)
+(add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
+```
