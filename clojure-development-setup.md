@@ -4,14 +4,21 @@ This setup uses:
 
 * the latest emacs (24.x as of this writing).  
 * a linux (should be okay for most linuxes)
-* leiningen for building/packaging (like ant/maven)
+* leiningen 2 for building/packaging (like ant/maven)
+
+### Official Documentation References
+
+* [clojure-mode. for A-x clojure-jack-in](https://github.com/technomancy/swank-clojure)
+* [swank cdt. the clojure debugger](http://georgejahad.com/clojure/swank-cdt.html)
+* [Leiningen](https://github.com/technomancy/leiningen)
+* [Marmelade.  To get latest version of clojure-mode](http://marmalade-repo.org/)
 
 ### Leiningen
 
-Now you need to setup `lein`.
+Install
 
 ```bash
-$ cd ~/bin; wget -c https://raw.github.com/technomancy/leiningen/stable/bin/lein; chmod a+x lein; ./lein self-install
+$ cd ~/bin; wget -c https://raw.github.com/technomancy/leiningen/preview/bin/lein; chmod a+x lein; ./lein self-install
 ```
 
 Add `lein` to your path, put a line like the following into `~/.bashrc`:
@@ -28,12 +35,12 @@ install java:
 
 ### Emacs
 
-* Download a developer version of emacs from here:
+* Download latest version of emacs from here:
 
-http://alpha.gnu.org/gnu/emacs/pretest/
+http://gnu.mirror.iweb.com/gnu/emacs/
 
 ```bash
-$ tar xvfz emacs-24.1-rc.tar.gz
+$ tar xvfz emacs-24.1.tar.gz
 $ cd emacs-24.1
 $ ./configure
 $ make
@@ -152,7 +159,88 @@ namespace of that file to switch to.  Press `Enter` to accept.
 Now you can modify your file and the changes will be reflected in your REPL
 
 
-### Notes
+### Debugging
 
-It's a beta release, but it's used because I couldn't get the 23
-version to see the marmelade ELPA repository.
+[ref](http://georgejahad.com/clojure/swank-cdt.html)
+
+To setup debugging, modify your `project.clj`, add: `swank-clojure
+"1.4.0"`, it should look like:
+
+```clojure
+(defproject my-project "1.0.0-SNAPSHOT"
+  :description "FIXME: write description"
+  :plugins [[lein-swank "1.4.4"]] 
+  :dependencies [[org.clojure/clojure "1.4.0"]
+                 [org.clojure/clojure-contrib "1.2.0"]
+                 [swank-clojure "1.4.0"]])
+```
+
+Re-run `lein deps` to get the required libs.  Your directory tree
+should look something like:
+
+```bash
+$ tree
+.
+|-- classes
+|-- lib
+|   |-- cdt-1.2.6.2.jar
+|   |-- clj-stacktrace-0.2.4.jar
+|   |-- clojure-1.4.0.jar
+|   |-- clojure-contrib-1.2.0.jar
+|   |-- debug-repl-0.3.1.jar
+|   `-- swank-clojure-1.4.0.jar
+|-- project.clj
+|-- README
+|-- src
+|   `-- my_project
+|       `-- core.clj
+`-- test
+    `-- my_project
+        `-- test
+            `-- core.clj
+```
+
+Ensure you are using a jdk not a jre.
+
+```bash
+$ java -version
+java version "1.7.0_05"
+Java(TM) SE Runtime Environment (build 1.7.0_05-b05)
+Java HotSpot(TM) 64-Bit Server VM (build 23.1-b03, mixed mode)
+```
+
+Have a file that looks like this:
+
+```clojure
+(ns my-project.core
+  (:use [clojure.set]
+        [swank.cdt]))
+(set-bp clojure.set/difference)
+```
+
+`A-x clojure-jack-in` as usual.  Get your namespace into the REPL with
+`C-c A-p`.  In a REPL now trigger the breakpoint by evaluating the
+following:
+
+```
+my-project.core> (difference #{1 2} #{2 3})
+CDT location is clojure/set.clj:53:0:/home/fenton/projects/tmp/my-project/lib/clojure-1.4.0.jar
+```
+
+You'll get an emacs buffer called: `sldb clojure`, which has the keys
+for (s)tepping, ne(x)ting, etc...
+
+```
+CDT BreakpointEvent in thread Swank REPL Thread
+From here you can: e/eval, v/show source, s/step, x/next, o/exit func
+
+Restarts:
+ 0: [QUIT] Quit to the SLIME top level
+
+Backtrace:
+  0:                set.clj:48 clojure.set/difference
+  1:          NO_SOURCE_FILE:1 my-project.core/eval3027
+  2:        Compiler.java:6511 clojure.lang.Compiler.eval
+  3:        Compiler.java:6477 clojure.lang.Compiler.eval
+```
+
