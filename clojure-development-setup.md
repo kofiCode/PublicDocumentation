@@ -3,15 +3,15 @@
 This setup uses:
 
 * the latest emacs (24.x as of this writing).  
-* a linux (should be okay for most linuxes)
+* arch linux (should be okay for most linuxes)
 * leiningen 2 for building/packaging (like ant/maven)
 
 ### Official Documentation References
 
-* [clojure-mode. for A-x clojure-jack-in](https://github.com/technomancy/swank-clojure)
+* [clojure-mode 1.11.5, for A-x clojure-jack-in](https://github.com/technomancy/swank-clojure)
 * [swank cdt. the clojure debugger](http://georgejahad.com/clojure/swank-cdt.html)
-* [Leiningen](https://github.com/technomancy/leiningen)
-* [Marmelade.  To get latest version of clojure-mode](http://marmalade-repo.org/)
+* [Leiningen 2.0.0-preview6](https://github.com/technomancy/leiningen)
+* [Marmalade.  To get latest version of clojure-mode](http://marmalade-repo.org/)
 
 ### Leiningen
 
@@ -130,16 +130,13 @@ put `[lein-swank "1.4.4"]` into the `:plugins` section of
 `project.clj`, here is a sample:
 
 ```clojure
-(defproject my-project "1.0.0-SNAPSHOT"
+(defproject my-project "0.1.0-SNAPSHOT"
   :description "FIXME: write description"
-  :plugins [[lein-swank "1.4.4"]]                 
-  :dependencies [[org.clojure/clojure "1.4.0"]])
-```
-
-Now pull in dependencies:
-
-```
-$ lein deps
+  :url "http://example.com/FIXME"
+  :license {:name "Eclipse Public License"
+            :url "http://www.eclipse.org/legal/epl-v10.html"}
+  :plugins [[lein-swank "1.4.4"]]
+  :dependencies [[org.clojure/clojure "1.3.0"]])
 ```
 
 ### Emacs
@@ -266,4 +263,7 @@ the following:
 (require 'ac-slime)
 (add-hook 'slime-mode-hook 'set-up-slime-ac)
 (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
+(eval-after-load "auto-complete"
+  '(add-to-list 'ac-modes 'slime-repl-mode))
+
 ```

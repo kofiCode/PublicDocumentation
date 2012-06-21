@@ -173,7 +173,7 @@ namespace there now.
 
 ```
 ;; Auto reload saved source files and send them to the repl
-(defun ed/clojure-compile-on-save (&optional args)
+(defn ed/clojure-compile-on-save (&optional args)
   "Compile with slime on save"
   (interactive)
   (if (and (eq major-mode 'clojure-mode)

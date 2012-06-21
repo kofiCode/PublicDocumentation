@@ -1,172 +1,90 @@
 ### Write XML
 
-Now I want to write XML.  Here is some starting code:
+Now I want to write XML.  Say I want to read the following:
+
+```xml
+<a>
+  <b1>ton</b1>
+</a>
+```
+
+and want to convert it to:
+
+```xml
+<a>
+  <b1>ton</b1>
+  <b2>joey</b2>
+</a>
+```
+
+that is add a `b2` node with the text "joey" after the `b1` node.
+
+Here is the project.clj file I'm using:
+
+```clojure
+(defproject my-project "0.1.0-SNAPSHOT"
+  :description "FIXME: write description"
+  :url "http://example.com/FIXME"
+  :license {:name "Eclipse Public License"
+            :url "http://www.eclipse.org/legal/epl-v10.html"}
+  :plugins [[lein-swank "1.4.4"]]
+  :dependencies [[org.clojure/clojure "1.4.0"]
+                 [org.clojure/data.zip "0.1.0"]
+                 [swank-clojure "1.4.0"]])
+```
+
+The main difference from a standard project AND required for xml
+processing in this example is the line with the `data.zip` in it.
+
+Now in my `src/my-project/core.clj` file I have: 
 
 ```clojure
 (ns my-project.core
-  (:use  :only (attr text xml->)])
   (:require [clojure.xml :as xml]
             [clojure.zip :as zip]
-            [clojure.data.zip.xml :as zd]))
+            [clojure.data.zip.xml :as zd] ))
 
-(def xml-zipper (-> (xml/parse "my.xml")
-                    (zip/xml)))
+(defn zip-str [s] (zip/xml-zip (xml/parse (new org.xml.sax.InputSource (new java.io.StringReader s)))))
+
+(def xml-string "<a><b1>ton</b1></a>")
+(def xml-zipper (zip-str xml-string))
 ```
 
-`my.xml` looks like:
+So here we can see I create a `zipper` out of the xml.
 
-```xml
-<a1>
-  <b1>ton</b1>
-  <b2>
-    <c1>jtr</c1>
-    <c1>cone2</c1>
-    <c2>
-      <d1>dee1</d1>
-      <d2>dee2</d2>
-    </c2>
-    <c3>see3</c3>
-  </b2>
-</a1>
-```
-
-### Get to location in XML
-
-So first I go to where I want to insert XML, say after the first
-`<c1>`.  I do this with:
+Now I need to create a new XML node, so I do the following:
 
 ```clojure
-(zd/xml-> xml-zipper :b2 :c1)
+(def new-node {:tag :b2,
+               :attrs nil,
+               :content ["joey"]})
 ```
 
-This gives me all the `c1`'s.  I can confirm I got here by telling
-`xml->` to give me the text at that location in the REPL:
-
-```clojure
-my-project.core> (zd/xml-> xml-zipper :b2 :c1 zd/text)
-("jtr" "cone2")
-```
-
-Now even if there had only been one `<c1>`, a list of one, I need to
-get it out of the list for the next step, the insertion.
-
-I'll also use the thread first `->` operator, so I can write down the
-steps in top to bottom fashion.
-
-```clojure
-(-> (zd/xml-> xml-zipper :b2 :c1)
-    (first))       ;; the <c1> with the text "jtr"
-```
-
-Now I can begin my navigation with the `clojure.zip` functions,
-`left`, `right`, `up`, `down`, `insert-right`, `insert-left`, etc..
-
-Before we can insert a node we must create one in zipper format, to
-understand the format zippers are in, lets output our zipper:
-
-```
-my-project.core> xml-zipper
-[{:tag :a1, :attrs nil, :content [{:tag :b1, :attrs nil, :content ["ton"]} ...
-```
-
-(truncated for brevity)
-
-So here is a sample xml node:
-
-# THE FOLLOWING DOESN'T WORK PROPERLY
-
-```clojure
-(def new-node {:tag :b,
-              :attrs nil,
-               :content ["joey"] })
-```
-
-So lets just `insert-right` it:
-
-```clojure
-(-> (zd/xml-> xml-zipper :b2 :c1)
-    (first)       ;; the <c1> with the text "jtr"
-    (zip/insert-right new-node))
-```
-
-Finally, we need to return to the root of the zipper, with `zip/root`,
-so finally:
-
-```clojure
-(-> (zd/xml-> xml-zipper :b2 :c1)
-    (first)       ;; the <c1> with the text "jtr"
-    (zip/insert-right new-node)
-    (zip/root))
-```
-
-Lets assign the result to a variable, and then search it to ensure our
-modification worked.
+Now what I do is the following:
 
 ```clojure
 (def new-xml (-> 
-    (zd/xml-> xml-zipper :b2 :c1)
-    (first)       ;; the <c1> with the text "jtr"
-    (zip/insert-right new-node)
-    (zip/root))
+              (zd/xml-> xml-zipper :b1) ;; goto the b1 node
+              (first) ;; pull out the first element from the seq
+              (zip/insert-right new-node) ;; insert the new node to right of this node
+              (zip/root) ;; get back to the root of the xml
+              (zip/xml-zip) ;; convert the result of that back into a zipper
+              ))
 ```
 
-
-
-
-
-
-
-
-
-(-> (zd/xml-> xml-zipper :b2 :c1)(first)(zip/insert-right new-node))
-
-
-
-
-
-become:
-
-```xml
-<f>fenton <b>oliver</b> <b>joey</b> travers</f>
-```
-
-so just adding `<b>joey</b>`, after the peer `<b>oliver</b>`
-
-In the REPL we see that an `xml-zipper` looks like:
-
-```
-my-project.core> (println xml-zipper)
-[{:tag :f, :attrs nil, :content
-  [fenton
-   {:tag :b, :attrs nil, :content [oliver]}
-   travers]} nil]
-```
-*formatted for readability*
-
-So I want to create another node like the one that is `oliver`, which
-should look like:
+Finally lets test the result to pull out the text "joey" from the
+zipper. 
 
 ```clojure
-{:tag :b, :attrs nil, :content [joey]}
-```   
-
-Basically a structmap `{}`, whose keyword `:content` holds a vector
-with the single string `joey`, with two other keywords `:tag` and
-`:attrs`, that are equal to keyword `:b` and value nil, respectively.
-
-I can make this in clojure like so:
-
-```clojure
-(def new-node {:tag :b,
-              :attrs nil,
-              :content ["joey"] })
+(def joey-text (zd/xml-> new-xml :b2 zd/text))
 ```
 
-Now I need to insert this into the `xml-zipper`.  First lets use the
-thread-first operator `->`, so we can write out the steps left to
-right.
-
-```clojure
-(->
+So in the REPL:
 
 ```
+my-project.core> joey-text
+("joey")         
+
+```
+
+TODO: demonstrate writing the xml out to a string.
