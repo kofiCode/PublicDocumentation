@@ -380,6 +380,7 @@ You can modify the configurations by editing the files in
 `/etc/nginx/conf`. (`/etc/nginx/conf/nginx.conf` being the main config
 file.)
 
+<<<<<<< HEAD
 # Solr
 
     # pacman -S jre7-openjdk
@@ -583,4 +584,13 @@ Example for sshd:
     # rc.d {start|stop|restart} sshd
 
 All scripts are kept in the folder: `/etc/rc.d`
+=======
+## VPN
+To download installer, method 1: Open browser and access http://myaccess.oraclevpn.com, after logging in, try to activate AnyConnect, browser would prompt for installation or downloading file which you can run to install; method 2: Goto ftp://obiftp/modules/unlicensed/global/ciscoanyconnect/2.5.3055/linux/ to download the 32bit or 64bit version for installation.
+
+After installation, run /opt/cisco/vpn/bin/vpnui to start the vpn client. However, you may find that after rebooting, the vpn client is broken. What you see is a window just displayed and then disapear very quickly. The solution is to add vpnagentd_init to /etc/rc.conf's DAEMONS section. Reboot or run:
+rc.d start vpnagentd_init.
+
+Then you can enjoy vpn client successfully.
+>>>>>>> d306f67e1ce7abf512393772d6eaa0fb3102ab31
 
