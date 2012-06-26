@@ -196,6 +196,16 @@ C-c C-w c    | List all callers of a given function
 
 [Slime Manual](http://common-lisp.net/project/slime/doc/html/)
 
+## Best Practices
+
+### Source Files
+
+You can provide documentation about your source file like so:
+
+```clojure
+(ns
+```
+
 ## Main method and Java AOT Compile Classes
 
 AOT = Ahead of Time

@@ -13,6 +13,17 @@ This setup uses:
 * [Leiningen 2.0.0-preview6](https://github.com/technomancy/leiningen)
 * [Marmalade.  To get latest version of clojure-mode](http://marmalade-repo.org/)
 
+
+### Overview
+
+Leiningen is a build tool like maven for java, or rake (i think) for
+ruby.  You can use it to publish your jar into maven repositories for example.
+
+Slime is a protocol that lets you communicate from emacs to a
+listening server.  In clojure, we start a swank server, which is the
+clojure REPL process, and connect to it from emacs, speaking 'slime'.
+The net effect is that we can have a REPL inside our emacs editor.
+
 ### Leiningen
 
 Install
@@ -25,10 +36,6 @@ Add `lein` to your path, put a line like the following into `~/.bashrc`:
 
     export PATH=$PATH:~/bin
     
-install rlwrap (needed for arch linux):
-
-    $ sudo pacman -S rlwrap
-
 install java:
 
     $ sudo pacman -S jdk7-openjdk
