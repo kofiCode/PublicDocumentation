@@ -856,6 +856,10 @@ anonymous function that adds three to its parameter. map returns a
 lazy-sequence.
 
     (map #(+ % 3) [2 4 7]) ; -> (5 7 10)
+    
+Here the `#(...)` part is an anonymous function.  The `%` represents
+the current element passed into the function.  So the first argument
+is the function and the second argument is the list.
 
 ### apply
 
