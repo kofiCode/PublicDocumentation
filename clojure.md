@@ -71,6 +71,12 @@ namespace of that file to switch to.  Press `Enter` to accept.
 
 Now you can modify your file and the changes will be reflected in your REPL
 
+### Editing sexp's in Emacs
+
+Check out
+[this good tutorial](http://cl-cookbook.sourceforge.net/emacs-ide.html#Slide-10)
+for learning how to edit sexp's.
+
 ### Use libraries
 
 Here we'll add in the use of an XML library, org.clojure/data.zip "0.1.0".

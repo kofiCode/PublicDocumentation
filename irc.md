@@ -63,3 +63,16 @@ In your irssi, you will see [2:#seneca] [Act:3,4]. What do those number mean? Th
 If 3 is in blue, which mean someone login, logoff, changing status.
 If 3 is white, that's mean conversation is going on in that chat.
 If 3 is pink, meaning you got messenger specificly sent to you plus other reason that might need your attention.
+
+To turn on autologging, this helps if you want to search a chat do:
+
+```
+settings = {
+  core = { real_name = "Fenton Travers"; user_name = "fenton"; nick = "fenton"; };
+  "fe-text" = { actlist_sort = "refnum"; scrollback_time = "48h"; };
+  "fe-common/core" = { autolog = "yes"; };
+};
+```
+
+Where the key elements are: `scrollback_time = "48h";` and
+`"fe-common/core" = { autolog = "yes"; };`
