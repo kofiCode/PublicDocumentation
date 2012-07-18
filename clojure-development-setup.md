@@ -42,18 +42,9 @@ install java:
 
 ### Emacs
 
-* Download latest version of emacs from here:
+Get the package.el file from
 
-http://gnu.mirror.iweb.com/gnu/emacs/
-
-```bash
-$ tar xvfz emacs-24.1.tar.gz
-$ cd emacs-24.1
-$ ./configure
-$ make
-$ sudo make install
-$ emacs-24.1 &
-```
+http://marmalade-repo.org/
 
 Now you must put the following into either `~/.emacs` or
 `~/.emacs.d/init.el`:

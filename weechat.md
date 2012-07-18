@@ -22,6 +22,8 @@ To auto-join channels, do:
 
 Where `#clojure,...` are the names of the channels u want to autojoin.
 
+## Identify
+
 Some networks require you to register before you can post questions.
 You do this by doing:
 
@@ -31,13 +33,21 @@ You must replace PASSWORD with a password of your choice and EMAIL
 with a VALID email address. It must be valid as some networks like you
 to verify it exists by sending you an email. Once you have registered
 your nick, when you come back to the network you must identify
-yourself, you can do this with these commands..
 
     /msg nickserv identify PASSWORD 
 
 OR 
 
     /nickserv identify PASSWORD (should work, does on most networks) 
+
+To run a command after connection to server, for example to identify
+with nickserv:
+
+    /set irc.server.freenode.command "/msg nickserv identify gumnuts8"
+
+yourself, you can do this with these commands..
+
+## Tab Shortcut nicknames
 
 To message someone, do first letter then <TAB> complete it out their
 nick to save you typing it.
