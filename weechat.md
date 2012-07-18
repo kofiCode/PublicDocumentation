@@ -74,5 +74,8 @@ To filter joins/parts/quits:
 
     /filter add joinquit * irc_join,irc_part,irc_quit *
 
+To add proxy server:
 
+    /proxy add myproxy http sample.host.org 8888
+    /set irc.server.freenode.proxy "myproxy"
 
