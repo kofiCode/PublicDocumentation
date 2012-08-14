@@ -43,3 +43,30 @@ with:
 ```clojure
 (map-indexed (fn [i s] [i s]) my-list)
 ```
+
+but maybe I'd like to find out which order a given item was, I might
+want to do something like:
+
+```clojure
+user> (my-collection :deer)
+1
+```
+
+That is find out that `deer` is the 2nd item.  So lets see how we
+could do this.  `map-indexed` will pair up each item with a number,
+but now we need to turn that into a record, so lets build up to that. 
+
+We can turn the strings into keywords using the `keyword` function.
+
+```clojure
+user> (map-indexed (fn [i s] [i (keyword s)]) my-list)
+([0 :human] [1 :deer] [2 :berry])
+```
+
+Now lets destructure this with the `flatten` function.
+
+```clojure
+user> (flatten (map-indexed (fn [i s] [i (keyword s)]) my-list))
+(0 :human 1 :deer 2 :berry)
+```
+
