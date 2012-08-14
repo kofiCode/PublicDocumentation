@@ -1055,6 +1055,13 @@ cannot be removed from instances.
 for loops:
 
 ```
+(for [the-current-element the-list-of-elements]
+  ; your code)
+```
+
+example:
+
+```
 (for [word ["the" "quick" "brown" "fox"]]
   (format "<p>%s</p>" word))
 ("<p>the</p>" "<p>quick</p>" "<p>brown</p>" "<p>fox</p>")
@@ -1509,3 +1516,32 @@ Pragmmatic Programming Clojure, recommends:
    out the lazy-xml and zip-filter/xml libraries in clojure-contrib."
    
 
+# Troubleshooting
+
+
+Goal:
+
+Try to run `clojure-jack-in` in a clojure source file and get the
+following error:
+
+Error:
+
+```
+Debugger entered--Lisp error: (error "Could not start swank server: /bin/bash: lein: command not found
+")
+  signal(error ("Could not start swank server: /bin/bash: lein: command not found\n"))
+  error("Could not start swank server: %s" "/bin/bash: lein: command not found\n")
+  clojure-jack-in-sentinel(#<process swank> "exited abnormally with code 127\n")
+```
+
+Diagnosis:
+
+We have a method: `set-exec-path-from-shell-PATH` that puts your shell
+path into the execution path that Emacs uses...so it will find
+`lein`.  However, I didn't have my home directory on the PATH, and the
+method: `shell-command-to-string` executes the login and non-login
+scripts, including `.profile`, etc..., however, it must be able to
+find these on the path...so `.profile` is called and the path is set.
+`.bashrc` is called which references `.bash_aliases`, which if not
+defined in the path in `.profile` will throw an error and this
+function will not successfully execute.
