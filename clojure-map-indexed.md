@@ -29,7 +29,7 @@ arguments.
 So if we have a list of strings like so:
 
 ```clojure
-(def my-list '("human" "deer" "berries"))
+(def my-list '("human" "deer" "berry"))
 ```
 
 We could generate:
@@ -69,4 +69,71 @@ Now lets destructure this with the `flatten` function.
 user> (flatten (map-indexed (fn [i s] [i (keyword s)]) my-list))
 (0 :human 1 :deer 2 :berry)
 ```
+
+We can use the `hash-map` function to turn the above into a hashmap,
+but first we need to put the key first, and value second!
+
+```clojure
+user> (flatten (map-indexed (fn [i s] [(keyword s) i]) my-list))
+(:human 0 :deer 1 :berry 2)
+```
+
+Next `hash-map` works like this:
+
+```clojure
+user> (hash-map :key1 "val1" :key2 "val2")
+{:key2 "val2", :key1 "val1"}
+```
+
+But we have:
+
+```clojure
+(:human 0 :deer 1 :berry 2)
+```
+
+not
+
+```clojure
+:human 0 :deer 1 :berry 2
+```
+
+So we need to strip off the parens, this is where the `apply` function
+comes in handy.  It takes two args, a function and a sequence, and
+then turns the sequence into a simply argument list.  So visually, it becomes:
+
+```clojure
+(hash-map :human 0 :deer 1 :berry 2)
+```
+
+instead of:
+
+```clojure
+(hash-map (:human 0 :deer 1 :berry 2))
+```
+
+which won't work.  So lets write that out properly.
+
+```clojure
+user> (def my-keyvals (flatten (map-indexed (fn [i s] [(keyword s) i]) my-list)))
+#'user/my-keyvals
+user> my-keyvals
+(:human 0 :deer 1 :berry 2)
+user> (apply hash-map my-keyvals)
+{:berry 2, :human 0, :deer 1}
+```
+
+Lets assign it to a variable and demonstrate using it:
+
+```clojure
+user> (def my-struct (apply hash-map my-keyvals))
+#'user/my-struct
+user> my-struct
+{:berry 2, :human 0, :deer 1}
+user> (:deer my-struct)
+1
+```
+
+Okay now on to the 
+
+
 
