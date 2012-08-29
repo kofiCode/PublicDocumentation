@@ -100,3 +100,74 @@ Hello, World!
 ```
 
 Lets create a simple java project that drives this library.
+
+```bash
+projects $ mvn archetype:create -DgroupId=com.oracle.git.middleware -DartifactId=aps-cx-driver
+```
+
+Lets install our library to our local maven repo:
+
+```bash
+aps-cx $ lein install
+Compiling com.oracle.git.aps.ApsController
+Compilation succeeded.
+Created /home/fenton/projects/aps-cx/target/aps-cx-0.1.0-SNAPSHOT.jar
+Wrote /home/fenton/projects/aps-cx/pom.xml
+```
+
+Check that its there:
+
+```bash
+aps-cx $ ls -l ~/.m2/repository/com/oracle/git/middleware/aps-cx/0.1.0-SNAPSHOT/
+total 20K
+-rw-r--r-- 1 fenton users 6.8K Aug 28 12:40 aps-cx-0.1.0-SNAPSHOT.jar
+-rw-r--r-- 1 fenton users 2.0K Aug 28 12:40 aps-cx-0.1.0-SNAPSHOT.pom
+-rw-r--r-- 1 fenton users  717 Aug 28 12:40 maven-metadata-local.xml
+-rw-r--r-- 1 fenton users  182 Aug 28 12:40 _maven.repositories
+```
+
+Lets reference this in the `pom.xml` of our Java driver program:
+
+```xml
+<project ... >
+  ...
+  <dependencies>
+    ...
+      <dependency>
+      <groupId>com.oracle.git.middleware</groupId>
+      <artifactId>aps-cx</artifactId>
+      <version>0.1.0-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
+</project>
+```
+
+Lets setup the project so we can import into eclipse:
+
+```bash
+aps-cx-driver $ mvn eclipse:eclipse
+```
+
+In our Java driver we ensure to include at least the following:
+
+```java
+import com.oracle.git.aps.ApsController;
+void doIt() {
+  String [] args = new String[0];
+  ApsController.main(args);
+}
+```
+
+Now lets turn these into instance methods, not just the main method!
+Add instance and static methods.  Rewrite ApsController to look like:
+
+```clojure
+(ns com.oracle.git.aps.ApsController
+  (:gen-class
+   :methods [[fenton [String] String]
+             #^{:static true} [foo [int] String]] ))
+(defn -fenton [this name] (str "Hello " name))
+(defn -foo [nmbr] (str "Hello " nmbr))
+```             
+
+Thats it for now!
