@@ -62,3 +62,14 @@ this.getClass().getClassLoader().getResourceAsStream("test.txt");
 ```
 
 Finds the file no problem.  So whats the problem?
+
+Here is the answer from google groups:
+
+slurp is happy to slurp from a URL, no need for the (.getFile) call on 
+the resource. In other words, the file returned for a resource that's 
+been compiled into a jar isn't very useful. Stick with the URL 
+returned bye clojure.java.io/resource. 
+
+Dave 
+
+https://groups.google.com/forum/?fromgroups=#!topic/clojure/Q-C83MrvNCE

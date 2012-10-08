@@ -1,0 +1,1 @@
+pacman -S sudo alsa-utils xorg-server xorg-xinit xorg-server-utils mesa xorg-twm xorg-xclock xterm ttf-dejavu weechat chromium ghc transmission-gtk thunderbird evince nautilus tree git libreoffice emacs eclipse
