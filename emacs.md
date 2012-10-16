@@ -428,3 +428,70 @@ notmuch is, like, [0] an emacs mail-reader frontend over a xapian database; see 
 11:46:56     krishnab | @fenton It took me a few tries, but I got it to work. I have many IMAP gmail email addresses, so it works pretty good with those. I think I tried setting it up for one address first   │ b0ef
                       | and got it working. Then I added extra addresses. I think I modeled my final config files based on http://www.gnumonk.com/my-config/my-emacs . Just make the appropriate changes based  │ barik
                       | on your own config.  
+                      
+                      
+# Use Cases
+
+## Kill whole sentence in text mode.
+
+So there are two functions `kill-sentence`, and
+`backwards-kill-sentence` but I want a single function that executes
+both action, and I want to map that to a key in the text-mode.
+
+First lets look at how to bind a key in a certain major-mode.
+
+```lisp
+(add-hook 'html-mode-hook
+ (lambda ()
+ (local-set-key (kbd "C-c w") 'bold-word)
+ (local-set-key (kbd "C-c b") 'blue-word)
+ (local-set-key (kbd "C-c p") 'insert-p)
+ (local-set-key (kbd "M-4") 'tag-image)
+ (local-set-key (kbd "M-5") 'wrap-url)
+ )
+)
+```
+
+I want to bind this function to the key combo: `M-k` or `Alt-k`.  So
+maybe i should make a function from these two functions now.
+
+Here is an example:
+
+```lisp
+(defun multiply-by-seven (number)
+     "Multiply NUMBER by seven."
+     (* 7 number))
+```
+
+So we might do something like:
+
+```lisp
+(defun kill-whole-sentence ()
+  (backwards-kill-sentence)
+  (kill-sentence))
+```
+
+However, in order for a function to be 'callable' it needs to be a
+'command' or 'interactive' function.  We remedy this by inserting the
+`interactive` keyword:
+
+```lisp
+(defun kill-whole-sentence ()
+  (interactive)
+  (backwards-kill-sentence)
+  (kill-sentence))
+```
+
+Now typing: `M-x kill-whole [TAB]` reveals that this function is
+defined.
+
+Now lets assign it properly with:
+
+
+```lisp
+(add-hook 
+ 'text-mode-hook
+ (lambda ()
+   (local-set-key (kbd "M-k") 'kill-whole-sentence)))
+```
+
