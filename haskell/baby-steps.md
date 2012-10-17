@@ -45,8 +45,6 @@ module Main () where
 import First
 main =  do c <- getChar
 putChar c
-
-
 ```
 
 
