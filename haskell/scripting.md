@@ -1,5 +1,60 @@
 # Shell Scripting with Haskell for Newbies
 
+## Problems & Solutions
+
+### Installation of Arch OS
+
+I have been installing my OS, Arch Linux, many times lately and I
+wanted to write some scripts to speed up the process.  Here is a
+sample of some bash code I used:
+
+```bash
+#!/bin/bash
+
+function install_yaourt_package {
+    local package_name=$1
+    local package_prefix=$2
+    local yaourt_url="${package_prefix}/${package_name}/${package_name}.tar.gz"    
+    cmd="wget http://aur.archlinux.org/packages/${yaourt_url}"
+    eval $cmd
+
+    cmd="tar xvfz ${package_name}.tar.gz"
+    eval $cmd
+
+    cmd="cd $package_name"
+    eval $cmd
+
+    su $USER
+    makepkg -s
+    exit
+
+    cmd="sudo pacman -U ${package_name}${package_query_version}_x86_64.pkg.tar.xz"
+    eval $cmd
+
+    cd
+}
+
+package_name="package_query"
+package_prefix="pa"
+install_yaourt_package $package_name $package_prefix
+
+package_name="yaourt"
+package_prefix="ya"
+#install_yaourt_package $package_name $package_prefix
+```
+
+This package has some issues, but lets just try to accomplish each
+step.  First thing is we want to identify an AUR package and download
+it with `wget`.
+
+First stop was the Systems Programming chapter from Real World
+Haskell.  They mention using something like:
+
+:module System.Cmd
+ghci> rawSystem "ls" ["-l", "/usr"]
+
+### Wifi Networks
+
 I have a problem where I scan for wireless networks with the `iw`
 command.  This command returns a lot of junk and I want to parse it
 and present it in a way that is useful for me.  Perhaps later
