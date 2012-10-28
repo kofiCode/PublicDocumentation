@@ -71,8 +71,8 @@ so lets give this one a try:
 
 ```haskell
 main = do 
-  a <- readProcess "ls" ["-l", "/usr"] []
-  print a
+  dirList <- readProcess "ls" ["-l", "/usr"] []
+  print dirList
   return ()
 ```
 
@@ -88,7 +88,7 @@ $ Main
 
 Something very tricky just transpired!  The `<-` operator converted an
 `IO String` to a `String`, something that a lot of documentation says
-you CAN'T do.  The reason you can do it, is that we are already in a
+you CAN'T do.  The reason you can do it, is that we are already in dirList
 function that will return an `IO ()`.
 
 It's very important for you to see how we just moved from an IMPURE,
@@ -104,8 +104,8 @@ a few ways to find information about functions:
 * From GHCI: `:info lines` or `:i lines` for short.
 
 ```haskell
-  a <- readProcess "ls" ["-l", "/usr"] []
-  myLines = lines a
+  dirList <- readProcess "ls" ["-l", "/usr"] []
+  myLines = lines dirList
   return ()
 ```
 
@@ -200,13 +200,82 @@ main = do
 ...
 ```
 
+So back to our problem:
 
+```haskell
+  dirList <- readProcess "ls" ["-l", "/usr"] []
+  myLines = lines dirList
+  return ()
+```
 
+again the error message:
 
+```bash
+ $ ghc Main.hs
+Main.hs:7:11: parse error on input `='
+```
 
+Well whats the type of: `lines a`?
 
+```haskell
+> :i lines
+lines :: String -> [String]
+```
 
+There is no `IO` to be seen anywhere, so it breaks down.  We need to
+replace it with a function that returns a type of: `IO` I guess.  Lets
+try. 
 
+Our original goal was to sum up the file sizes, so lets continue down
+that path.  However, lets go really slow and build up to it!  First,
+lets see the return type of the main function here: `readProcess`:
+
+```haskell
+> :i readProcess
+FilePath -> [String] -> String -> IO String
+```
+
+Remember the bind `>>=` operator removes the contents of the type `IO
+xyz` to just be `xyz`.  So we need to make a function that takes a
+`String` in, and returns an `IO String`.  Lets call it: `dirSpaceUsed`,
+so:
+
+```haskell
+dirSpaceUsed :: String -> IO String
+```
+
+Thats our end goal.  But again, lets go slow!
+
+Lets get some helper functions.  `lines` breaks a long string on line
+separators: `'\n'` for example.  So we'll end up with a list of
+`String`'s, i.e.: `[String]`.
+
+`splitOn`, in the `Data.List.Split` module, splits a string on a given
+character:
+
+```haskell
+> splitOn "," "my,comma,separated,list"
+["my","comma","separated","list"]
+```
+
+However, lines returns a list of `String`s, while splitOn takes only a
+single `String`!  We can use a handy function called `map` which takes a
+function and a list, and applies the function to each element in the
+list, and returns the new list.  So we should be able to do something
+like: 
+
+```haskell
+map (splitOn ",") (lines dirListing)
+```
+
+But I don't think we can write it like this.  Lets use a `where`
+clause, so we can make a bunch of assignments that aid in legibility.
+
+```haskell
+map splitOnComma dirListingLines
+where
+  
+```
 
 
 
