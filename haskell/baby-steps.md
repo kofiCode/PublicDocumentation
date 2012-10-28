@@ -270,11 +270,15 @@ map (splitOn ",") (lines dirListing)
 
 But I don't think we can write it like this.  Lets use a `where`
 clause, so we can make a bunch of assignments that aid in legibility.
+Here is the function I whipped up:
 
 ```haskell
-map splitOnComma dirListingLines
-where
-  
+makeArrayFromDirListing :: String -> [[String]]
+makeArrayFromDirListing dirListing = 
+    map splitOnComma dirListingLines
+    where
+      dirListingLines = lines dirListing
+      splitOnComma = splitOn ","
 ```
 
 
