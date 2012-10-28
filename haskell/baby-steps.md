@@ -354,7 +354,157 @@ time = "08:08" :: String
 name = "bin"
 ```
 
-Okay, it's not perfect, but good enough for now!  Lets recall in
-haskell how to make a data type.
+Well thats a bit long, lets just use filesize and name.  Lets recall
+in haskell how to make a data type.
 
+```haskell
+> data DirEntry = DirEntry String Integer  -- name, filesize
+> myDirEntry = DirEntry "bin" 40960
+> :t myDirEntry
+myDirEntry :: DirEntry
+```
 
+Okay cool!  Now how do we convert that 2D array of strings into a list
+of `DirEntry`'s???  Google to the rescue!  Get the Nth element out of
+a list.  `xs !! n`  So perhaps a function like the following would do
+it: 
+
+```haskell
+makeDirEntry :: [String] -> DirEntry 
+makeDirEntry entry = 
+    DirEntry name filesize
+    where 
+      name = entry !! 8
+      filesize = entry !! 4
+```
+
+but before we go any further, we know this wont work because the
+filesize is still a string, lets confirm this problem in the GHCI. 
+
+```
+Couldn't match type `[Char]' with `Integer'
+Expected type: Integer
+  Actual type: String
+In the second argument of `DirEntry', namely `filesize'
+...
+```
+
+What a great compiler!  Cool...so lets convert the `String` to an
+`Integer`! 
+
+```haskell
+...
+   where 
+      name = entry !! 8
+      filesize = read $ entry !! 4
+```
+
+`read` reads in a string and changes it to the required type, in this
+case an integer.  Lets verify this works in the GHCI:
+
+```haskell
+> :load "/home/fenton/projects/cur-DIR/hBabySteps/Main.hs"
+[1 of 1] Compiling Main             ( /home/fenton/projects/cur-DIR/hBabySteps/Main.hs, interpreted )
+Ok, modules loaded: Main.
+> let dirEntry = ["drwxr-xr-x","3","root","root","40960","Oct","27","08:08","bin"]
+> :t dirEntry
+dirEntry :: [[Char]]
+```
+
+(aside): remember `String` and `[Char]` are the same!
+
+```haskell
+> let myDirEntry = makeDirEntry dirEntry
+> :t myDirEntry
+myDirEntry :: DirEntry
+> show myDirEntry
+<interactive>:42:1:
+    No instance for (Show DirEntry) arising from a use of `show'
+    Possible fix: add an instance declaration for (Show DirEntry)
+    In the expression: show myDirEntry
+    In an equation for `it': it = show myDirEntry
+>
+```
+
+So we successfully created an instance of our type, but it failed when
+we went to `show` it.  The error message guides us on how to fix it
+again.  Here's the fix on the data type declaration:
+
+```haskell
+data DirEntry = DirEntry String Integer deriving (Show) -- name, filesize
+```
+
+and again in the GHCI:
+
+```
+> let dirEntry = ["drwxr-xr-x","3","root","root","40960","Oct","27","08:08","bin"]
+> let myDirEntry = makeDirEntry dirEntry
+> show myDirEntry
+"DirEntry \"bin\" 40960"
+```
+
+Great.  Ok, now lets look at one handy operator, the `$` operator.  It
+basically just means run the function on the right, then apply the
+result to function on the left.  So:
+
+```haskell
+read $ entry !! 4
+```
+
+means get the 5th element from the array entry, remember arrays are
+indexed starting from zero, then `read` it. 
+
+Okay, lets make a function to bring these two functions together:
+
+```haskell
+makeDirEntryList :: [[String]] -> [DirEntry]
+makeDirEntryList twoDarray =
+    map makeDirEntry twoDarray
+```
+
+Applying it:
+
+```haskell
+> let fakeDirList = "drwxr-xr-x   3 root root 40960 Oct 27 08:08 bin\ndrwxr-xr-x 321 root root 36864 Oct 26 12:35 include"
+> let twoDarray = makeArrayFromDirListing fakeDirList
+> let myDirList = makeDirEntryList twoDarray
+> show myDirList
+"[DirEntry \"bin\" 40960,DirEntry \"include\" 36864]"
+```
+
+Now we just need a function that adds up the file sizes, so the
+signature would look something like:
+
+```haskell
+addDirEntries :: [DirEntry] -> Integer
+```
+
+but first lets write a function that extracts the `filesize` from a
+`DirEntry`.  Here we use this nifty function of pattern matching, or
+deconstructing the `DirEntry` data type like so:
+
+```haskell
+dirEntryFileSize :: DirEntry -> Integer
+dirEntryFileSize (DirEntry name filesize) =
+    filesize
+```
+
+We can use the `foldr` or `foldl` functions to sum up a list of
+integers, so lets do this all in a GHCI session:
+
+```haskell
+> :load "/home/fenton/projects/cur-DIR/hBabySteps/Main.hs"
+[1 of 1] Compiling Main             ( /home/fenton/projects/cur-DIR/hBabySteps/Main.hs, interpreted )
+Ok, modules loaded: Main.
+> let fakeDirList = "drwxr-xr-x   3 root root 40960 Oct 27 08:08 bin\ndrwxr-xr-x 321 root root 36864 Oct 26 12:35 include"
+> let twoDarray = makeArrayFromDirListing fakeDirList
+> let myDirList = makeDirEntryList twoDarray
+> let myFileSizeList = map dirEntryFileSize myDirList
+> show myFileSizeList
+"[40960,36864]"
+> sum myFileSizeList
+77824
+```
+
+but this is kind of ugly, we can thread operations together using the
+`.` or `$` operators.  Lets call it the `allTogether` function:
