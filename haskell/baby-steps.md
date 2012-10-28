@@ -154,8 +154,51 @@ The previous example is run in the GHCI environment.  Basically: `(\x
 -> x + 1)` is the anonymous function part.  `4` is the argument to the
 anonymous function.  We start anonymous functions with a `\` because
 it looks a bit like a lambda sign, which is a synonym for anonymous
-function from math.  The next part between `\` and `->` 
+function from math.  The next part between `\` and `->` are the
+arguments, in this case there is just one: `x`.  Finally the part to
+the right of `->` is the function.  In this case we increment our
+argument by one, thus the `5 :: Integer` result.  Okay back to IO!
 
+So we are currently looking at:
+
+```haskell
+ putStrLn "What is your name?" >>= (\_ -> getLine)
+```
+
+`putStrln`... turns into a: `IO ()` as we can see by it's signature,
+and this is applied to: `(\_ -> getLine)`.  The underscore, `_`,
+basically means we dont care what our argument is, basically just
+throw it away.  So lets look at `getLine`:
+
+```haskell
+> :i getLine
+getLine :: IO String
+```
+
+So the value of `getLine` is simply an `IO String`.  Finally we are
+left with:
+
+```haskell
+(\_ -> getLine) >>= (\name -> putStrLn ("Welcome, " ++ name ++ "!"))
+```
+
+We know the left hand side is of type: `IO String`, and the value of
+putStrLn again is:
+
+```haskell
+putStrLn :: String -> IO ()
+```
+
+Well this takes a `String` not a `IO String`!  The bind operator also
+unpackages the monad that it is working with, so `IO String` turns
+into `String`.  This finally results in an `IO ()`, just the type that
+main must evaluate to!  Recall the type of `main`:
+
+```haskell
+main :: IO ()
+main = do
+...
+```
 
 
 
