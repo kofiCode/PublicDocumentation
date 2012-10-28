@@ -265,9 +265,19 @@ list, and returns the new list.  So we should be able to do something
 like: 
 
 ```haskell
-map (splitOn ",") (lines dirListing)
+map (splitOn " ") (lines dirListing)
 ```
 
+Lets remind ourselves what our basic output of `ls` looks like:
+
+```
+drwxr-xr-x   3 root root 40960 Oct 27 08:08 bin
+drwxr-xr-x 321 root root 36864 Oct 26 12:35 include
+```
+
+Of course there is junk we have to worry about above and below, but
+lets keep it simple!  
+  
 But I don't think we can write it like this.  Lets use a `where`
 clause, so we can make a bunch of assignments that aid in legibility.
 Here is the function I whipped up:
@@ -275,18 +285,76 @@ Here is the function I whipped up:
 ```haskell
 makeArrayFromDirListing :: String -> [[String]]
 makeArrayFromDirListing dirListing = 
-    map splitOnComma dirListingLines
+    map splitOnSpace dirListingLines
     where
       dirListingLines = lines dirListing
-      splitOnComma = splitOn ","
+      splitOnSpace = splitOn " "
 ```
 
-
-
-`split` looks like a candidate to break up a line on a delimeter:
+Experimenting with this in the `ghci` we get:
 
 ```haskell
-  myLines = lines a
-  splitter = split (==' ')
-  splitLines = map splitter myLines
+> let fakeDirList = "drwxr-xr-x   3 root root 40960 Oct 27 08:08 bin\ndrwxr-xr-x 321 root root 36864 Oct 26 12:35 include"
+> makeArrayFromDirListing fakeDirList
+[["drwxr-xr-x","","","3","root","root","40960","Oct","27","08:08","bin"],["drwxr-xr-x","321","root","root","36864","Oct","26","12:35","include"]]
 ```
+
+Hey, that looks almost right!  Except there is the weirdness of:
+
+    drwxr-xr-x   3 root root 40960
+    
+getting turned into:
+
+    "drwxr-xr-x","","","3","root","root","40960"
+    
+while:
+
+    drwxr-xr-x 321 root root 36864
+
+got turned into
+
+    "drwxr-xr-x","321","root","root","36864"
+    
+We've got 2 extra "" for the first one.  So I guess what we are
+looking for is to split on any number of white space characters, so
+1 space and 3 spaces are treated the same!  Well it turns out there's
+a function for that!  Thankgs google and hoogle!  It's simply called
+`words`!  So lets try to fix this up:
+
+```haskell
+map words dirListingLines
+where
+  dirListingLines = lines dirListing
+```      
+      
+and reloading into the GHCI:
+
+```haskell
+> let fakeDirList = "drwxr-xr-x   3 root root 40960 Oct 27 08:08 bin\ndrwxr-xr-x 321 root root 36864 Oct 26 12:35 include"
+> makeArrayFromDirListing fakeDirList
+[["drwxr-xr-x","3","root","root","40960","Oct","27","08:08","bin"],["drwxr-xr-x","321","root","root","36864","Oct","26","12:35","include"]]
+```
+
+Much better!!!
+
+Okay, now all we have is a list of list of `String`'s.  Lets turn this
+2 dimensional array of `String`'s into a list of a custom type, lets
+call it a: `directoryEntry`!  It should be something like the
+following pseudo code:
+
+```
+filePermissions = "drwxr-xr-x" :: String
+mysteryField = 3 :: Integer
+owner = "root" :: String
+group = "root" :: String
+fileSize = 40960 :: Integer
+month = "Oct" :: String
+day = 27 :: Integer
+time = "08:08" :: String
+name = "bin"
+```
+
+Okay, it's not perfect, but good enough for now!  Lets recall in
+haskell how to make a data type.
+
+
