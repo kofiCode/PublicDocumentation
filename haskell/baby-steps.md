@@ -129,7 +129,20 @@ the IO Monad, and basically implies that the function has
 side-effects, and therefore isn't a pure function.  
 
 You should have read about the importance of 'pure' functions to
-continue using this tutorial.
+continue using this tutorial.  Once a function is impure, i.e. it's
+return type is of type `IO ...` you cannot wrap that function in
+another function that is pure.  It _taints_ you all the way up the
+function stack calls.  Impure functions can call out to pure
+functions, but pure functions CANNOT call out to impure functions.
+
+Back to our our code, remember this is what we have:
+
+```haskell
+main = do 
+  dirList <- readProcess "ls" ["-l", "/usr"] []
+  print dirList
+  return ()
+```
 
 compiling...
 
@@ -141,19 +154,57 @@ $ Main
 "total 212\ndrwxr-xr-x   3 root root 40960 Oct 27 08:08 bin\ndrwxr-xr ...
 ```
 
-Something very tricky just transpired!  The `<-` operator converted an
-`IO String` to a `String`, something that a lot of documentation says
-you CAN'T do.  The reason you can do it, is that we are already in the
-main function that will return an `IO ()`, so we are not escaping from
+Something very tricky just transpired!  The `<-` operator must have
+converted an `IO String` to a `String`, since from the function
+signature of `print` is:
+
+```haskell
+print :: Show a => a -> IO ()
+```
+
+not:
+
+```haskell
+print :: Show a => IO a -> IO ()
+```
+
+When I was doing my reading, I came across a lot of material that said
+you CANNOT convert from `IO a` to `a`, in fact I make that assertion
+above!  But here we are doing exactly that!  So I was a bit confused.
+Well it turns out that since we are in a function that has side
+effects, remember `main`'s signature:
+
+```haskell
+main :: IO ()
+```
+
+as long as we ultimate evaluate to an `IO ()`, inside the function we
+can wrap and unwrap values from the `IO ()` container.
+
+The main function will return an `IO ()`, so we are not escaping from
 the IO Monad once entered.  We can temporarily escape, but ultimately
 we must go back into it as the method signature demands.
 
-It's very important for you to see how we just moved from an IMPURE,
-step, to a pure step.  Of course ultimately we must go back to
-Monads/impure, etc..., because main must return an `IO ()`.
+So the `<-` in the following line, unwraps the return type of
+`readProcess`, which is `IO String`: 
 
-Moving on.  Lets convert the big string in lines with the `lines`
-function!  Well lets find the definition of `lines` first!!!  
+```haskell
+readProcess :: FilePath -> [String] -> String -> IO String
+```
+
+from the `IO` monad, leaving just `String`, which *IS* a valid input
+for the `print` function.
+
+Back to the task at hand.  `readProcess` returned one large string,
+lets break it up to a list of strings by separating the big string on
+new line characters `\n`.  The `lines` function can do this for us!
+The signature of `lines` is:
+
+```haskell
+lines :: String -> [String]
+```
+
+So lets try to use it:
 
 ```haskell
   dirList <- readProcess "ls" ["-l", "/usr"] []
@@ -161,15 +212,16 @@ function!  Well lets find the definition of `lines` first!!!
   return ()
 ```
 
-But this doesn't work!
+and compiling:
 
 ```bash
  $ ghc Main.hs
 Main.hs:7:11: parse error on input `='
 ```
 
-Damn!  The reason for this is that the `do` notation is syntactic
-sugar, that must be used properly.  Lets look at an example:
+Damn, it doesn't work!  The reason for this is that the `do` notation
+is syntactic sugar, that must be used properly.  Lets look at an
+example:
 
 ```haskell
 do
