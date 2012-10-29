@@ -129,7 +129,8 @@ the IO Monad, and basically implies that the function has
 side-effects, and therefore isn't a pure function.  
 
 You should have read about the importance of 'pure' functions to
-continue using this tutorial.
+continue using this tutorial.  Once a function is impure, i.e. it's
+return type is of type `IO ...` y
 
 compiling...
 
