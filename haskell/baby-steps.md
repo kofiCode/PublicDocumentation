@@ -201,6 +201,7 @@ new line characters `\n`.  The `lines` function can do this for us!
 The signature of `lines` is:
 
 ```haskell
+> :i lines
 lines :: String -> [String]
 ```
 
@@ -593,8 +594,14 @@ dirEntryFileSize (DirEntry name filesize) =
     filesize
 ```
 
-We can use the `foldr` or `foldl` functions to sum up a list of
-integers, so lets do this all in a GHCI session:
+We can use the `sum` function to sum up a list of integers, here is
+the signature:
+
+```haskell
+sum :: Num a => [a] -> a
+```
+
+so lets do this all in a GHCI session:
 
 ```haskell
 > :load "/home/fenton/projects/cur-DIR/hBabySteps/Main.hs"
@@ -611,4 +618,46 @@ Ok, modules loaded: Main.
 ```
 
 but this is kind of ugly, we can thread operations together using the
-`.` or `$` operators.  Lets call it the `allTogether` function:
+`.` or `$` operators.  Lets call it the `sumFileSizes` function:
+
+So here is a complete code listing for now:
+
+```haskell
+import System.Process
+import Data.List.Split 
+
+main :: IO ()
+main = do 
+  dirListing  <- readProcess "ls" ["-l", "/usr"] []
+  dirSize <- sumFileSizes dirListing
+  putStrLn dirSize
+
+data DirEntry = DirEntry String Integer deriving (Show) -- name, filesize
+
+sumFileSizes :: String -> IO String
+sumFileSizes dirListing = return $ show $ sumFileSizeList $ filesizeList $ makeDirEntryList $ makeArrayFromDirListing $ tail dirListing
+
+sumFileSizeList filesizeList = sum filesizeList
+filesizeList myDirList = map dirEntryFileSize myDirList
+
+makeDirEntryList :: [[String]] -> [DirEntry]
+makeDirEntryList twoDarray =
+    map makeDirEntry twoDarray
+
+dirEntryFileSize :: DirEntry -> Integer
+dirEntryFileSize (DirEntry name filesize) =
+    filesize
+
+makeArrayFromDirListing :: String -> [[String]]
+makeArrayFromDirListing dirListing = 
+    map words dirListingLines
+    where
+      dirListingLines = lines dirListing
+
+makeDirEntry :: [String] -> DirEntry 
+makeDirEntry entry =  
+    DirEntry name filesize
+    where 
+      name = entry !! 8
+      filesize = read $ entry !! 4
+```
