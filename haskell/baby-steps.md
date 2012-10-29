@@ -4,6 +4,21 @@ structured.  Pre-requisites are:
 * You've installed Haskell and played with it a bit.
 * You've tried to learn haskell by reading a number of articles but
   still haven't really made much progress
+  
+This tutorial will highlight some common areas where Haskell trips
+newbie's up.  We'll start by writing a trivial program that executes
+the `ls` system command on Unix to get a directory listing.  The
+output from that command looks like:
+
+```bash
+total 212
+drwxr-xr-x   3 root root 40960 Oct 27 08:08 bin
+drwxr-xr-x 321 root root 36864 Oct 26 12:35 include
+drwxr-xr-x 145 root root 90112 Oct 26 12:35 lib
+```
+
+We'll then try to add up the filesizes, above we see three entries
+with sizes of 40, 36 and 90 kB respectively.  Okay lets dive in!
 
 Learn to use some basic system calls.
 
