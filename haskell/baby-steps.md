@@ -57,7 +57,7 @@ that the signature to rawSystem is:
 rawSystem :: String -> [String] -> IO ExitCode
 ```
 
-but we know main must return `IO ()`.  Well putting in: `return ()`
+but we know main must return `IO ()`.  Putting in: `return ()`
 
 ```haskell
 main = do 
@@ -65,7 +65,7 @@ main = do
   return ()
 ```
 
-lets it compile:
+and compile it:
 
 ```bash
 $ ghc Main.hs
@@ -83,6 +83,15 @@ into some type of data structure, do some analysis, then print out a
 result right?  Why don't we sum the file sizes, so mimic the `du -sh`
 command? 
 
+Throughout the tutorial I'll be looking up function signatures, so you
+need to know how to do that too.  Here are a few ways to find
+information about functions:
+
+* [Hoogle](http://www.haskell.org/hoogle)
+
+* From GHCI: `:info lines` or `:i lines` for short.
+
+
 At the documentation page, I found a command called: 
 
 ```haskell
@@ -98,6 +107,27 @@ main = do
   return ()
 ```
 
+Lets also look at the signature for `print`
+
+```haskell
+> :i print
+print :: Show a => a -> IO ()
+```
+
+The `Show a =>` part means that `a` must conform to the `Show`
+typeclass.  The `Show` typeclass basically means that the object `a`
+must implement the `toString` method, or be printable, or convertable
+to a string format.
+
+The use of `a` is basically a wildcard for any type.  Much like `x`
+and `y` are the variables in algebra for numbers.  `a` means any
+type.
+
+Finally: `a -> IO ()` means print takes in any type and outputs a type
+of `IO ()`.  `()` is basically null.  The `IO` part is what they call
+the IO Monad, and basically implies that the function has
+side-effects, and therefore isn't a pure function.  
+
 compiling...
 
 ```bash
@@ -110,20 +140,17 @@ $ Main
 
 Something very tricky just transpired!  The `<-` operator converted an
 `IO String` to a `String`, something that a lot of documentation says
-you CAN'T do.  The reason you can do it, is that we are already in dirList
-function that will return an `IO ()`.
+you CAN'T do.  The reason you can do it, is that we are already in the
+main function that will return an `IO ()`, so we are not escaping from
+the IO Monad once entered.  We can temporarily escape, but ultimately
+we must go back into it as the method signature demands.
 
 It's very important for you to see how we just moved from an IMPURE,
 step, to a pure step.  Of course ultimately we must go back to
 Monads/impure, etc..., because main must return an `IO ()`.
 
 Moving on.  Lets convert the big string in lines with the `lines`
-function!  Well lets find the definition of `lines` first!!!  Here are
-a few ways to find information about functions:
-
-* [Hoogle](http://www.haskell.org/hoogle)
-
-* From GHCI: `:info lines` or `:i lines` for short.
+function!  Well lets find the definition of `lines` first!!!  
 
 ```haskell
   dirList <- readProcess "ls" ["-l", "/usr"] []
@@ -176,9 +203,9 @@ The previous example is run in the GHCI environment.  Basically: `(\x
 -> x + 1)` is the anonymous function part.  `4` is the argument to the
 anonymous function.  We start anonymous functions with a `\` because
 it looks a bit like a lambda sign, which is a synonym for anonymous
-function from math.  The next part between `\` and `->` are the
+functions from math.  The next part between `\` and `->` are the
 arguments, in this case there is just one: `x`.  Finally the part to
-the right of `->` is the function.  In this case we increment our
+the right of `->` is the function body.  In this case we increment our
 argument by one, thus the `5 :: Integer` result.  Okay back to IO!
 
 So we are currently looking at:
@@ -237,7 +264,7 @@ again the error message:
 Main.hs:7:11: parse error on input `='
 ```
 
-Well whats the type of: `lines a`?
+Well whats the type of: `lines dirList`?
 
 ```haskell
 > :i lines
@@ -257,10 +284,10 @@ lets see the return type of the main function here: `readProcess`:
 FilePath -> [String] -> String -> IO String
 ```
 
-Remember the bind `>>=` operator removes the contents of the type `IO
-xyz` to just be `xyz`.  So we need to make a function that takes a
-`String` in, and returns an `IO String`.  Lets call it: `dirSpaceUsed`,
-so:
+Remember the bind `>>=` operator unpackages the contents from the type
+`IO xyz` to just be `xyz`.  So we need to make a function that takes a
+`String` in, and returns an `IO String`.  Lets call it:
+`dirSpaceUsed`, so:
 
 ```haskell
 dirSpaceUsed :: String -> IO String
