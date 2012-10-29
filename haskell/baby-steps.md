@@ -1,3 +1,10 @@
+I'm a learn by doing person.  As such, this is how this tutorial is
+structured.  Pre-requisites are: 
+
+* You've installed Haskell and played with it a bit.
+* You've tryed to learn haskell by reading a number of articles but
+  still haven't really made much progress.
+
 Learn to use some basic system calls.
 
 ```haskell
