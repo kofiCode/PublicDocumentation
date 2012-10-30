@@ -106,7 +106,7 @@ so it's result is of type:
 IO ()
 ```
 
-now the bind operator, unpackages this, removing the IO monad,
+now the bind operator, unpackages this, removing the `IO` monad,
 leaving:
 
 ```haskell
@@ -151,7 +151,14 @@ main = do
   c :: String -> IO ()
 ```
 
-so we are in good shape.  Now lets apply this to the real code that we
+great!  Keep in mind that the bind operator only gets inserted between
+the function, so since there is no function after `c` we don't remove
+the `IO` from it's result, we simply understand that `c`'s result is
+the result of the `main` function since it's the last function in the
+`do` block.
+
+
+Now lets apply this to the real code that we
 have at the top:
 
 ```haskell
