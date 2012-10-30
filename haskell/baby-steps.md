@@ -661,3 +661,16 @@ makeDirEntry entry =
       name = entry !! 8
       filesize = read $ entry !! 4
 ```
+
+Compile and run:
+
+```bash
+$ ghc Main.hs
+[1 of 1] Compiling Main             ( Main.hs, Main.o )
+Linking Main ...
+$ ./Main
+Main: Prelude.(!!): index too large
+```
+
+Hmmm...  Well, lets make this code a bit more testable, to see if we
+can figure out whats going on here!
