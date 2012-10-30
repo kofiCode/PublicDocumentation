@@ -5,7 +5,9 @@ proficient at using the IO monad.  I assume some basic programming
 background, and also that you've read some information about *pure*
 functions, and their lack of side-effects.
 
-Lets jump right in.  Examine the following basic haskell code:
+Lets jump right in.  Briefly look at the following basic haskell code,
+by the end of the tutorial you'll understand exactly how this code
+works.  Don't get too concerned about it right now:
 
 ```haskell
 main :: IO ()
@@ -26,9 +28,9 @@ signatures are: _function name_ :: _type signature_.
 
 So we can see that the main function, or expression, evaluates to an
 `IO ()`.  The `()` part is basically equivalent to a null.  The `IO`
-part means the `()` is wrapped in `IO` monad.
+part means the `()` is wrapped in the `IO` monad.
 
-Next lets examine the `do` block.  `do` is syntactic sugar.  Examine
+Next lets examine a `do` block.  `do` is syntactic sugar.  Examine
 the two eqivalent blocks:
 
 ```haskell
@@ -41,13 +43,12 @@ do
 and
 
 ```haskell
-do
   a "hello" >>= b >>= c
 ```
 
 `>>=` is the *bind* operator.  It is an *infix* operator, so it's
 arguments are on the left and right hand sides of it, just like the
-`+` operator in: `a + b`.
+`+` operator in: `1 + 3`.
 
 What the bind operator does, is it takes the value of the expression
 on the left and applies it to the function on the right.  Lets say
