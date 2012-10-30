@@ -51,8 +51,10 @@ arguments are on the left and right hand sides of it, just like the
 `+` operator in: `1 + 3`.
 
 What the bind operator does, is it takes the value of the expression
-on the left and applies it to the function on the right.  Lets say
-that `a`,`b`, and `c` have the following function signatures:
+on the left; this means the result of the LHS or output of the LHS;
+and applies it to the function on the right; i.e. it becomes the
+argument to the function on the RHS.  Lets say that `a`,`b`, and `c`
+have the following function signatures:
 
 ```haskell
 a :: String -> IO ()
@@ -66,7 +68,7 @@ on the other hand doesn't take any arguments, but just results in an
 
 Bind also does one more thing, when it takes the output of the left
 hand side (LHS), say for the case of `a` this would be `IO ()`, it
-unpackages the value from the monad, in our case the IO monad.  So:
+unpackages the value from the monad, in our case the `IO` monad.  So:
 
 ```haskell
 IO ()
