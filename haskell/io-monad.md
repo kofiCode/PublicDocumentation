@@ -1,4 +1,4 @@
-Understanding the IO Monad
+# Understanding the IO Monad
 
 After this tutorial you should understand what you need to know to be
 proficient at using the IO monad.  I assume some basic programming
