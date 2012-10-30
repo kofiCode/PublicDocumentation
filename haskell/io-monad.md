@@ -80,12 +80,11 @@ becomes
 ()
 ```
 
-or just null, not `IO` null.  After bind does this unpackaging, it
+or just null, not `IO ()`.  After bind does this unpackaging, it
 then supplies this to function on the right hand side (RHS).  So lets
 go back to our example and process it step by step
 
 ```haskell
-do
   a "hello" >>= b >>= c
 ```
 
