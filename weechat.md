@@ -18,7 +18,7 @@ Enable auto-connect to server `freenode`, defined above, on startup:
 
 To auto-join channels, do:
 
-    /set irc.server.freenode.autojoin "#emacs,#archlinux,#haskell,#xmonad"
+    /set irc.server.freenode.autojoin "#emacs,#archlinux,#haskell,#xmonad,#yesod"
 
 Where `#clojure,...` are the names of the channels u want to autojoin.
 

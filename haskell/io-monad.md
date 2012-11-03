@@ -1,9 +1,28 @@
 # Understanding the IO Monad
 
+This tutorial aims to show you how to use the IO Monad.  It is
+absolutely not theoretical.  It will help you get past the first
+difficulties you'll have with basic IO, with an understanding
+sufficient to not get completely stuck.
+
+I think this is very useful, because after you have done some initial
+reading you really have to roll up your sleeves and try something.
+Without knowing what the rest of this article teaches, you are going
+to wind up scratching your head.
+
+To me this article should be used very close to the beginning of your
+path on learning haskell.  I'm a firm believer in learning by doing.
+What I find in most haskell tutorials on the monad is they have too
+much theory and too little practical, what you need to get started,
+information.  This is a shame because it needlessly frustrates
+newbies. 
+
 After this tutorial you should understand what you need to know to be
-proficient at using the IO monad.  I assume some basic programming
-background, and also that you've read some information about *pure*
-functions, and their lack of side-effects.
+proficient at using the IO monad.  I'm not going to use the word monad
+for the rest of the tutorial, until the very last paragraph in
+conclusion!  I assume some basic programming background, and also that
+you've read some information about *pure* functions, and their lack of
+side-effects.
 
 Lets jump right in.  Briefly look at the following basic haskell code,
 by the end of the tutorial you'll understand exactly how this code
@@ -27,11 +46,16 @@ is the type signature of the `main` function.  The format of
 signatures are: _function name_ :: _type signature_.
 
 So we can see that the main function, or expression, evaluates to an
-`IO ()`.  The `()` part is basically equivalent to a null.  The `IO`
-part means the `()` is wrapped in the `IO` monad.
+`IO ()`.  The `()` part is basically equivalent to a null, void, nil
+or whatever word you use to mean nothing.  The `IO` part means that
+the `()` is wrapped by the `IO` part.  Lets use the term wrapping,
+instead of prefixing.  So when the word `IO` prefixes another type, we
+say that it is wrapping it.  When the `IO` part gets removed from in
+front of another type, we say it has been *unwrapped*.
 
-Next lets examine a `do` block.  `do` is syntactic sugar.  Examine
-the two eqivalent blocks:
+Next lets examine a `do` block.  `do` is syntactic sugar.  The
+following two blocks are effectively the same, `do` in the first being
+short-hand or syntactic sugar for the second example.
 
 ```haskell
 do
@@ -68,7 +92,7 @@ on the other hand doesn't take any arguments, but just results in an
 
 Bind also does one more thing, when it takes the output of the left
 hand side (LHS), say for the case of `a` this would be `IO ()`, it
-unpackages the value from the monad, in our case the `IO` monad.  So:
+unwraps it, leaving, in this case, just the `()` part.  So:
 
 ```haskell
 IO ()
@@ -80,9 +104,10 @@ becomes
 ()
 ```
 
-or just null, not `IO ()`.  After bind does this unpackaging, it
-then supplies this to function on the right hand side (RHS).  So lets
-go back to our example and process it step by step
+or just null, not `IO ()`.  After bind does this
+unpackaging/unwrapping, it then supplies this to function on the right
+hand side (RHS).  So lets go back to our example and process it step
+by step
 
 ```haskell
   a "hello" >>= b >>= c
@@ -106,8 +131,7 @@ so it's result is of type:
 IO ()
 ```
 
-now the bind operator, unpackages this, removing the `IO` monad,
-leaving:
+now the bind operator, unpackages this, removing the `IO`, leaving:
 
 ```haskell
 ()
@@ -124,7 +148,7 @@ so this is a function that doesn't have any arguments, and just
 evaluates to an `IO String`.  Well kind of appropriate since we were
 only going to pass it a `()`, null, anyway!  So continuing with our
 bind operator, we must now take the output of the `b` function and
-strip the `IO` monad from it, leaving just `String`.
+strip the `IO` from it, leaving just `String`.
 
 So the final part looks like this:
 
@@ -182,9 +206,11 @@ the inputs and outputs proceed.  Just remember the bind operator takes
 the output of the previous line, strips the `IO` part, applies whats
 left as the argument to the next function.
 
+So as promised I didn't use the word monad again until now.  Well
+everywhere you saw `IO` above, that was the `IO` *MONAD*.  
 
-
-
+Next steps, see: [Going Pure](io-monad-2.md) to see how to execute
+pure functions from the `main :: IO ()` impure function.
 
 
 
