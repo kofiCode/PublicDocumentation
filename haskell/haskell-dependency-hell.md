@@ -107,3 +107,17 @@ $ cabal update
 $ cabal install cabal-install
 $ sudo ghc-pkg init /usr/lib/ghc-7.6.1/package.conf.d
 ```
+
+Here's the problem:
+
+```bash
+$ cabal install cabal-install
+Resolving dependencies...
+cabal: Could not resolve dependencies:
+trying: cabal-install-1.16.0.1
+rejecting: base-3.0.3.2 (conflict: base => base>=4.0 && <4.3)
+rejecting: base-3.0.3.1 (conflict: base => base>=4.0 && <4.2)
+rejecting: base-4.6.0.0, 4.5.1.0, 4.5.0.0, 4.4.1.0, 4.4.0.0, 4.3.1.0, 4.3.0.0,
+4.2.0.2, 4.2.0.1, 4.2.0.0, 4.1.0.0, 4.0.0.0 (only already installed instances
+can be used)
+```
