@@ -11,7 +11,14 @@ Before fixing a problem, the problem should be well understood.  The
 next section will articulate the problem.
 
 
-## The Context
+## The Context & Background Info
+
+### Cabal Package
+
+### Darcs
+
+Darcs, is a distributed version control system written in Haskell.  It
+is similar to git.
 
 ### GHC-PKG
 
@@ -37,14 +44,23 @@ All of the code is available on Github . Additionally, there is a
 package on Hackage with the code powering this site both as a library
 and as an executable, so you can test code which is not uploaded to
 the public Hackage server.
- 
 
 
+## Solution in other Domains
+
+### Nix
+
+[Nix](http://nixos.org/): is a purely functional package manager. This
+means that it can ensure that an upgrade to one package cannot break
+others, that you can always roll back to previous version, that
+multiple versions of a package can coexist on the same system, and
+much more.
 
 ## Problem
 
-* [The dreaded diamond dependency](http://www.well-typed.com/blog/9)
+* [The dreaded diamond dependency](http://www.well-typed.com/blog/9) (DDD)
 
+* [Solving the DDD](http://www.well-typed.com/blog/12)
 
 ## Solutions
 
@@ -53,3 +69,41 @@ the public Hackage server.
 cabal-dev, uses sandboxing as a technique
 
 
+## Tips & Techniques
+
+### Reseting your haskell system
+
+#### Remove old
+
+These instructions have been tested only on an Arch Linux system.
+YMMV. 
+
+* Delete `~/.cabal`
+
+```bash
+$ rm -rf ~/.cabal
+```
+
+* Delete the GHC package database folders
+
+First find the folders to delete with:
+
+```bash
+$ ghc-pkg list | grep package.conf.d
+...
+```
+
+Next delete them:
+
+```bash
+$ sudo rm -rf /usr/lib/ghc-7.6.1/package.conf.d
+$ rm -rf ~/.ghc/x86_64-linux-7.6.1/package.conf.d
+```
+
+#### Install fresh
+
+```bash
+$ cabal update
+$ cabal install cabal-install
+$ sudo ghc-pkg init /usr/lib/ghc-7.6.1/package.conf.d
+```
