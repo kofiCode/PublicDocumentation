@@ -78,10 +78,17 @@ cabal-dev, uses sandboxing as a technique
 These instructions have been tested only on an Arch Linux system.
 YMMV. 
 
-* Delete `~/.cabal`
+Remove arch packages:
+
+```bash
+$ sudo pacman -R cabal-install ghc
+```
+
+* Delete `~/.cabal` and `~/.ghc`
 
 ```bash
 $ rm -rf ~/.cabal
+$ rm -rf ~/.ghc
 ```
 
 * Delete the GHC package database folders
@@ -100,11 +107,6 @@ $ sudo rm -rf /usr/lib/ghc-7.6.1/package.conf.d
 $ rm -rf ~/.ghc/x86_64-linux-7.6.1/package.conf.d
 ```
 
-Remove arch packages:
-
-```bash
-$ sudo pacman -R cabal-install ghc
-```
 
 #### Install fresh
 
