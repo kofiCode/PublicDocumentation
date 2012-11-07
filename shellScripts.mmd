@@ -61,6 +61,18 @@ calling function
 
     myFunc "Fenton"
 
+## Looping over an array
+
+```bash
+dirs=("tmp" "src" "dist")
+
+for dir in "${dirs[@]}"
+do
+  echo $dir
+done
+```
+```
+
 ## Capture command output
 
     var=`date`
