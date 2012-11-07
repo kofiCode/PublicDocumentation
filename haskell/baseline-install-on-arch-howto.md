@@ -17,10 +17,9 @@ update cabal and install a new cabal from hackage
 ```bash
 $ cabal update
 $ cabal install cabal-install
-$ cabal install darcs
 ```
 
-gives the following errors:
+trying to install `darcs` gives the following errors:
 
 ```bash
 $ cabal install darcs
