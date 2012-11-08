@@ -2,6 +2,17 @@ Getting a baseline Haskell system up and running on Arch
 
 ```bash
 $ sudo pacman -Syu
+```
+
+Now we can't use the `ghc` from pacman because it is too new.  Other
+dependent packages won't compile with it, like `darcs` for example.
+
+Download `ghc` version: 7.4.2 from:
+
+[http://www.haskell.org/ghc/](http://www.haskell.org/ghc/)
+
+```bash
+$ wget http://www.haskell.org/ghc/dist/7.4.2/ghc-7.4.2-x86_64-unknown-linux.tar.bz2
 $ sudo pacman -S ghc cabal-install
 ```
 
