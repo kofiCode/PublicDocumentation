@@ -50,7 +50,7 @@ Say I have three folders, like so:
 `-- proj1-joe
 ```
 
-Initially proj1-bob and proj1-joe are identical clones of a git
+Initially `proj1-bob` and `proj1-joe` are identical clones of a git
 repository.  Then I add and commit a binary file to `proj1-bob`, and
 want to create a patch that can be applied to `proj1-joe` to bring
 them back into sysc.
