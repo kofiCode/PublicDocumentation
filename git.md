@@ -38,58 +38,22 @@ bit more legible.
 $ git log --stat -3 --pretty=format:"%h%x09%an%x09%ad%x09%s"
 ```
 
+# git bundle
 
-## patch file with binary
+if you want to keep two repos in sync but cannot use ssh or some other
+protocol to do so directly, you can use git bundle to help out.
 
-Say I have three folders, like so:
-
-```
-..
-|-- proj1-bob
-|-- patch
-`-- proj1-joe
-```
-
-Initially `proj1-bob` and `proj1-joe` are identical clones of a git
-repository.  Then I add and commit a binary file to `proj1-bob`, and
-want to create a patch that can be applied to `proj1-joe` to bring
-them back into sync.
+Create your bundle:
 
 ```
-proj1-bob $ git format-patch -1 --binary --full-index
+$ git bundle create my.bundle HEAD
 ```
 
-This gets the last commit: `-1`.  Now I copy the resulting file:
-0001-.patch to the folder `patch`.
+This creates a bundle called `my.bundle`, now email this to the other
+person who applies it to their repo with:
 
 ```
-proj1-bob $ cp 0001-.patch ../patch
-```
-
-Now from the `proj1-joe` folder I attempt to apply the patch.
-
-```
-proj1-bob $ cd ../proj1-joe
-proj1-joe $ git am ../patch/0001-.patch
-```
-
-Unfortunately it doesn't work.  You can see the commit hashes are
-different for the two git repositories! :(
-
-```
-proj1-joe $ git log -2 --oneline
-d141317 .
-aa9d9ba .
-```
-
-`proj1-bob` still has one more commit than joe!
-
-```
-proj1-joe $ cd ../proj1-bob
-proj1-bob $ git log -3 --oneline
-2fd4a6d .
-d141317 .
-aa9d9ba .
+$ git pull my.bundle
 ```
 
 # Go back in time
