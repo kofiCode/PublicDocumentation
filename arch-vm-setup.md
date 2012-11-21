@@ -54,4 +54,25 @@ $ chmod 600 .ssh/config .ssh/id_rsa
 $ git pull origin master
 $ mkdir projects; cd projects;
 $ git clone ft_git3@spicevan.com:documentation.git
+$ cd documentation
+$ ./arch-packages.md 
+$ cd
+$ scp ftravers@spicevan.com:/home/ftravers/ssh.tgz .
+$ tar xvfz ssh.tgz
+$ chmod 600 .ssh/config .ssh/id_rsa
+$ sudo pacman -S xf86-video-vesa
+$ sudo systemctl enable slim.service
+```
+
+modify `/etc/slim.conf` with the following:
+
+```
+default_user        fenton
+auto_login          yes
+```
+
+reboot
+
+```bash
+$ sudo reboot
 ```
