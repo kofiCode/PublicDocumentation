@@ -25,6 +25,38 @@ $@              | list of all parameters
 | ------------- | ---------------------------------- |
 shift           | shift command line arguments to the left, ie $1 becomes the value of $2, $3 shifts into $2, etc. The command, "shift 2" will shift 2 places meaning the new value of $1 will be the old value of $3 and so forth.
 
+## Testing
+
+[Ref](http://tldp.org/LDP/abs/html/comparison-ops.html)
+
+String comparison operators: `==`, and `!=`
+
+```
+if [ "$var" == "" ]
+   echo variable is null
+fi
+```
+
+Integer comparison operators: `-eq`, `-ne`, `-gt`, `-lt`, `-ge`,
+`-le`.  Equal, not equal, greater than, less than, greater than or
+equal to, less than or equal to.
+
+Test if command was passed any arguments
+
+```
+if [ $# -gt 0 ]
+```
+
+File testing operators: 
+
+Op | Meaning
+-- | -------------
+-e | file exists
+-f | file is a regular file (not a directory or device file)
+-s | file is not zero size
+-d | file is a directory
+
+
 ## Iteration, control and if statements
 
     case $NUM of
@@ -71,7 +103,6 @@ do
   echo $dir
 done
 ```
-```
 
 ## Capture command output
 
@@ -104,3 +135,4 @@ if [ -n "$OnVpn" ]
     }
     copyFile ~ .bashrc
     copyFile ~ .bash_aliases
+

@@ -1,3 +1,26 @@
+# Modules
+
+A module is a file containing Python definitions and statements. The
+file name is the module name with the suffix .py appended.  
+
+```python
+import my_module
+my_module.myFunction(23)
+```
+
+Imports file: `my_module.py`, with say, a function called
+`myFunction(int)`.  Which is accessed as per above.
+
+There is a variant of the import statement that imports names from a
+module directly into the importing module’s symbol table. For example:
+
+```python
+from my_module import myFunction
+myFunction(23)
+```
+
+This does not introduce the module name, so `my_module` is not defined.
+
 # Package Management - Python Eggs
 
 ## Debian Setup
@@ -219,3 +242,4 @@ def print_globvar():
 set_globvar_to_one()
 print_globvar()       # Prints 1
 ```
+

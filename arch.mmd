@@ -181,6 +181,37 @@ Setup ELPA see: emacs.html
 
 Add packages: clojure-mode, clojure-test-mode
 
+# RVM
+
+Install rvm under current user 'fenton'.
+
+```bash
+$ curl -L get.rvm.io | bash -s stable
+```
+
+add to `~/.bashrc`:
+
+```bash
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+```
+
+test with:
+
+```bash
+$ type rvm | head -n1
+rvm is a function
+```
+
+get some rvm completions with:
+
+```bash
+# RVM bash completion
+[[ -r "$HOME/.rvm/scripts/completion" ]] && source "$HOME/.rvm/scripts/completion"
+```
+
+
+
+
 # RVM - Ruby
 
 [rvm ruby reference][rvm ruby]
