@@ -35,3 +35,8 @@ To restart application touch file: `~/sinatra.spicevan.com/tmp/restart.txt`
 ```bash
 $ cd sinatra.spicevan.com; mkdir tmp; cd tmp; touch restart.txt
 ```
+
+# Just Sinatra
+
+parse parameters received from a post:
+
