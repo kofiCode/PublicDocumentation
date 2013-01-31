@@ -1207,3 +1207,30 @@ def method_name
 
 end
 ```
+
+Generate ctags:
+
+    ctags -e -a --Ruby-kinds=-fF -o TAGS -R .
+
+keys             | Meaning
+---------------- | ---------------------
+A-.              | go to definition
+A-*              | return from definition
+M-. <tag> <RET>  | Search for a particular tag
+
+# Slim
+
+Render a partial:
+
+file: `_thing.slim`
+
+```
+h2 = title
+```
+
+file `test.slim`
+
+```
+== render :slim, :'_thing', :locals => {:title => "This is a title"}
+```
+
