@@ -312,8 +312,6 @@ class CreateUsers < ActiveRecord::Migration
     create_table :users do |t|
       t.string :name
       t.string :email
-      t.integer :role_id
-      t.string :role_type
       t.timestamps
     end
   end
