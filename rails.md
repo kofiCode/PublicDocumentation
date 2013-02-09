@@ -1,6 +1,22 @@
+# Install on Arch
+
+* Install RVM:
+
+    $ curl -L get.rvm.io | bash -s stable
+
+* reboot
+
+* Install 1.9.3, create and use personal gemset
+
+    $ rvm install 1.9.3
+    $ rvm gemset create myGems
+    $ rvm use 1.9.3@myGems --default
+
+# Using Rails
+
 This tutorial is based on the excellent book: "Ruby on Rails Tutorial
 - Learn Rails by Example", by Michael Hartl.  I'll abbreviate this
-with the ackronym: RORT.
+with the ackronym: (RORT)
 
 # Setup testing
 
@@ -22,11 +38,44 @@ group :test do
 end      
 ```
 
-I've also setup notifications on my arch linux system using `twmn`.
+I've also setup notifications on my arch linux system using `dunst`.
 See (RORT, 105) for advice on how to setup notifications for your
 system. 
 
+# Testing
+
+We ALWAYS start with testing.  So first we decide what we want to
+build (what type of page), and think of what the test will be like.
+So lets build a page that says: "Hello World".  So first we'll design
+a test that looks for the words "Hello World" on the page.
+
+However, since this is our VERY FIRST page, we'll relax the test first
+discipline so we can first learn about pages and their URL's.
+
 # Create a simple page
+
+The way _pages_ work in rails is that, at it's most basic, is as
+follows:
+
+* start with a URL
+
+In our case we'll have the URL: `http://0.0.0.0:3000/pages/index`
+
+* tell rails about the URL
+
+first we have to let Rails know that we'll be handling a certain type
+of URL.  This is done the the `config/routes.rb` file.
+
+* create a controller to handle URL
+
+a controller is just ruby code that lets you, at a minimum, specify
+which `view` template to use
+
+* create a `view` template
+
+the `view` template is basically the actual html page.
+
+So lets go ahead with that:
 
 ## Routing
 
@@ -51,18 +100,27 @@ Create file `app/views/pages/index.html.erb`, with the following contents:
 
 ```html
 <%
-name = "Fenton"
+name = "World"
 %>
 <h1>Hello <%=name%></h1>
 ```
 
 ## Test
 
+Fire up the rails web server with: `rails s`, and navigate to:
+
     http://0.0.0.0:3000/pages/index
     
-Okay now lets setup some testing.
+# Testing Infrastructure
+
+Okay now lets setup some testing infrastructure
 
     $ mkdir -p spec/requests
+
+## Spork
+
+Spork pre-loads the rails environment, so when you test, it's already
+loaded, thereby speeding up your tests.
 
 Have the following as the contents for the file:
 `spec/spec_helper.rb`:
@@ -95,9 +153,9 @@ Create file: `spec/requests/pages_spec.rb` with contents:
 require 'spec_helper'
 describe "Pages" do
   describe "GET /pages/index" do
-    it "should have Fenton in the body" do
+    it "should have Hello World in the body" do
       visit '/pages/index'
-      page.should have_selector('h1', :text => "Fenton")
+      page.should have_selector('h1', :text => "Hello World")
     end
   end
 end
@@ -148,13 +206,313 @@ Now in a terminal that you keep running do:
     $ bundle exec guard
     
 Now after you let that settle down, lets update the view file:
-`app/views/pages/index.html.erb`, to inject an error.  Change `Fenton`
-to `Fentonn` and see that you get an auto notification about the
+`app/views/pages/index.html.erb`, to inject an error.  Change `World`
+to `Worl` and see that you get an auto notification about the
 error instantly.
 
 # Database Modelling
 
-Lets do some simple DB modelling.
+Lets do some simple DB modelling.  As always we START with tests and
+testing. 
+
+## The test (spec)
+
+Lets say we are going to create a User object, since we'll have users
+logging into our application we'll need to keep track of them.  We put
+the test in:
+
+    spec/models/user_spec.rb
+    
+In this file put the following:
+
+```ruby
+require 'spec_helper'
+describe User do
+  before { @user = User.new(name: "Example User", email:
+                            "user@example.com") }
+  subject { @user }
+  it { should respond_to(:name) }
+  it { should respond_to(:email) }
+end
+```
+
+What this does, or would do, is create a user with the specified name
+and email `before` the test runs.  Then `subject` tells the test that
+this object is the subject of our test.  Finally the `respond_to`
+basically checks that the object has attributes: name and email.
+
+## Autowatch for changes (guard)
+
+So you've put that file into your code, but the test doesn't fail?
+Lets look at the file: `Guardfile`.  Look at the `rspec` section.
+First the `watch` line:
+
+    watch(%r{^app/controllers/(.+)_(controller)\.rb$}) do |m|
+    
+What this means is that it'll look in the `app/controllers` folder for
+files that look like:
+
+    XYZ_controller.rb
+    
+Where `XYZ` can be anything.  So `pages_controller.rb` matches.  Lets
+write something for the models:
+
+    watch(%r{^app/models/(.+)\.rb$}) do |m|
+      "spec/models/#{m[1]}_spec.rb"
+    end
+
+What this means is watch for changes in `app/models/` and if any file
+changes there, re-run the corresponding test in: `spec/models/`.
+However, since we dont have any files in `app/models` lets put
+`user.rb` there:
+
+## The Model
+
+    class User < ActiveRecord::Base
+      attr_accessible :email, :name
+    end
+
+So this makes a `User` object, that inherits from the
+`ActiveRecord::Base` object and has two attributes: `email`, and
+`name`.
+
+This generate two errors that look like:
+
+```
+Failure/Error: before { @user = User.new(name: "Example User", email:
+ActiveRecord::StatementInvalid:
+  Could not find table 'users'
+```
+
+Which is a bit funny because calling User.new doesn't touch the
+database; it simply creates a new Ruby object in memory.
+
+So the problem is that ActiveRecord expects that there is a table in
+the DB called `users`.  So lets create it.  Rails uses what it calls
+*Migrations*.
+
+## Migration
+
+Rails puts these files into: `db/migrate/` and begins the file with a
+unique integer that is like a timestamp so is always growing.  This is
+to accomodate multiple developers.  For this reason I like to use
+Rails to generate the file but then I edit the contents myself.
+
+    $ rails generate migration create_users_table
+
+This created a file called:
+
+    `db/migrate/20130207152707_create_users_table.rb` 
+
+We put the following into the file:
+
+```ruby
+class CreateUsers < ActiveRecord::Migration
+  def change
+    create_table :users do |t|
+      t.string :name
+      t.string :email
+      t.integer :role_id
+      t.string :role_type
+      t.timestamps
+    end
+  end
+end
+```
+
+Now we can create the DB table with the command:
+
+    $ rake db:migrate
+    
+if you modify your migration file and want to rerun it, reset the
+database to version 0 and then rerun migrations like so:
+
+    $ rake db:migrate VERSION=0; rake db:migrate
+    
+Even though we created a development database with rake db:migrate in
+Section 6.1.1, the tests fail because the test database doesn’t yet
+know about the data model (indeed, it doesn’t yet exist at all). We
+can create a test database with the correct structure, and thereby get
+the tests to pass, using the `db:test:prepare` Rake task: 
+
+    $ bundle exec rake db:test:prepare
+ 
+Finally the tests pass!    
+    
+If you want, you can go into any of the three `Rails.env`'s,
+`development`, `test`, `production`, like so:
+
+    $ rails console                # <------- development
+    $ rails console test           # <------- test
+    $ rails console production     # <------- production
+    
+## Validations
+
+Now we want to ensure that good data gets inserted into the DB and we
+control that with _validations_.  Validations do things like ensure
+that the email field is not empty, or ensure that a password is at
+least 6 digits long.  So we can add a validation to the model that
+ensure the email address field is present like so:
+
+```ruby
+class User < ActiveRecord::Base
+  attr_accessible :email, :name 
+  validates(:email, presence: true)   # <--- this is the validation 
+end
+```
+
+The way this works now is that when I try to create a user without an
+email address, the object will be set to invalid.  Lets see this at
+work in the console:
+
+```
+$ rails console --sandbox
+>> user = User.new(name: "Fenton", email: "")
+>> user.save
+=> false
+>> user.valid?
+=> false
+>> user.errors.full_messages
+=> ["Email can't be blank"]
+```
+
+the method: `valid?`, returns false when the object fails one or more
+validations, and true when all validations pass.
+
+to test this we can do:
+
+```ruby
+describe "when name is not present" do
+  before { @user.name = " " }
+  it { should_not be_valid }
+end
+```
+
+We can also test this under the console like so:
+
+```
+$ rails console
+> u = User.new(name: "Fenton", email: "ff")
+> u.update_attributes(email: "")
+```
+
+### Length Validation
+
+Lets say the email must be at least 3 characters.  The test would look
+like:
+
+```
+describe "when email is too short < 3 characters" do
+  before { @user.email = "ab" }
+  it { should_not be_valid }
+end
+```
+
+We make the test pass with the following in `user.rb`:
+
+    validates :email, length: { minimum: 3 }
+
+
+### Format Validations
+
+We'd also like to ensure that the email addresses entered are valid.
+Lets write some tests:
+
+```ruby
+describe "when email is invalid" do
+  it "should not be valid" do 
+    addresses = %w[ user@foo, user_at_foo.com, a@f., foo@b+c.com]
+    addresses.each do |bad_address|
+      @user.email = bad_address
+      @user.should_not be_valid
+    end
+  end
+end
+```
+
+we can provide this with:
+
+```ruby
+VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+validates :email, format: { with: VALID_EMAIL_REGEX }
+```
+
+### Uniqueness
+
+We also need to ensure that we don't have two different users entering
+in the same email address as it should be unique.  The test:
+
+```ruby
+  validates :email, uniqueness: true
+```
+
+We also want case insensitive uniqueness:
+
+```ruby
+validates :email, uniqueness: { case_sensitive: false }
+```
+
+Still however we can insert duplicate rows:
+
+* Alice signs up for the sample app, with address alice@wonderland.com.
+
+* Alice accidentally clicks on “Submit” twice, sending two requests in
+quick succession.
+
+* The following sequence occurs: request 1 creates a user in memory
+that passes validation, request 2 does the same, request 1’s user gets
+saved, request 2’s user gets saved.
+
+* Result: two user records with the exact same email address, despite
+the uniqueness validation.
+
+To fix this we just need to enforce uniqueness at the database level
+as well. Our method is to create a database index on the email column,
+and then require that the index be unique.
+
+    $ rails generate migration add_index_to_users_email
+
+`db/migrate/[timestamp]_add_index_to_users_email.rb` then has:
+
+```ruby
+class AddIndexToUsersEmail < ActiveRecord::Migration
+  def change
+    add_index :users, :email, unique: true
+  end
+end
+```
+
+Lets clean out the database first, in case you got some rows with
+duplicate emails already:
+
+```
+rake db:reset
+rake db:migrate
+```
+
+Even though we created a development database with rake db:migrate in
+Section 6.1.1, the tests fail because the test database doesn’t yet
+know about the data model (indeed, it doesn’t yet exist at all). We
+can create a test database with the correct structure, and thereby get
+the tests to pass, using the db:test:prepare Rake task:
+
+    $ rake db:test:prepare
+
+Failure to run this Rake task after a migration is a common source of
+confusion. In addition, sometimes the test database gets corrupted and
+needs to be reset. If your test suite is mysteriously breaking, be
+sure to try running rake db:test:prepare to see if that fixes the
+problem.
+
+
+
+
+
+run the migration
+
+    $ rake db:migrate
+    
+# Modelling with generators    
 
     $ rails generate model User name:string email:string
 
@@ -920,7 +1278,6 @@ In your `Gemfile` put:
 and run
 
     $ bundle install
-
 
 # Behaviour Driven Development Rails
 
