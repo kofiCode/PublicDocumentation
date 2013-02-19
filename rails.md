@@ -343,7 +343,45 @@ If you want, you can go into any of the three `Rails.env`'s,
     $ rails console                # <------- development
     $ rails console test           # <------- test
     $ rails console production     # <------- production
+   
+# Debugging
+
+    $ gem install debugger
+
+In your test file put like with: 
+
+    require 'debugger'; debugger
+
+Add it to your `Gemfile` and `bundle` the directory.
+
+    gem 'debugger'
     
+Sample running of one test:
+
+    $ bundle exec rspec spec/models/publisher_spec.rb
+    
+This should drop you into the debugger.  Help with some commands at:
+
+    http://bashdb.sourceforge.net/ruby-debug.html
+
+Command                  | Effect
+------------------------ | --------------------------
+l                        | list
+l 4,10                   | list lines 4 through 10
+step                     | step 
+p abc                    | print value of variable abc
+display abc              | shows us abc all the time
+undisplay abc            | stops showing us
+set linetrace on         | 
+finish                   |
+(u)p                     | go up a frame                     
+(c)ontinue               | 
+(b)reak 16               | set a breakpoint at line 16 in current file
+
+
+
+
+
 ## Validations
 
 Now we want to ensure that good data gets inserted into the DB and we
@@ -1380,8 +1418,76 @@ Test by navigating to:
     $ http://127.0.0.1:3000/
 
 
+# Mobile Development
+
+Watch rails-casts video: http://railscasts.com/episodes/199-mobile-devices
+
+
 
 
 [testing]: http://railscasts.com/episodes/155-beginning-with-cucumber?view=asciicast
 [tut1]: http://guides.rubyonrails.org/getting_started.html
 
+
+# Live Reload
+
+You can have chrome auto reload when you modify a file by using
+`livereload`.  In your `Guardfile` put:
+
+```ruby
+guard 'livereload' do
+  watch(%r{app/views/.+\.(erb|haml|slim)$})
+  watch(%r{app/helpers/.+\.rb})
+  watch(%r{public/.+\.(css|js|html)})
+  watch(%r{config/locales/.+\.yml})
+  # Rails Assets Pipeline
+  watch(%r{(app|vendor)(/assets/\w+/(.+\.(css|js|html))).*}) { |m| "/assets/#{m[3]}" }
+end
+```
+
+then run: `bundle exec guard` as usual.
+
+Then in your chrome browswer, install the extension: `LiveReload`.
+
+After extension is installed, you'll have a little black icon that
+looks like a recycle sign that you need to click to hook the browser
+up to the livereload server.
+
+# Heroku Deployment
+
+## One time steps
+
+Create your heroku account and upload your ssh keys.  Info about this
+is in the RORT pdf.  On arch linux you can install the heroku toolbelt
+with: 
+
+    $ yaourt heroku-toolbelt
+
+## Once per project
+
+Modify your `Gemfile` so 
+
+    gem 'sqlite3'
+    
+is only in the `development` section.   
+
+In your project folder do:
+
+    $ git init; git add .; git commit -am'.'
+    
+edit the `.gitignore` file to exclude anything that shouldn't be added
+to your project and `add` and `commit` your files.  Then create a
+heroku project with:
+
+    $ heroku create 
+
+## (Re)Deploy
+
+Ensure that there is a heroku git remote repository.  Otherwise add
+the repository indicated by the `heroku create` command.
+
+    $ git push heroku master
+    
+You can open the site in a browser with:
+
+    $ heroku open
