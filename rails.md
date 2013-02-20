@@ -1469,11 +1469,24 @@ Modify your `Gemfile` so
 
     gem 'sqlite3'
     
-is only in the `development` section.   
+is only in the `development` section, and 
+
+    gem 'pg'
+
+is in a 'production' section.
+
+Modify your `config/database.yml` likes like:
+
+```yml
+production:
+  adapter: postgresql
+  pool: 5
+  timeout: 5000
+```
 
 In your project folder do:
 
-    $ git init; git add .; git commit -am'.'
+    $ bundle; git init; git add .; git commit -am'.'
     
 edit the `.gitignore` file to exclude anything that shouldn't be added
 to your project and `add` and `commit` your files.  Then create a
