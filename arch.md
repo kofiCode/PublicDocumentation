@@ -651,3 +651,18 @@ $ sudo pacman -S davfs2
 $ sudo mount.davfs https://oracle-git.rnowtraining.com/dav ~/projects/cur-DIR/cx
 ```    
 
+# Truecrypt
+
+## Mount
+
+The following mounts the file: `old-info` into the directory `empty`. 
+
+    truecrypt /home/fenton/projects/docs-DIR/pers-docs/old-info /home/fenton/projects/docs-DIR/pers-docs/empty
+
+password: hhmspiritpoemnumberhardfamilyone
+
+## Unmount
+
+just type:
+
+    truecrypt -d

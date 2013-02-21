@@ -1496,11 +1496,41 @@ heroku project with:
 
 ## (Re)Deploy
 
+If you've modified `css`, `js` assets then for production you want to
+run: 
+
+    bundle exec rake assets:precompile
+
+Which precompiles your assets for production.
+
 Ensure that there is a heroku git remote repository.  Otherwise add
 the repository indicated by the `heroku create` command.
 
-    $ git push heroku master
+    $ git add .; git commit -am'.'; git push heroku master
     
 You can open the site in a browser with:
 
     $ heroku open
+
+# Mobile Dev
+
+See: http://railscasts.com/episodes/199-mobile-devices
+
+Use the `jqtouch` javascript/css library.  Put the themes (css stuff)
+folder in:
+
+    vendor/assets/stylesheets/jqtouch/themes
+
+Put the javascript stuff in: 
+
+    vendor/assets/javascripts/jqtouch
+    
+The above folder should have the `lib` and `extensions` directories in
+it.   
+
+```rhtml
+<%= stylesheet_link_tag "jqtouch/themes/css/jqtouch.css" %>
+<%= javascript_include_tag "jqtouch/lib/zepto.min.js", "jqtouch/jqtouch.min.js", "mobile" %>
+```    
+
+
