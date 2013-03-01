@@ -1,4 +1,4 @@
-# Reference
+# The Reference
 
 [GNU Emacs Manuals Online](http://www.gnu.org/software/emacs/manual/)
 
