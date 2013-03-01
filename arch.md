@@ -515,7 +515,17 @@ download vpn software and install
 
     https://myaccess.oraclevpn.com
 
-put the following in: /etc/rc.d/vpnagentd
+run: 
+
+    $ sudo /etc/rc.d/vpnagentd_init start
+
+install:
+
+    $ sudo pacman -S pangox-compat
+
+then need to run the `~/vpnui` program, connect to:
+
+    https://myaccess.oraclevpn.com
 
 ```
 #!/bin/bash
