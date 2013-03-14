@@ -1,8 +1,4 @@
-sudo pacman -S --needed ghc thunderbird evince nautilus libreoffice
-sudo pacman -S --needed flashplugin inkscape eclipse gimp virtualbox
-sudo pacman -S --needed virtualbox-guest-utils virtualbox-guest-iso
-sudo pacman -S --needed maven pidgin meld icedtea-web-java7
-sudo pacman -S --needed transmission-gtk vlc chromium weechat
+sudo pacman -S --needed ghc thunderbird evince nautilus libreoffice flashplugin inkscape eclipse gimp virtualbox virtualbox-guest-utils virtualbox-guest-iso maven pidgin meld icedtea-web-java7 transmission-gtk vlc chromium weechat skype firefox sqlitebrowser
 
 
 

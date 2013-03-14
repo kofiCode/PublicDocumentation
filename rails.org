@@ -1,24 +1,51 @@
-# Install on Arch
+* Starting your development day
 
-* Install RVM:
+Go to your application directory:
+
+    $ cd ~/projects/pricecompare
+    
+Start your rails server:
+
+    $ rails s
+
+In a new terminal, start your testing server:
+
+    $ bundle exec guard
+    
+Open your `pricecompare.org` file, to see what you were last working
+on.
+
+Open a browser window at: 
+
+    http://192.168.1.24:3000/pages/shop?mobile=1
+
+Click on `Enable Live Reload` button.
+
+Open bookmarks: `pricecompare`
+
+Open two emacs.  1 for `pricecompare.org` and `rails.org` and 1 for
+your normal editing. 
+
+** Install on Arch
+
+** Install RVM:
 
     $ curl -L get.rvm.io | bash -s stable
 
-* reboot
+** reboot
 
-* Install 1.9.3, create and use personal gemset
+** Install 1.9.3, create and use personal gemset
 
     $ rvm install 1.9.3
     $ rvm gemset create myGems
     $ rvm use 1.9.3@myGems --default
-
-# Using Rails
+* Using Rails
 
 This tutorial is based on the excellent book: "Ruby on Rails Tutorial
 - Learn Rails by Example", by Michael Hartl.  I'll abbreviate this
 with the ackronym: (RORT)
 
-# Setup testing
+* Setup testing
 
 Add rspec, guard, livereload, spork, capybara, etc... to `Gemfile`
 
@@ -42,7 +69,7 @@ I've also setup notifications on my arch linux system using `dunst`.
 See (RORT, 105) for advice on how to setup notifications for your
 system. 
 
-# Testing
+* Testing
 
 We ALWAYS start with testing.  So first we decide what we want to
 build (what type of page), and think of what the test will be like.
@@ -52,39 +79,29 @@ a test that looks for the words "Hello World" on the page.
 However, since this is our VERY FIRST page, we'll relax the test first
 discipline so we can first learn about pages and their URL's.
 
-# Create a simple page
+* Create a simple page
 
 The way _pages_ work in rails is that, at it's most basic, is as
 follows:
 
-* start with a URL
+** Start with a URL
 
 In our case we'll have the URL: `http://0.0.0.0:3000/pages/index`
 
-* tell rails about the URL
+** Routing
 
-first we have to let Rails know that we'll be handling a certain type
+First we have to let Rails know that we'll be handling a certain type
 of URL.  This is done the the `config/routes.rb` file.
 
-* create a controller to handle URL
-
-a controller is just ruby code that lets you, at a minimum, specify
-which `view` template to use
-
-* create a `view` template
-
-the `view` template is basically the actual html page.
-
-So lets go ahead with that:
-
-## Routing
-
-File `config/routes.rb` insert following line:
+insert following line:
 
     get 'pages/index'
-    
-## Controller
- 
+
+** Controller
+
+A controller is just ruby code that lets you, at a minimum, specify
+which `view` template to use
+
 Create file: `app/controllers/pages_controller.rb` with contents:
 
 ```ruby
@@ -94,7 +111,9 @@ class PagesController < ApplicationController
 end
 ```
 
-## View
+** View
+
+The `view` template is basically the actual html page.
 
 Create file `app/views/pages/index.html.erb`, with the following contents:
 
@@ -105,19 +124,19 @@ name = "World"
 <h1>Hello <%=name%></h1>
 ```
 
-## Test
+** Confirm it works
 
 Fire up the rails web server with: `rails s`, and navigate to:
 
     http://0.0.0.0:3000/pages/index
     
-# Testing Infrastructure
+* Testing Infrastructure
 
 Okay now lets setup some testing infrastructure
 
     $ mkdir -p spec/requests
 
-## Spork
+** Spork
 
 Spork pre-loads the rails environment, so when you test, it's already
 loaded, thereby speeding up your tests.
@@ -165,7 +184,7 @@ Now run the test with:
 
     $ bundle exec rspec spec/requests/pages_spec.rb
 
-# Automated watching tests: Guard, Spork
+* Automated watching tests: Guard, Spork
 
 Guard will watch for file changes and rerun the required tests.  Spork
 speeds up the loading of the Rails environment by preloading it.  This
@@ -186,6 +205,12 @@ guard 'rspec', :version => 2, :all_after_pass => false, :cli => '--drb' do
   end
   watch(%r{^app/views/(.+)/}) do |m|
     "spec/requests/#{m[1]}_spec.rb"
+  end
+  watch(%r{^app/models/(.+)\.rb$}) do |m|
+    "spec/models/#{m[1]}_spec.rb"
+  end
+  watch(%r{^spec/(.+)/(.+)$}) do |m|
+    "spec/#{m[1]}/#{m[2]}"
   end
 end
 guard 'spork', :rspec_env => { 'RAILS_ENV' => 'test' }, test_unit: false, cucumber: false do
@@ -210,12 +235,12 @@ Now after you let that settle down, lets update the view file:
 to `Worl` and see that you get an auto notification about the
 error instantly.
 
-# Database Modelling
+* Database Modelling
 
 Lets do some simple DB modelling.  As always we START with tests and
 testing. 
 
-## The test (spec)
+** The test (spec)
 
 Lets say we are going to create a User object, since we'll have users
 logging into our application we'll need to keep track of them.  We put
@@ -241,7 +266,7 @@ and email `before` the test runs.  Then `subject` tells the test that
 this object is the subject of our test.  Finally the `respond_to`
 basically checks that the object has attributes: name and email.
 
-## Autowatch for changes (guard)
+** Autowatch for changes (guard)
 
 So you've put that file into your code, but the test doesn't fail?
 Lets look at the file: `Guardfile`.  Look at the `rspec` section.
@@ -266,7 +291,7 @@ changes there, re-run the corresponding test in: `spec/models/`.
 However, since we dont have any files in `app/models` lets put
 `user.rb` there:
 
-## The Model
+** The Model
 
     class User < ActiveRecord::Base
       attr_accessible :email, :name
@@ -291,7 +316,7 @@ So the problem is that ActiveRecord expects that there is a table in
 the DB called `users`.  So lets create it.  Rails uses what it calls
 *Migrations*.
 
-## Migration
+** Migration
 
 Rails puts these files into: `db/migrate/` and begins the file with a
 unique integer that is like a timestamp so is always growing.  This is
@@ -343,8 +368,8 @@ If you want, you can go into any of the three `Rails.env`'s,
     $ rails console                # <------- development
     $ rails console test           # <------- test
     $ rails console production     # <------- production
-   
-# Debugging
+    
+* Debugging
 
     $ gem install debugger
 
@@ -382,7 +407,7 @@ finish                   |
 
 
 
-## Validations
+** Validations
 
 Now we want to ensure that good data gets inserted into the DB and we
 control that with _validations_.  Validations do things like ensure
@@ -432,7 +457,7 @@ $ rails console
 > u.update_attributes(email: "")
 ```
 
-### Length Validation
+*** Length Validation
 
 Lets say the email must be at least 3 characters.  The test would look
 like:
@@ -449,7 +474,7 @@ We make the test pass with the following in `user.rb`:
     validates :email, length: { minimum: 3 }
 
 
-### Format Validations
+*** Format Validations
 
 We'd also like to ensure that the email addresses entered are valid.
 Lets write some tests:
@@ -473,7 +498,7 @@ VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 validates :email, format: { with: VALID_EMAIL_REGEX }
 ```
 
-### Uniqueness
+*** Uniqueness
 
 We also need to ensure that we don't have two different users entering
 in the same email address as it should be unique.  The test:
@@ -490,16 +515,16 @@ validates :email, uniqueness: { case_sensitive: false }
 
 Still however we can insert duplicate rows:
 
-* Alice signs up for the sample app, with address alice@wonderland.com.
+** Alice signs up for the sample app, with address alice@wonderland.com.
 
-* Alice accidentally clicks on “Submit” twice, sending two requests in
+** Alice accidentally clicks on “Submit” twice, sending two requests in
 quick succession.
 
-* The following sequence occurs: request 1 creates a user in memory
+** The following sequence occurs: request 1 creates a user in memory
 that passes validation, request 2 does the same, request 1’s user gets
 saved, request 2’s user gets saved.
 
-* Result: two user records with the exact same email address, despite
+** Result: two user records with the exact same email address, despite
 the uniqueness validation.
 
 To fix this we just need to enforce uniqueness at the database level
@@ -548,7 +573,7 @@ run the migration
 
     $ rake db:migrate
     
-# Modelling with generators    
+* Modelling with generators    
 
     $ rails generate model User name:string email:string
 
@@ -567,12 +592,12 @@ Open a rails console:
 
 ----------
 
-# Rails testing
+* Rails testing
 
 When test web pages put test files in: `spec/requests`.  When testing
 models put files in: `spec/model`.
 
-## View Testing
+** View Testing
 
 First lets look at the view test: `spec/requests/pages_spec.rb` with
 contents:
@@ -679,7 +704,7 @@ Or as above, change the count by 1.
 
 ----
 
-# form_for
+* form_for
 
 When creating a new resource, user, order, etc..., we use the `new`
 action/method.  When we want to save the user, we use the `create`
@@ -743,7 +768,7 @@ Although the hash keys appear as strings in the debug output,
 internally Rails uses symbols, so that `params[:user]` is the hash of
 `user` attributes.
 
-## Errors
+** Errors
 
 To handle errors we put in a *partial* like so:
 
@@ -761,7 +786,7 @@ To handle errors we put in a *partial* like so:
 
 ----
 
-# Model Testing
+* Model Testing
 
 We have create a `User` model.  So we create a test:
 `spec/model/user_spec.rb`.
@@ -930,7 +955,7 @@ The keyword is assigned the results of the following block.  In the
 subsequent code *DONT* use the keyword, drop the preceeding `:`, and
 use like a normal variable.
 
-## Authenticating Users Tests:
+** Authenticating Users Tests:
 
 We start by requiring a User object to respond to authenticate:
 
@@ -962,7 +987,7 @@ better.
 
 ----
 
-# View Testing
+* View Testing
 
 Often we'll want to test pages that show info from the DB.  We auto
 add info to the DB by using factories.  Edit `Gemfile`:
@@ -1003,7 +1028,11 @@ end
 
 ----------
 
-# Modelling Validations
+* Model, View AND Controller
+
+$ rails generate scaffold Post name:string title:string content:text
+
+* Modelling Validations
 
 Require the presence of `name` and `email`:
 
@@ -1042,9 +1071,9 @@ this case as well.
     
 Still duplicate emails can get into the DB like so:
 
-* User clicks create *twice* by accident.
+** User clicks create *twice* by accident.
 
-* 1st `User` gets created in memory, passes validations, then 2nd
+** 1st `User` gets created in memory, passes validations, then 2nd
   `User` gets created *in memory* and passes validation.  Finally both
   get persisted to DB.
 
@@ -1091,7 +1120,7 @@ class User < ActiveRecord::Base
 end
 ```
 
-# Making a secure password
+* Making a secure password
 
 Enable gem: `gem 'bcrypt-ruby', '3.0.1'`.
 
@@ -1125,7 +1154,7 @@ The magic is done in `has_secure_password` in rails >= 3.1
 
 ----
 
-# Test Data
+* Test Data
 
 `Gemfile`:
 
@@ -1162,7 +1191,7 @@ $ bundle exec rake db:populate
 $ bundle exec rake db:test:prepare
 ```
 
-## Factory Girl Test Data
+** Factory Girl Test Data
 
 `spec/factories.rb`:
 
@@ -1186,8 +1215,7 @@ after(:all) { User.delete_all }
 
 
 
-
-# Pagination
+* Pagination
 
 `Gemfile`:
 
@@ -1200,7 +1228,7 @@ gem 'bootstrap-will_paginate', '0.0.6'
 
 ----
 
-# REST
+* REST
 
 Three items: verb, resource, id.
 
@@ -1233,7 +1261,7 @@ Delete    | /users/1      | destroy | user_path(user)      | delete user
 
 ----
 
-# Authorization
+* Authorization
 
 To (say) edit the user information corresponding to user with id: 1,
 we'd use the URL: `/users/1/edit` which routes us through the edit
@@ -1248,7 +1276,7 @@ end
 This takes us to: `app/views/users/edit.html.erb` with the values
 filled in.
 
-## Sign-In Helper
+** Sign-In Helper
 
 `spec/requests/authentication_pages_spec.rb`
 
@@ -1295,7 +1323,7 @@ end
 
 
 
-## Create DB
+** Create DB
 
     $ rake db:create
 
@@ -1303,7 +1331,7 @@ end
 
 
 
-## Install a javascript runtime
+** Install a javascript runtime
 
     $ gem install therubyracer
 
@@ -1315,7 +1343,7 @@ and run
 
     $ bundle install
 
-# Behaviour Driven Development Rails
+* Behaviour Driven Development Rails
 
 [ref][testing]
 
@@ -1339,7 +1367,7 @@ gem 'rspec', '>= 1.2.2'
 
 ----
 
-# Rails Console 
+* Rails Console 
 
 Printing out an object, (`ap` short for awesome print method):
 
@@ -1350,7 +1378,7 @@ $ bundle exec rails console
 > ap a
 ```
 
-## Pry Rails Console
+** Pry Rails Console
 
 `Gemfile`
 
@@ -1368,7 +1396,7 @@ ls -Mp --grep ^pa      | show a list of all private instance methods (in scope) 
 nesting                | show inheritance stack
 
 
-* show methods source
+** show methods source
 
 Enter the Pry class, list the instance methods beginning with 're' and
 display the source code for the rep method:
@@ -1380,7 +1408,7 @@ Pry#methods: re  readline  refresh  rep  repl  repl_epilogue  repl_prologue  ret
 pry(Pry):1> show-method rep -l
 ```
 
-* show method documentation
+** show method documentation
 
 Enter the `User` class, find instance methods beginning with 'up',
 show documentation associated with method `update-attributes`
@@ -1395,21 +1423,21 @@ The number after the : in the pry prompt indicates the nesting level.
 
 ----
 
-# Basic Rails
+* Basic Rails
 
 [ref][tut1]
 
-# Install rails
+* Install rails
 
     $ gem install rails
 
-# Create new rails app
+* Create new rails app
 
 Create an application called `catdb`
 
     $ rails new catdb
     
-## Start it up!
+** Start it up!
 
     $ rails server
     
@@ -1417,8 +1445,7 @@ Test by navigating to:
 
     $ http://127.0.0.1:3000/
 
-
-# Mobile Development
+* Mobile Development
 
 Watch rails-casts video: http://railscasts.com/episodes/199-mobile-devices
 
@@ -1428,8 +1455,7 @@ Watch rails-casts video: http://railscasts.com/episodes/199-mobile-devices
 [testing]: http://railscasts.com/episodes/155-beginning-with-cucumber?view=asciicast
 [tut1]: http://guides.rubyonrails.org/getting_started.html
 
-
-# Live Reload
+* Live Reload
 
 You can have chrome auto reload when you modify a file by using
 `livereload`.  In your `Guardfile` put:
@@ -1453,9 +1479,9 @@ After extension is installed, you'll have a little black icon that
 looks like a recycle sign that you need to click to hook the browser
 up to the livereload server.
 
-# Heroku Deployment
+* Heroku Deployment
 
-## One time steps
+** One time steps
 
 Create your heroku account and upload your ssh keys.  Info about this
 is in the RORT pdf.  On arch linux you can install the heroku toolbelt
@@ -1463,7 +1489,7 @@ with:
 
     $ yaourt heroku-toolbelt
 
-## Once per project
+** Once per project
 
 Modify your `Gemfile` so 
 
@@ -1494,14 +1520,16 @@ heroku project with:
 
     $ heroku create 
 
-## (Re)Deploy
+** (Re)Deploy
 
 If you've modified `css`, `js` assets then for production you want to
 run: 
 
-    bundle exec rake assets:precompile
+    $ bundle exec rake assets:precompile
 
-Which precompiles your assets for production.
+Which precompiles your assets for production.  You can clean it out with:
+
+    $ bundle exec rake assets:clean
 
 Ensure that there is a heroku git remote repository.  Otherwise add
 the repository indicated by the `heroku create` command.
@@ -1512,7 +1540,7 @@ You can open the site in a browser with:
 
     $ heroku open
 
-# Mobile Dev
+* Mobile Dev (deprecated)
 
 See: http://railscasts.com/episodes/199-mobile-devices
 
@@ -1533,4 +1561,96 @@ it.
 <%= javascript_include_tag "jqtouch/lib/zepto.min.js", "jqtouch/jqtouch.min.js", "mobile" %>
 ```    
 
+* JQuery Mobile
 
+In your: `app/views/layout/application.mobile.erb` include the
+required jquery mobile js and css files:
+
+```
+<%= stylesheet_link_tag "http://code.jquery.com/mobile/latest/jquery.mobile.min.css", :media => "all" %>
+<%= javascript_include_tag "http://code.jquery.com/mobile/latest/jquery.mobile.min.js" %>
+```
+
+also in the head put a view port statement:
+
+```
+<meta name="viewport" content="width=device-width, initial-scale=1">
+```
+
+* Rails Cookbook
+
+** Javascript for just one view
+
+Sometimes we want javascript to be only in one view.  In this scenario
+we ensure we have a `yield(:head)` in the layout like so:
+
+From:
+http://stackoverflow.com/questions/3437585/best-way-to-add-page-specific-javascript-in-a-rails-3-app
+
+```rhtml
+  <head>
+    ...
+    <%= yield :head %>
+  </head>
+```    
+
+Then in our view file we have a section like:
+
+```rhtml
+<% content_for :head do %>
+  <script type="text/javascript">
+    $(function() {
+      $('user_rating_positve').click(function() {
+        $('some_div').show();
+      }
+    });
+  </script>
+<% end %>
+```
+
+or you could put it into a partial if it is longer like so:
+
+```rhtml
+<% content_for :head do %>
+  <script type="text/javascript">
+    <%= render :partial => "my_view_javascript"
+  </script>
+<% end %>
+```
+
+* rinari - Emacs Rails IDE
+
+Key Chord | Effect
+---------------------------------
+C-c ; f c	| go to controller
+C-c ; f e	| go to environment
+C-c ; f f | go to file-in-project
+C-c ; f h	| go to helper
+C-c ; f i | go to migration
+C-c ; f j | go to javascript
+C-c ; f l | go to plugin
+C-c ; f m	| go to model
+C-c ; f n	| go to configuration
+C-c ; f o	| go to log
+C-c ; f p	| go to public
+C-c ; f s	| go to script
+C-c ; f t | go to test
+C-c ; f v	| go to view
+C-c ; f w	| go to worker
+C-c ; f x	| go to fixture
+C-c ; f y	| go to stylesheet
+
+* ctags
+
+    $ ctags -a -e -f TAGS --tag-relative -R app lib vendor
+
+* Guardfile
+
+We'd also like to have changes to our spec's.  So the format is: watch
+somewhere, then run some tests.  So our watch statement is:
+
+    watch(%r{^spec/(.+)/(.+)$}) do |m|
+
+Then run our test:
+
+    "spec/#{m[1]}/m[2]}/"

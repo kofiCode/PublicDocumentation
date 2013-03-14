@@ -653,6 +653,13 @@ $ sudo mount.davfs https://oracle-git.rnowtraining.com/dav ~/projects/cur-DIR/cx
 
 # Truecrypt
 
+## Create
+
+To create a new truecrypt volume (file) interactively, type the
+following in a terminal: 
+
+    truecrypt
+
 ## Mount
 
 The following mounts the file: `old-info` into the directory `empty`. 

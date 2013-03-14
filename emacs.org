@@ -1,15 +1,11 @@
-# Reference
-
-[GNU Emacs Manuals Online](http://www.gnu.org/software/emacs/manual/)
-
-# Super Useful
+* Super Useful
 
 Key Stroke | Effect                           
 ---------- | -------------------------------- 
 A-\        | Delete horizontal space
 C-h a      | Will find all functions that have string in it
 
-# Files
+* Files
 
 | Key Stroke | Effect                           |
 | ---------- | -------------------------------- |
@@ -20,13 +16,13 @@ C-x C-c      | Close emacs
 C-x C-r      | Open file read only
 C-x C-c      | Exit Emacs
 
-# Navigation, Search & Replace
+* Navigation, Search & Replace
 
 | Key Stroke        | Effect                           |
 | ----------------- | -------------------------------- |
 A->                 | Go to the beginning of the file
 A-<                 | Go to the end of the file
-A-g A-g             | Goto line #
+A-g A-g             | Goto line *
 A-(L/R) arrows      | Move word forward/backwards
 A-f, A-b            | Move word forward/backwards
 C-s                 | Incremental Search Forward
@@ -40,7 +36,7 @@ C-x (, C-x ), C-x e | Start, stop, playback macro
 C-u 25 C-x e        | Replay macro 25 times
 C-u C-space         | Return to previous position
 
-# Special Characters
+* Special Characters
 
 | Name             | ASCII Code | string notation | Caret Notation | Input method                  |
 | ---------------- | ---------- | --------------- | -------------- | ------------                  |
@@ -48,7 +44,7 @@ C-u C-space         | Return to previous position
 | line feed        | 10         | \n              | J              | Ctrl+q Ctrl+j                 |
 | carriage return  | 13         | \r              | M              | Ctrl+q Ctrl+m or Ctrl+q Enter | 
 
-# Buffers, Regions, & Windows
+* Buffers, Regions, & Windows
 
 | Key Stroke          | Effect                           |
 | ------------------- | -------------------------------- |
@@ -67,7 +63,7 @@ C-x b **scratch** RET | re-open scratch buffer
 d                     | In buffer list, mark buffer for deletion, happens when hit x
 A-^                   | Join this line to previous and fix up whitespace at join. If there is a fill prefix, delete it from the beginning of this line.
 
-# Edit, Selection, Cut & Paste
+* Edit, Selection, Cut & Paste
 
 | Key Stroke                 | Effect                           |
 | ----------                 | -------------------------------- |
@@ -84,7 +80,7 @@ C-w                          | Cut
 C-y, Esc-y                   | Yank (paste), successive Esc-y get clipboard history
 A-x cua-mode                 | Column Edit, C-Ret. begin selection
 
-# Calculator
+* Calculator
 
 to start the Calculator:
 
@@ -92,13 +88,13 @@ to start the Calculator:
 
 to quit type: `q`
 
-# Misc
+* Misc
 
-## Automatic word wrap
+** Automatic word wrap
 
 Toggle auto word wrap with: `M-x auto-fill-mode`
 
-## Truncate long lines
+** Truncate long lines
 
 When u dont want emacs to wrap long lines do one of the following:
 
@@ -109,23 +105,22 @@ or put the following in your .emacs to have on by default
 
     (setq-default truncate-lines t)
 
-## Sort selection
+** Sort selection
 
     M-x sort-lines
 
-## XML Formatting
+** XML Formatting
 
  In sgml-mode, a built-in pretty printing function called
 (sgml-pretty-print ...)
-
-# Keymaps & Function bindings
+* Keymaps & Function bindings
 
 | Command         | Meaning                           |
 | ----------      | -------------------------------- |
 A-x describe-key  | and hit the key (or key combination) in question. This will reveal the name of the key as well as the function it is currently bound to.
 C-h f             | Display documentation on the Lisp function named function (describe-function). Since commands are Lisp functions, a command name may be used.
 
-# Exuberant ctags
+* Exuberant ctags
 
 go to the root of your source and enter:
 
@@ -133,7 +128,7 @@ go to the root of your source and enter:
 ctags -Re
 ```
 
-# Diff
+* Diff
 
 -   [Reference](http://www.gnu.org/software/emacs/manual/html_node/emacs/Diff-Mode.html)
 
@@ -151,7 +146,7 @@ diff-buffer-with-file
 ```
 
 
-## Flyspell
+** Flyspell
 
 Command  | Meaning                           
 -------- | -------------------------------- 
@@ -160,8 +155,7 @@ C-S-F8   | disable flyspell
 C-A-F8   | run flyspell
 C-F8     | ispell for flyspell highlighted word PRIOR to cursor position
 A-F8     | ispell for flyspell highlighted work AFTER the cursor position
-
-# Latex
+* Latex
 
 | Key Stroke  | Effect                           |
 | ----------  | -------------------------------- |
@@ -169,16 +163,15 @@ C-c C-c       | to compile to **.dvi/**.pdf, again to view
 C-c C-t C-p   | to toggle into PDF mode.
 C-c =         | show TOC
 
-# Programming
-
-# Cheatsheet
+* Programming
+* Cheatsheet
 
 | Key Stroke            | Effect                           |
 | ----------            | -------------------------------- |
 C-h v < variable-name > | display the contents of a variable
 C-x C-e                 | evaluate an expression: position the cursor after a list and type
 
-# Variables
+* Variables
 
 | Variable | Definition |
 | -------- | ---------- |
@@ -186,7 +179,7 @@ load-path  | The variable load-path lists all the directories where Emacs should
 
 [Reference](http://www.gnu.org/software/emacs/emacs-lisp-intro/html_node/index.html)
 
-# Overview
+* Overview
 
 Put your code into `*.el` files. Then put `*.el` into a directory on
 your load-path, `/usr/local/share/emacs/site-lisp` or
@@ -203,7 +196,7 @@ without closing and reopenning emacs.
     (interactive)
     (load "~/.emacs"))
 
-# To create a function
+* To create a function
 
 A function definition has up to five parts following the word
 defun:
@@ -237,7 +230,7 @@ Function Interactive, for that information.)
       "Multiply NUMBER by seven."
       (* 7 number))
 
-# Install the function
+* Install the function
 
 Install the function by putting the cursor at the end of the
 function and typing C-x C-e. This will install the function for the
@@ -253,15 +246,15 @@ To make the above function interactive do:
 
 Invoke with `C-u` some number `A-x multiply-by-seven`.
 
-# Installing *.el files
+* Installing *.el files
 
-## One time
+** One time
 
 Ensure you have the following in your ~/.emacs file:
 
     (add-to-list 'load-path "~/projects/elisp")
 
-## For each new *.el file
+** For each new *.el file
 
 Ensure you have the following in your ~/.emacs file:
 
@@ -270,8 +263,7 @@ Ensure you have the following in your ~/.emacs file:
 where foo means foo.el
 
 And put your foo.el file in: `~/projects/elisp`
-
-# Reference
+* Reference
 
     C-SP     set-mark-command         C-q      quoted-insert
     C-a      beginning-of-line       C-r      isearch-backward
@@ -392,8 +384,11 @@ save the file (`C-x C-s`), or
 
     C-x RET f undecided-dos
     C-x C-f
+* Reference
 
-# Setup ELPA
+[GNU Emacs Manuals Online](http://www.gnu.org/software/emacs/manual/)
+
+* Setup ELPA
 
 Emacs Lisp Package Archive
 
@@ -419,9 +414,9 @@ Then do:
 						
 						
 				
-## Emacs mail reader (incomplete)
+** Emacs mail reader (incomplete)
 notmuch is, like, [0] an emacs mail-reader frontend over a xapian database; see http://keithp.com/blogs/notmuch/ or http://notmuchmail.org                                              │ Athas
-11:33:21        fsbot | [1] see #notmuch                                                                                                                                                                        │ atrus`
+11:33:21        fsbot | [1] see *notmuch                                                                                                                                                                        │ atrus`
 11:35:06            * | bremner looks around shiftily                                                                                                                                                           │ avar
 11:36:35            * | homie needles bremner vodoo wise!                                                                                                                                                       │ axrfnu
 11:37:31            * | bremner nods knowingly                                                                                                                                                                  │ az
@@ -429,10 +424,9 @@ notmuch is, like, [0] an emacs mail-reader frontend over a xapian database; see 
                       | and got it working. Then I added extra addresses. I think I modeled my final config files based on http://www.gnumonk.com/my-config/my-emacs . Just make the appropriate changes based  │ barik
                       | on your own config.  
                       
-                      
-# Use Cases
+* Use Cases
 
-## Kill whole sentence in text mode.
+** Kill whole sentence in text mode.
 
 So there are two functions `kill-sentence`, and
 `backwards-kill-sentence` but I want a single function that executes
@@ -494,4 +488,116 @@ Now lets assign it properly with:
  (lambda ()
    (local-set-key (kbd "M-k") 'kill-whole-sentence)))
 ```
+
+* Org Mode
+** Linking to another file
+
+   Visit another file (target) and type: `C-c l`.  Then go back to the
+   source file and insert the link to the target with: `C-c C-l`.
+
+| Keys    | Effect                         |
+|---------+--------------------------------|
+| C-c l   | Clipboard link to current file |
+| C-c C-l | Paste link to file             |
+| C-c C-o | Open URL / follow link         |
+
+** TODO
+
+This toggles between TODO/DONE/and nothing
+
+    C-c C-t
+  
+** Move entries
+
+Move entry up or down:
+
+    M-(up or down arrow)
+   
+Promote/Demote:
+
+    M-(left/right arrow)
+    
+** Global Agenda
+
+First you must set the variable org-agenda-files so that org-mode will
+know which files to search for TODOs and scheduled items. 
+
+```elisp
+(setq org-agenda-files (list "~/org/work.org"
+                             "~/org/school.org" 
+                             "~/org/home.org"))
+```
+
+    C-c a t
+    
+** Schedule a Task
+
+Go to line after a todo and do:
+
+   C-c C-s
+   
+Can use syntax like: `+2w` for two weeks from now.
+
+** Get agenda
+
+     C-c a a
+
+* Workspaces
+
+Set the prefix key with:
+
+    (setq wg-prefix-key (kbd "C-c w"))
+
+You can create a workspace, rename it, switch to a named workspace.
+You can go to the previous or next workspaces, or you can go to the
+workspace number (0-9).
+
+| Keys         | Description |
+|--------------+-------------|
+| <prefix> c   | Create      |
+| <prefix> A   | Rename      |
+| <prefix> v   | Switch      |
+| <prefix> p   | Previous    |
+| <prefix> n   | Next        |
+| <prefix> 0-9 | Goto        |
+
+Workspaces actually consist of two workspaces.  The base workspace,
+and the working workspace.  The base config is the one that you have
+saved. The working one is the current one.  So if you move your
+cursor, adjust buffer windows, etc..., your current config is now
+different from your base config.
+
+| Keys       | Description              |
+|------------+--------------------------|
+| <prefix> r | Revert working from base |
+| <prefix> u | Update base from working |
+| <prefix> R | Revert ALL               |
+| <prefix> U | Update ALL               |
+
+Save workgroups to a file, or load them with:
+
+| Keys         | Description |
+|--------------+-------------|
+| <prefix> C-s | Save        |
+| <prefix> C-l | Load        |
+
+Killing a workgroup deletes it from the list of workgroups, and copies
+its working config to the kill ring. You can yank killed wconfigs into
+the current frame.
+
+| Keys         | Description               |
+|--------------+---------------------------|
+| <prefix> k   | Kill                      |
+| <prefix> y   | Yank                      |
+| <prefix> A-w | Save current -> kill ring |
+| <prefix> A-W | Save base -> kill ring    |
+
+You can move a workgroup leftward or rightward in the workgroups
+list.
+
+| Keys       | Description  |
+|------------+--------------|
+| <prefix> , | Offset Left  |
+| <prefix> . | Offset Right |
+
 
