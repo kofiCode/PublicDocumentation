@@ -1,6 +1,148 @@
-# Installation
+* Installation
 
-## Copy to Android Device
+** Install
+*** Boot install media
+*** Establish Internet Connection
+**** Wireless
+
+# iwconfig
+# ip link set wlan0 up     # <--- optional
+# wifi-menu wlan0
+
+*** Hard Disks
+
+# lsblk
+# cfdisk /dev/sda
+create a 15360 bootable, and then create another for the rest of the
+space. 
+# mkfs.ext4 /dev/sda1
+# mkfs.ext4 /dev/sda2
+# mount /dev/sda1 /mnt
+# mkdir /mnt/home
+# mount /dev/sda2 /mnt/home
+
+*** Packages
+# pacstrap -i /mnt base base-devel
+# genfstab -U -p /mnt >> /mnt/etc/fstab
+# arch-chroot /mnt
+# nano /etc/locale.gen
+# locale-gen
+# echo LANG=en_US.UTF-8 > /etc/locale.conf
+# export LANG=en_US.UTF-8
+# setfont Lat2-Terminus16
+# nano /etc/vconsole.conf
+FONT=Lat2-Terminus16
+ln -s /usr/share/zoneinfo/<Zone>/<SubZone> /etc/localtime
+# hwclock --systohc --utc
+# echo ft_lenovo > /etc/hostname    # <-- pick a different hostname 
+
+# pacman -S wireless_tools wpa_supplicant wpa_actiond dialog
+# wifi-menu wlan0
+# systemctl enable net-auto-wireless.service
+# systemctl enable net-auto-wire.service
+# passwd
+
+*** Bootloader
+# pacman -S syslinux
+# syslinux-install_update -i -a -m
+# nano /boot/syslinux/syslinux.cfg
+...
+TIMEOUT 5
+...
+LABEL arch
+        ...
+        APPEND root=/dev/sda1 ro
+        ...
+
+# exit
+# umount /mnt/{home,}
+# reboot
+
+*** User Management
+# useradd -m -g users -s /bin/bash fenton
+# passwd fenton
+# pacman -S sudo
+# visudo
+fenton ALL=(ALL) NOPASSWD: ALL
+# exit
+
+Login as fenton now.  Your wireless might have got adjusted so:
+$ iwconfig   # <-- find your new wireless adapter, eg:wlp3s0
+$ sudo wifi-menu wlp3s0
+Make sure that the correct wireless interface (e.g. wlp3s0) is set in
+/etc/conf.d/netcfg 
+
+Enable multilib in /etc/pacman.conf
+
+*** SSH, Git
+
+$ sudo pacman -S openssh git net-tools rxvt-unicode
+$ sudo systemctl enable sshd.service
+$ sudo systemctl start sshd.service
+SSH into the machine from your other machine so have cut and paste,
+etc... 
+$ sudo scp ftravers@spicevan.com:/home/ftravers/ssh.tgz .
+$ tar xvfz ssh.tgz
+$ chmod 600 .ssh/id_rsa
+$ ssh ftravers@spicevan.com
+$ sudo pacman -S ntp
+in: /etc/systemd/system/ntp-once.service, put:
+[Unit]
+Description=Network Time Service (once)
+After=network.target nss-lookup.target 
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/ntpd -q -g -u ntp:ntp ; /sbin/hwclock -w
+
+[Install]
+WantedBy=multi-user.target
+$ sudo systemctl enable ntp-once
+
+*** Clone fenton git dir
+
+$ git clone ft_git3@spicevan.com:ft.home.dir.git
+$ mkdir -p projects/docs-DIR/
+$ cd !$
+$ git clone ft_git3@spicevan.com:documentation.git
+$ cd documenation
+$ chmod +x arch-packages.md
+Modify /etc/pacman.conf so SigLevels are all: Optional TrustAll 
+$ ./arch-packages.md 
+$ mv ft.home.dir/ fenton
+$ tar cvfz fenton.tgz fenton
+$ sudo mv fenton.tgz ..; cd ..; sudo tar xvfz fenton.tgz
+$ cd fenton
+$ chmod 600 .ssh/id_rsa
+$ sudo vi /etc/slim.conf
+default_user        fenton
+auto_login         yes
+$ sudo systemctl enable slim.service
+$ sudo reboot
+
+*** Extra monitors
+
+Now get all your monitors plugged in and run:
+$ arandr
+Save your settings
+$ rm -f scripts/rar
+
+In the command below change first argument to name you used above
+saving the arandr config.
+$ chmod +x .screenlayout/lenovo_syncmaster.sh 
+$ cd scripts
+$ ln -s ../.screenlayout/lenovo_syncmaster.sh rar
+
+*** Emacs
+
+List packages and install bookmarks+
+
+*** Skype
+
+Choose: lib32-mesa-libgl, when it comes up as an option.
+
+
+** Copy to Android Device
 
 To copy over a movie
 
@@ -10,16 +152,12 @@ To copy over music
 
     sudo mtp-connect --sendfile <src-file> Music
 
-## Virtual Box Install
+** Virtual Box Install
 
 Ensure you choose `Bridged Networking` and select correct network
 adaptor.
 
-## Install
-
-    /arch/setup
-
-## Configure Arch 
+** Configure Arch 
 
 Simply go through accepting all defaults except for what is listed
 below.
@@ -74,7 +212,7 @@ and then it says some file `exists in the filesystem`, simply delete
 those files and retry: `pacman -Syyu`, again saying `n` when it asks
 if you want to upgrade.
     
-## Install/Setup SSH
+** Install/Setup SSH
     
     # pacman --noconfirm -S openssh openssl
 
@@ -84,7 +222,7 @@ Add it as a daemon after `network` to `/etc/rc.conf`:
 
 Reboot and ssh into it so you can enjoy your nice terminal client.
 
-## DBus
+** DBus
 
     # pacman --noconfirm -S dbus
     # rc.d start dbus
@@ -93,7 +231,7 @@ add it to the daemons array in `rc.conf`
 
     DAEMONS=(... dbus ...)
 
-## Add User
+** Add User
 
 Install sudo:
 
@@ -108,10 +246,11 @@ allow docs to do everything with an entry like:
 
     fenton ALL=(ALL) ALL
 
-## Window Managers / Desktop Environments
+** Window Managers / Desktop Environments
 
-* [beginners guide - x][arch-beg-x-win]
-* [virtual box][arch-virtual-box]
+[beginners guide - x][arch-beg-x-win]
+
+[virtual box][arch-virtual-box]
 
 ```bash
 # pacman --noconfirm -S xorg-server xorg-xinit xorg-utils xorg-server-utils mesa mesa-demos virtualbox-archlinux-additions xf86-video-vesa xf86-input-synaptics zlib ttf-dejavu
@@ -126,7 +265,7 @@ add to `rc.conf`
 If you are using Arch installed directly on your hardware, you could
 use the i3 window manager, otherwise you might want to use xfce4.
 
-### i3 window manager
+*** i3 window manager
 
 install i3 window manager
 
@@ -143,7 +282,7 @@ Reboot for good measure!
 
     # startx
 
-### xfce4 desktop environment
+*** xfce4 desktop environment
 
 install
 
@@ -153,11 +292,11 @@ accept default to get all packages, to start do:
 
     startxfce4
 
-## Git
+** Git
 
     # pacman --noconfirm -S git curl
     
-## Emacs
+** Emacs
 
     # pacman --noconfirm -S emacs
     
@@ -165,7 +304,7 @@ If this is inside a virtualbox vm, I normally remap the Host Key from
 right Ctrl to F12 key.  File > Preferences > Input.  The right ctrl
 key is used extensively for emacs!
 
-### Clojure support
+*** Clojure support
 
 install rlwrap:
 
@@ -181,7 +320,7 @@ Setup ELPA see: emacs.html
 
 Add packages: clojure-mode, clojure-test-mode
 
-# RVM
+* RVM
 
 Install rvm under current user 'fenton'.
 
@@ -212,7 +351,7 @@ get some rvm completions with:
 
 
 
-# RVM - Ruby
+* RVM - Ruby
 
 [rvm ruby reference][rvm ruby]
 
@@ -233,7 +372,7 @@ as docs user:
     $ rvm install 1.9.3
     $ rvm use 1.9.3 --default
     
-# Virtualization (not complete - not working)
+* Virtualization (not complete - not working)
 
 [Ref](https://wiki.archlinux.org/index.php/KVM)
 
@@ -265,7 +404,7 @@ Login as `fenton`, and create OS Image
 $ qemu-img create -f qcow2 arch2 2G
 ```
 
-# Nginx, Passenger, Rack, ...
+* Nginx, Passenger, Rack, ...
 
 http://tommy.chheng.com/2009/06/09/deploying-a-sinatra-app-on-nginx-passenger-with-capistrano-and-git/
 
@@ -421,11 +560,11 @@ You can modify the configurations by editing the files in
 `/etc/nginx/conf`. (`/etc/nginx/conf/nginx.conf` being the main config
 file.)
 
-# Solr
+* Solr
 
     # pacman -S jre7-openjdk
 
-# Display
+* Display
 
 I have two 1920x1080 monitors I use side by side.  In file:
 `/etc/X11/xorg.conf.d/10-monitor.conf` put:
@@ -466,7 +605,7 @@ xrandr --auto --output VGA1 --mode 1920x1080 --left-of HDMI1
 will give you the names of your monitors, like I have VGA1 and HDMI1
 
 
-# Fonts
+* Fonts
 
 List fonts
 
@@ -484,7 +623,7 @@ Query fonts path:
     xset q
 
 !!! NOTE UNFINISHED AND UNSUCCESSFUL !!!
-# Customizing Xterm
+* Customizing Xterm
 
 When it comes to customizing xterm in a serious way XResources are the
 way to go.
@@ -509,7 +648,7 @@ XTerm*scrollBar:        true
 XTerm*scrollTtyOutput:  false
 ```
 
-# VPN
+* VPN
 
 download vpn software and install
 
@@ -575,7 +714,7 @@ add entry to /etc/rc.conf
 
     DAEMONS=(... @vpnagentd)
 
-# AUR
+* AUR
 
 You need to make package installer from source. Steps are:
 
@@ -593,19 +732,19 @@ You can also use yaourt to build/install packages from AUR
 3. Select a number from the query result list, then go on as instructed
 
 
-* Goto https://aur.archlinux.org to search packages
-* dowload tar.gz: `yaourt 1.1-1`
+- Goto https://aur.archlinux.org to search packages
+- dowload tar.gz: `yaourt 1.1-1`
 
 ```bash
 $ tar xvfz yaourt-1.1.tar.gz
 $ make install
 ```
 
-# Open (Libre) Office
+* Open (Libre) Office
 
     $ sudo pacman -S libreoffice
 
-## Apache LAMP
+** Apache LAMP
 
 [ref](https://wiki.archlinux.org/index.php/LAMP#Apache)
 
@@ -627,7 +766,7 @@ Virtual Hosts: `/etc/httpd/conf/extra/httpd-vhosts.conf`
 </VirtualHost>
 ```
 
-# Start/Stop/Restart Services
+* Start/Stop/Restart Services
 
 Example for sshd: 
 
@@ -635,7 +774,7 @@ Example for sshd:
 
 All scripts are kept in the folder: `/etc/rc.d`
 
-## VPN
+** VPN
 To download installer, method 1: Open browser and access http://myaccess.oraclevpn.com, after logging in, try to activate AnyConnect, browser would prompt for installation or downloading file which you can run to install; method 2: Goto ftp://obiftp/modules/unlicensed/global/ciscoanyconnect/2.5.3055/linux/ to download the 32bit or 64bit version for installation.
 
 After installation, run /opt/cisco/vpn/bin/vpnui to start the vpn client. However, you may find that after rebooting, the vpn client is broken. What you see is a window just displayed and then disapear very quickly. The solution is to add vpnagentd_init to /etc/rc.conf's DAEMONS section. Reboot or run:
@@ -644,23 +783,23 @@ rc.d start vpnagentd_init.
 Then you can enjoy vpn client successfully.
 
 
-## Dav
+** Dav
 
 ```
 $ sudo pacman -S davfs2
 $ sudo mount.davfs https://oracle-git.rnowtraining.com/dav ~/projects/cur-DIR/cx
 ```    
 
-# Truecrypt
+* Truecrypt
 
-## Create
+** Create
 
 To create a new truecrypt volume (file) interactively, type the
 following in a terminal: 
 
     truecrypt
 
-## Mount
+** Mount
 
 The following mounts the file: `old-info` into the directory `empty`. 
 
@@ -668,7 +807,7 @@ The following mounts the file: `old-info` into the directory `empty`.
 
 password: hhmspiritpoemnumberhardfamilyone
 
-## Unmount
+** Unmount
 
 just type:
 

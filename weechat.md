@@ -47,6 +47,11 @@ with nickserv:
 
 yourself, you can do this with these commands..
 
+Sometimes you'll be logged in with a different nick, and you can
+switch to your regular nick, in this case: ftravers, with:
+
+    /msg NickServ IDENTIFY ftravers password
+
 ## Tab Shortcut nicknames
 
 To message someone, do first letter then <TAB> complete it out their

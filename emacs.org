@@ -548,9 +548,9 @@ Set the prefix key with:
 
     (setq wg-prefix-key (kbd "C-c w"))
 
-You can create a workspace, rename it, switch to a named workspace.
-You can go to the previous or next workspaces, or you can go to the
-workspace number (0-9).
+You can create a workgroup, rename it, switch to a named workgroup.
+You can go to the previous or next workgroups, or you can go to the
+workgroup number (0-9).
 
 | Keys         | Description |
 |--------------+-------------|
@@ -561,8 +561,8 @@ workspace number (0-9).
 | <prefix> n   | Next        |
 | <prefix> 0-9 | Goto        |
 
-Workspaces actually consist of two workspaces.  The base workspace,
-and the working workspace.  The base config is the one that you have
+Workgroups actually consist of two workgroups.  The base workgroup,
+and the working workgroup.  The base config is the one that you have
 saved. The working one is the current one.  So if you move your
 cursor, adjust buffer windows, etc..., your current config is now
 different from your base config.
