@@ -17,7 +17,7 @@ on.
 
 Open a browser window at: 
 
-    http://192.168.1.24:3000/pages/shop?mobile=1
+    http://127.0.0.1:3000/pages/shop?mobile=1
 
 Click on `Enable Live Reload` button.
 
@@ -1212,8 +1212,6 @@ Apply with:
 before(:all) { 30.times { FactoryGirl.create(:user) } }
 after(:all) { User.delete_all }
 ```
-
-
 
 * Pagination
 

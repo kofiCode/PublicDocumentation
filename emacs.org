@@ -265,6 +265,8 @@ where foo means foo.el
 And put your foo.el file in: `~/projects/elisp`
 * Reference
 
+[GNU Emacs Manuals Online](http://www.gnu.org/software/emacs/manual/)
+
     C-SP     set-mark-command         C-q      quoted-insert
     C-a      beginning-of-line       C-r      isearch-backward
     C-b      backward-char           C-s      isearch-forward
@@ -384,9 +386,6 @@ save the file (`C-x C-s`), or
 
     C-x RET f undecided-dos
     C-x C-f
-* Reference
-
-[GNU Emacs Manuals Online](http://www.gnu.org/software/emacs/manual/)
 
 * Setup ELPA
 
@@ -490,7 +489,7 @@ Now lets assign it properly with:
 ```
 
 * Org Mode
-** Linking to another file
+** File Links
 
    Visit another file (target) and type: `C-c l`.  Then go back to the
    source file and insert the link to the target with: `C-c C-l`.
@@ -542,7 +541,7 @@ Can use syntax like: `+2w` for two weeks from now.
 
      C-c a a
 
-* Workspaces
+* Workgroups / Workspaces
 
 Set the prefix key with:
 
@@ -600,4 +599,23 @@ list.
 | <prefix> , | Offset Left  |
 | <prefix> . | Offset Right |
 
+* Emacs installed packages
 
+  auto-complete      1.4          installed  Auto Completion for GNU Emacs
+  bookmark+          20111214     installed  Bookmark Plus
+  color-theme        6.5.5        installed  install color themes
+  findr              0.7          installed  Breadth-first file-finding facility for (X)Emacs
+  haskell-mode       2.8.0        installed  Haskell editing mode
+  highlight-paren... 1.0.1        installed  highlight surrounding parentheses
+  hl-sexp            1.0.0        installed  highlight the current sexp
+  inf-ruby           2.2.4        installed  Run a ruby process in a buffer
+  inflections        1.1          installed  convert english words between singular and plural
+  jump               2.2          installed  build functions which contextually jump between files
+  org                20130318     installed  Outline-based notes management and organizer
+  org-cua-dwim       0.5          installed  Org-mode and Cua mode compatibility layer
+  paredit            22           installed  minor mode for editing parentheses  -*- Mode: Emacs-Lisp -*-
+  popup              0.5          installed  Visual Popup User Interface
+  rinari             2.10         installed  Rinari Is Not A Rails IDE
+  ruby-compilation   0.9          installed  run a ruby process in a compilation buffer
+  ruby-mode          1.1          installed  ruby-mode package
+  workgroups         0.2.0        installed  workgroups for windows (for Emacs)
