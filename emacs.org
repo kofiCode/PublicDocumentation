@@ -822,7 +822,6 @@ the changes by pressing the = key (magit-diff-with-mark).
 
 *** Tags, branches, and remote repositories
 
-
 |---+---------------------------------|
 | t | tag                             |
 | T | annotated tag                   |
