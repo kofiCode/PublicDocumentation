@@ -762,30 +762,78 @@ http://alexott.net/en/writings/emacs-vcs/EmacsGit.html#sec7
 
 ** magit
 
-A-x magit-status
-
-| Keys         | Description                  |
-|--------------+------------------------------|
-| magit-status | Start Magit                  |
-|--------------+------------------------------|
-| 1            | goto untracked               |
-| 2            | unstaged                     |
-| 3            | staged                       |
-| 4            | unpushed                     |
-|--------------+------------------------------|
-| k            | file unknown > delete        |
-| k            | file modified > drop changes |
-| i            | ignore                       |
-| RET          | open                         |
-| c            | commit, free form message    |
-| C            | commit, files changed added  |
-| s, u         | stage, unstage               |
-| S, U         | stage, unstage ALL           |
-|--------------+------------------------------|
-| z, a, k      | stash, apply, kill           |
-|--------------+------------------------------|
+|--------------+--------------------------------------|
+| magit-status | Start Magit                          |
+|--------------+--------------------------------------|
+| 1            | goto untracked                       |
+| 2            | unstaged                             |
+| 3            | staged                               |
+| 4            | unpushed                             |
+|--------------+--------------------------------------|
+| k            | file unknown > delete                |
+| k            | file modified > drop changes         |
+| i            | IGNORE                               |
+| RET          | OPEN                                 |
+| c            | COMMIT, free form message            |
+| C            | COMMIT, files changed added          |
+| s, u         | stage (add), unstage                 |
+| S, U         | stage, unstage ALL                   |
+|--------------+--------------------------------------|
+| z, a, k      | stash, apply, kill                   |
+|--------------+--------------------------------------|
 
 z will stash changes, a will take stashed changes and 'a'pply them to
 the current repo. k will 'k'ill the stashd changes.
+
+|------+--------------------------------------|
+| TAB  | Toggle display changes               |
+| A-S  | Show all                             |
+| A-H  | Hide All                             |
+|------+--------------------------------------|
+| d    | diff working tree to another version |
+| D    | diff two arbitrary versions          |
+| SPC  | Scroll DOWN                          |
+| DEL  | scroll UP                            |
+|------+--------------------------------------|
+| x    | rollback to changeset                |
+| X    | rollback to last commit              |
+|------+--------------------------------------|
+| l    | history current branch               |
+| L    | history range                        |
+|------+--------------------------------------|
+| RET  | Get Detailed INFO                    |
+| .    | mark changeset                       |
+| =    | display changes                      |
+|------+--------------------------------------|
+
+When moving through history can get detailed info with `RET` key. To
+do this, he need to move to first changeset and mark it with the . key
+(magit-mark-item), and than, move to the other changeset, and display
+the changes by pressing the = key (magit-diff-with-mark). 
+
+|---+-----------------------------------|
+| a | apply changeset under point       |
+| A | apply and COMMIT                  |
+| v | reVert changes                    |
+|---+-----------------------------------|
+| h | local history                     |
+| H | specify versions in local history |
+|---+-----------------------------------|
+
+*** Tags, branches, and remote repositories
+
+
+|---+---------------------------------|
+| t | tag                             |
+| T | annotated tag                   |
+| B | create and switch to new BRANCH |
+| b | switch to existing BRANCH       |
+| R | rebase                          |
+| M | MERGE                           |
+| m | manual merge                    |
+| f | fetch remote updates            |
+| F | PULL                            |
+| P | PUSH                            |
+
 
 * ERC
