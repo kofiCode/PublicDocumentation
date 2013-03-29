@@ -45,6 +45,21 @@ This tutorial is based on the excellent book: "Ruby on Rails Tutorial
 - Learn Rails by Example", by Michael Hartl.  I'll abbreviate this
 with the ackronym: (RORT)
 
+* Testing
+
+We are using the natural language testing syntax by Capybara.
+
+http://rubydoc.info/github/jnicklas/capybara/file/README.md
+http://rubydoc.info/github/jnicklas/capybara
+
+We ALWAYS start with testing.  So first we decide what we want to
+build (what type of page), and think of what the test will be like.
+So lets build a page that says: "Hello World".  So first we'll design
+a test that looks for the words "Hello World" on the page.
+
+However, since this is our VERY FIRST page, we'll relax the test first
+discipline so we can first learn about pages and their URL's.
+
 * Setup testing
 
 Add rspec, guard, livereload, spork, capybara, etc... to `Gemfile`
@@ -68,16 +83,6 @@ end
 I've also setup notifications on my arch linux system using `dunst`.
 See (RORT, 105) for advice on how to setup notifications for your
 system. 
-
-* Testing
-
-We ALWAYS start with testing.  So first we decide what we want to
-build (what type of page), and think of what the test will be like.
-So lets build a page that says: "Hello World".  So first we'll design
-a test that looks for the words "Hello World" on the page.
-
-However, since this is our VERY FIRST page, we'll relax the test first
-discipline so we can first learn about pages and their URL's.
 
 * Create a simple page
 
@@ -292,6 +297,8 @@ However, since we dont have any files in `app/models` lets put
 `user.rb` there:
 
 ** The Model
+
+in the file: `app/models/user.rb`:
 
     class User < ActiveRecord::Base
       attr_accessible :email, :name
@@ -1586,7 +1593,7 @@ From:
 http://stackoverflow.com/questions/3437585/best-way-to-add-page-specific-javascript-in-a-rails-3-app
 
 ```rhtml
-  <head>
+<head>
     ...
     <%= yield :head %>
   </head>

@@ -812,3 +812,11 @@ password: hhmspiritpoemnumberhardfamilyone
 just type:
 
     truecrypt -d
+* pacman
+
+To list files associated with a package:
+
+    pacman -Ql <package-name>
+* random password generation
+
+    $ apg -m 25 -M NC

@@ -230,6 +230,44 @@ Function Interactive, for that information.)
       "Multiply NUMBER by seven."
       (* 7 number))
 
+** Interactive Functions
+
+Interactive functions allow you to prompt the user for what each
+parameter for a function should be.
+
+(ref:
+http://www.gnu.org/savannah-checkouts/gnu/emacs/manual/html_node/elisp/Interactive-Codes.html#Interactive-Codes)
+
+So the following:
+
+```elisp
+(defun get-a-string (str)
+"print a string"
+(interactive "sEnter a string: ")
+(message (format "The string you entered is: %s" str)))
+```
+
+The `s` in the interactive line: "sEnter... means get a string.  We
+can use `n` to get a number.  Notice for each arg, we separate with a
+newline character `\n`.
+
+```elisp
+(defun get-a-string (str numb)
+"print a string"
+(interactive "sEnter a string: \nnEnter a number: ")
+(message (format "The string you entered is: %s.  10 times your number
+is: %d" str (* 10 numb))))
+```
+
+```elisp
+(defun foo (str bool)
+  (interactive
+    (list (read-string "Some text: ")
+          (y-or-n-p "Do the thing? ")))
+  (some-func str)
+  (if bool (some-other-func str)))
+```
+
 * Install the function
 
 Install the function by putting the cursor at the end of the
@@ -489,6 +527,30 @@ Now lets assign it properly with:
 ```
 
 * Org Mode
+** Tables
+
+| Keys    | Description     |
+|---------+-----------------|
+| C-c RET | Horizontal Rule |
+
+** Export as HTML
+
+| Keys      | Description    |
+|-----------+----------------|
+| C-c C-e h | Export to HTML |
+|           |                |
+
+
+
+** Quickies
+| Keys  | Effect                                   |
+|-------+------------------------------------------|
+| C-c ^ | sort all subentries of the current entry |
+| C-c . | add a timestamp to the current entry     |
+
+Use Shift and arrows to skip days or weeks. Use the mouse on the
+calendar or press Enter on a specific day to choose it.
+
 ** File Links
 
    Visit another file (target) and type: `C-c l`.  Then go back to the
@@ -541,7 +603,7 @@ Can use syntax like: `+2w` for two weeks from now.
 
      C-c a a
 
-* Workgroups / Workspaces
+* Workgroups
 
 Set the prefix key with:
 
@@ -551,14 +613,14 @@ You can create a workgroup, rename it, switch to a named workgroup.
 You can go to the previous or next workgroups, or you can go to the
 workgroup number (0-9).
 
-| Keys         | Description |
-|--------------+-------------|
-| <prefix> c   | Create      |
-| <prefix> A   | Rename      |
-| <prefix> v   | Switch      |
-| <prefix> p   | Previous    |
-| <prefix> n   | Next        |
-| <prefix> 0-9 | Goto        |
+| Keys         | Description  |
+|--------------+--------------|
+| <prefix> c   | Create       |
+| <prefix> A   | Rename       |
+| <prefix> v   | Switch   *** |
+| <prefix> p   | Previous     |
+| <prefix> n   | Next         |
+| <prefix> 0-9 | Goto         |
 
 Workgroups actually consist of two workgroups.  The base workgroup,
 and the working workgroup.  The base config is the one that you have
@@ -594,10 +656,61 @@ the current frame.
 You can move a workgroup leftward or rightward in the workgroups
 list.
 
-| Keys       | Description  |
-|------------+--------------|
-| <prefix> , | Offset Left  |
-| <prefix> . | Offset Right |
+| Keys         | Description  |
+|--------------+--------------|
+| <prefix> C-, | Offset Left  |
+| <prefix> C-. | Offset Right |
+
+Clone a workgroup
+
+| Keys | Description       |
+|------+-------------------|
+| C    | Clone a workgroup |
+
+
+** Coding Workgroups
+
+I want, when i go to kill emacs for it to ask me if i want to save
+the current buffer layout to the active workgroup.
+
+```elisp
+;; try to write function that will allow the prompting 
+;; of updating AND saving the current workspace.
+(defun ft-uw () 
+  "function to ask user if they'd like to update
+their current workgroup"
+  (progn 
+    (if (y-or-n-p "Update workgroup?")
+        (progn 
+          (wg-update-workgroup (wg-current-workgroup))
+          (wg-save wg-file))
+      1)))
+(add-hook 'kill-emacs-query-functions 'ft-uw )
+```elisp
+
+  I think the
+function I want is: `wg-update-workgroup`, however it is not
+interactive.  Looks like something like the following might work:
+
+```
+(defun foo (str bool)
+  (interactive
+    (list (read-string "Some text: ")
+          (y-or-n-p "Update workgroup with current buffer layout?")))
+  (some-func str)
+  (if bool (some-other-func str)))
+```
+* Syntax Highlighting
+
+I want to highlight code that falls between:
+
+```
+and the next
+```
+
+So above: 'and the next' would be highlighted.  Can look at
+markdown-mode.el, but for now it's a bit too complex, so leave it for
+later. 
 
 * Emacs installed packages
 
@@ -619,3 +732,60 @@ list.
   ruby-compilation   0.9          installed  run a ruby process in a compilation buffer
   ruby-mode          1.1          installed  ruby-mode package
   workgroups         0.2.0        installed  workgroups for windows (for Emacs)
+
+wg-list
+* GIT
+** ref
+
+http://alexott.net/en/writings/emacs-vcs/EmacsGit.html#sec7
+
+** vc-git
+
+| Keys        | Description               |
+|-------------+---------------------------|
+| git-status  | Start VC-GIT              |
+|-------------+---------------------------|
+| n, p        | next,previous lines       |
+| m, u, SPC   | mark, unmark, toggle mark |
+| a, r        | add, remove               |
+| v, o        | view, open                |
+| i           | ignore file > .gitignore  |
+| =           | see what has changed      |
+| c           | commit changes            |
+| C-c C-c     | finish commit message     |
+|-------------+---------------------------|
+| git-merge   | Merge from another branch |
+| !           | resolve conflicts         |
+| git-log     |                           |
+| git-history |                           |
+| k           | gitk                      |
+
+** magit
+
+A-x magit-status
+
+| Keys         | Description                  |
+|--------------+------------------------------|
+| magit-status | Start Magit                  |
+|--------------+------------------------------|
+| 1            | goto untracked               |
+| 2            | unstaged                     |
+| 3            | staged                       |
+| 4            | unpushed                     |
+|--------------+------------------------------|
+| k            | file unknown > delete        |
+| k            | file modified > drop changes |
+| i            | ignore                       |
+| RET          | open                         |
+| c            | commit, free form message    |
+| C            | commit, files changed added  |
+| s, u         | stage, unstage               |
+| S, U         | stage, unstage ALL           |
+|--------------+------------------------------|
+| z, a, k      | stash, apply, kill           |
+|--------------+------------------------------|
+
+z will stash changes, a will take stashed changes and 'a'pply them to
+the current repo. k will 'k'ill the stashd changes.
+
+* ERC
