@@ -762,25 +762,27 @@ http://alexott.net/en/writings/emacs-vcs/EmacsGit.html#sec7
 
 ** magit
 
-|--------------+--------------------------------------|
-| magit-status | Start Magit                          |
-|--------------+--------------------------------------|
-| 1            | goto untracked                       |
-| 2            | unstaged                             |
-| 3            | staged                               |
-| 4            | unpushed                             |
-|--------------+--------------------------------------|
-| k            | file unknown > delete                |
-| k            | file modified > drop changes         |
-| i            | IGNORE                               |
-| RET          | OPEN                                 |
-| c            | COMMIT, free form message            |
-| C            | COMMIT, files changed added          |
-| s, u         | stage (add), unstage                 |
-| S, U         | stage, unstage ALL                   |
-|--------------+--------------------------------------|
-| z, a, k      | stash, apply, kill                   |
-|--------------+--------------------------------------|
+|--------------+------------------------------|
+| magit-status | Start Magit                  |
+|--------------+------------------------------|
+| g            | refresh Magit buffer         |
+|--------------+------------------------------|
+| 1            | goto untracked               |
+| 2            | unstaged                     |
+| 3            | staged                       |
+| 4            | unpushed                     |
+|--------------+------------------------------|
+| k            | file unknown > delete        |
+| k            | file modified > drop changes |
+| i            | IGNORE                       |
+| RET          | OPEN                         |
+| c            | COMMIT, free form message    |
+| C            | COMMIT, files changed added  |
+| s, u         | stage (add), unstage         |
+| S, U         | stage, unstage ALL           |
+|--------------+------------------------------|
+| z, a, k      | stash, apply, kill           |
+|--------------+------------------------------|
 
 z will stash changes, a will take stashed changes and 'a'pply them to
 the current repo. k will 'k'ill the stashd changes.
@@ -833,7 +835,5 @@ the changes by pressing the = key (magit-diff-with-mark).
 | f | fetch remote updates            |
 | F | PULL                            |
 | P | PUSH                            |
-
-
 
 * ERC
