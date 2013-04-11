@@ -1,4 +1,8 @@
-* Super Useful
+# Reference
+
+[GNU Emacs Manuals Online](http://www.gnu.org/software/emacs/manual/)
+
+# Super Useful
 
 Key Stroke | Effect                           
 ---------- | -------------------------------- 
