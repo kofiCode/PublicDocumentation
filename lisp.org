@@ -1,0 +1,8 @@
+The purpose of this tutorial is to give you the eureka that lisp
+users talk about.  This should be done with the least amount of
+ceremony.   This tutorial is targetted at programmers who know some
+other languages, like java, etc...
+
+You can get a hint of what this 'lisp elightenment' by reading:  [[http://www.defmacro.org/ramblings/lisp.html][The
+Nature of Lisp]].  Or you can read the first chapter in: [[http://www.gigamonkeys.com/book/introduction-why-lisp.html][Practical
+Common Lisp]].  To paraphrase:

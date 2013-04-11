@@ -113,12 +113,6 @@ or put the following in your .emacs to have on by default
 
  In sgml-mode, a built-in pretty printing function called
 (sgml-pretty-print ...)
-* Keymaps & Function bindings
-
-| Command         | Meaning                           |
-| ----------      | -------------------------------- |
-A-x describe-key  | and hit the key (or key combination) in question. This will reveal the name of the key as well as the function it is currently bound to.
-C-h f             | Display documentation on the Lisp function named function (describe-function). Since commands are Lisp functions, a command name may be used.
 
 * Exuberant ctags
 
@@ -162,22 +156,12 @@ A-F8     | ispell for flyspell highlighted work AFTER the cursor position
 C-c C-c       | to compile to **.dvi/**.pdf, again to view
 C-c C-t C-p   | to toggle into PDF mode.
 C-c =         | show TOC
-
-* Programming
 * Cheatsheet
 
 | Key Stroke            | Effect                           |
 | ----------            | -------------------------------- |
 C-h v < variable-name > | display the contents of a variable
 C-x C-e                 | evaluate an expression: position the cursor after a list and type
-
-* Variables
-
-| Variable | Definition |
-| -------- | ---------- |
-load-path  | The variable load-path lists all the directories where Emacs should look for Elisp files.
-
-[Reference](http://www.gnu.org/software/emacs/emacs-lisp-intro/html_node/index.html)
 
 * Overview
 
@@ -194,113 +178,7 @@ without closing and reopenning emacs.
     ;; Reload .emacs file by typing: A-x reload.
     (defun reload () "Reloads .emacs interactively."
     (interactive)
-    (load "~/.emacs"))
-
-* To create a function
-
-A function definition has up to five parts following the word
-defun:
-
--   The name of the symbol to which the function definition should
-    be attached.
--   A list of the arguments that will be passed to the function. If
-    no arguments will be passed to the function, this is an empty list,
-    ().
--   Documentation describing the function. (Technically optional,
-    but strongly recommended.)
--   Optionally, an expression to make the function interactive so
-    you can use it by typing M-x and then the name of the function; or
-    by typing an appropriate key or keychord.
--   The code that instructs the computer what to do: the body of
-    the function definition.
-
-It is helpful to think of the five parts of a function definition
-as being organized in a template, with slots for each part:
-
-    (defun function-name (arguments...)
-      "optional-documentation..."
-      (interactive argument-passing-info)     ; optional
-      body...)
-
-As an example, here is the code for a function that multiplies its
-argument by 7. (This example is not interactive. See Making a
-Function Interactive, for that information.)
-
-    (defun multiply-by-seven (number)
-      "Multiply NUMBER by seven."
-      (* 7 number))
-
-** Interactive Functions
-
-Interactive functions allow you to prompt the user for what each
-parameter for a function should be.
-
-(ref:
-http://www.gnu.org/savannah-checkouts/gnu/emacs/manual/html_node/elisp/Interactive-Codes.html#Interactive-Codes)
-
-So the following:
-
-```elisp
-(defun get-a-string (str)
-"print a string"
-(interactive "sEnter a string: ")
-(message (format "The string you entered is: %s" str)))
-```
-
-The `s` in the interactive line: "sEnter... means get a string.  We
-can use `n` to get a number.  Notice for each arg, we separate with a
-newline character `\n`.
-
-```elisp
-(defun get-a-string (str numb)
-"print a string"
-(interactive "sEnter a string: \nnEnter a number: ")
-(message (format "The string you entered is: %s.  10 times your number
-is: %d" str (* 10 numb))))
-```
-
-```elisp
-(defun foo (str bool)
-  (interactive
-    (list (read-string "Some text: ")
-          (y-or-n-p "Do the thing? ")))
-  (some-func str)
-  (if bool (some-other-func str)))
-```
-
-* Install the function
-
-Install the function by putting the cursor at the end of the
-function and typing C-x C-e. This will install the function for the
-life of your current emacs session. To install more permanently put
-it in your ~/.emacs file.
-
-To make the above function interactive do:
-
-    (defun multiply-by-seven (number)
-      "Multiply NUMBER by seven."
-      (interactive "p")
-      (message "The result is %d" (* 7 number)))
-
-Invoke with `C-u` some number `A-x multiply-by-seven`.
-
-* Installing *.el files
-
-** One time
-
-Ensure you have the following in your ~/.emacs file:
-
-    (add-to-list 'load-path "~/projects/elisp")
-
-** For each new *.el file
-
-Ensure you have the following in your ~/.emacs file:
-
-    (require 'foo)
-
-where foo means foo.el
-
-And put your foo.el file in: `~/projects/elisp`
+    (load "~/.emacs")) 
 * Reference
 
 [GNU Emacs Manuals Online](http://www.gnu.org/software/emacs/manual/)
@@ -539,7 +417,6 @@ Now lets assign it properly with:
 |-----------+----------------|
 | C-c C-e h | Export to HTML |
 |           |                |
-
 
 
 ** Quickies
@@ -835,5 +712,246 @@ the changes by pressing the = key (magit-diff-with-mark).
 | f | fetch remote updates            |
 | F | PULL                            |
 | P | PUSH                            |
-
 * ERC
+* Weblogger
+
+;; in .emacs file:
+;;
+;; (load-file "weblogger.el")
+
+then:
+ M-x weblogger-setup-weblog
+ M-x weblogger-start-entry
+
+;; C-x C-s    -- post-and-publish current buffer to the weblog.
+;;               Calling weblogger-publish-entry with an prefix argument
+;;               (i.e. C-u C-x C-s) will prompt for which weblog
+;;               to use.
+;; C-c C-c    -- save as draft and bury the buffer.
+;; C-c C-n    -- post (but not publish) the current entry and
+;;               load the next entry.
+;; C-c C-p    -- post (but not publish) the current entry and
+;;               load the previous entry.
+;; C-c C-k    -- delete the current entry.
+;; M-g        -- synchronise weblogger.el's idea of the entries available
+;;               with the weblog server.
+;; C-c C-t m  -- edit the main template.
+;; C-c C-t a  -- edit the Archive Index template
+;; C-c C-s s  -- Change the server being used.
+;; C-c C-s w  -- Change the weblog.
+;; C-c C-s u  -- Change the user (re-login).
+
+* org2blog
+
+|-----------------------+-----------|
+| function              | effect    |
+|-----------------------+-----------|
+| org2blog/wp-login     | login     |
+| org2blog/wp-logout    | logout    |
+| org2blog/wp-new-entry | new entry |
+|-----------------------+-----------|
+
+|-------+----------------------|
+| key   | effect               |
+|-------+----------------------|
+| C-c d | post buffer as draft |
+| C-c p | publish              |
+| C-c D | post as page draft   |
+| C-c P | post as page         |
+|-------+----------------------|
+
+
+* Keymaps & Function bindings
+
+| Command          | Meaning                                                                                                                                       |
+|------------------+-----------------------------------------------------------------------------------------------------------------------------------------------|
+| A-x describe-key | and hit the key (or key combination) in question. This will reveal the name of the key as well as the function it is currently bound to.      |
+| C-h f            | Display documentation on the Lisp function named function (describe-function). Since commands are Lisp functions, a command name may be used. |
+
+(global-set-key "\C-c\C-s" 'fold-dwim-show-all)
+
+(setq wg-prefix-key (kbd "C-c w"))
+
+* Install the function
+
+Install the function by putting the cursor at the end of the
+function and typing C-x C-e. This will install the function for the
+life of your current emacs session. To install more permanently put
+it in your ~/.emacs file.
+
+To make the above function interactive do:
+
+    (defun multiply-by-seven (number)
+      "Multiply NUMBER by seven."
+      (interactive "p")
+      (message "The result is %d" (* 7 number)))
+
+Invoke with `C-u` some number `A-x multiply-by-seven`.
+
+* Installing *.el files
+
+** One time
+
+Ensure you have the following in your ~/.emacs file:
+
+    (add-to-list 'load-path "~/projects/elisp")
+
+** For each new *.el file
+
+Ensure you have the following in your ~/.emacs file:
+
+    (require 'foo)
+
+where foo means foo.el
+
+And put your foo.el file in: `~/projects/elisp`
+
+* Programming
+
+Try the interactive elisp buffer with: `A-x ielm`
+
+| function | effect                        |
+|----------+-------------------------------|
+| ielm     | interactive elisp buffer REPL |
+| type-of  | tell you type of variable     |
+| car      | first part of cons            |
+| cdr      | second part of cons           |
+|          |                               |
+
+** let expression
+
+(let ((variable value)
+           (variable value)
+           ...)
+       body...)
+
+* Variables
+
+| Variable | Definition |
+| -------- | ---------- |
+load-path  | The variable load-path lists all the directories where Emacs should look for Elisp files.
+
+[Reference](http://www.gnu.org/software/emacs/emacs-lisp-intro/html_node/index.html)
+
+* To create a function
+
+A function definition has up to five parts following the word
+defun:
+
+-   The name of the symbol to which the function definition should
+    be attached.
+-   A list of the arguments that will be passed to the function. If
+    no arguments will be passed to the function, this is an empty list,
+    ().
+-   Documentation describing the function. (Technically optional,
+    but strongly recommended.)
+-   Optionally, an expression to make the function interactive so
+    you can use it by typing M-x and then the name of the function; or
+    by typing an appropriate key or keychord.
+-   The code that instructs the computer what to do: the body of
+    the function definition.
+
+It is helpful to think of the five parts of a function definition
+as being organized in a template, with slots for each part:
+
+    (defun function-name (arguments...)
+      "optional-documentation..."
+      (interactive argument-passing-info)     ; optional
+      body...)
+
+As an example, here is the code for a function that multiplies its
+argument by 7. (This example is not interactive. See Making a
+Function Interactive, for that information.)
+
+    (defun multiply-by-seven (number)
+      "Multiply NUMBER by seven."
+      (* 7 number))
+
+** Interactive Functions
+
+Interactive functions allow you to prompt the user for what each
+parameter for a function should be.
+
+(ref:
+http://www.gnu.org/savannah-checkouts/gnu/emacs/manual/html_node/elisp/Interactive-Codes.html#Interactive-Codes)
+
+So the following:
+
+```elisp
+(defun get-a-string (str)
+"print a string"
+(interactive "sEnter a string: ")
+(message (format "The string you entered is: %s" str)))
+```
+
+The `s` in the interactive line: "sEnter... means get a string.  We
+can use `n` to get a number.  Notice for each arg, we separate with a
+newline character `\n`.
+
+```elisp
+(defun get-a-string (str numb)
+"print a string"
+(interactive "sEnter a string: \nnEnter a number: ")
+(message (format "The string you entered is: %s.  10 times your number
+is: %d" str (* 10 numb))))
+```
+
+```elisp
+(defun foo (str bool)
+  (interactive
+    (list (read-string "Some text: ")
+          (y-or-n-p "Do the thing? ")))
+  (some-func str)
+  (if bool (some-other-func str)))
+```
+* Debugger
+
+abc
+
+|-----+----------------------------------------------------------------|
+| key | effect                                                         |
+|-----+----------------------------------------------------------------|
+| q   | QUIT debugger                                                  |
+| c   | continue execution                                             |
+| d   | continue but enter debugger on next function call              |
+| b   | flag frame so debugger is entered when frame is exited         |
+| u   | cancel 'b'                                                     |
+| j   | like b, then c, but don't stop at any other b's, just this one |
+| e   | read expression in minibuffer, and print in echo area          |
+| R   | like e, but save result                                        |
+| l   | list functions that will trigger debugger                      |
+| r   | value specied will be return value for frame                   |
+|-----+----------------------------------------------------------------|
+
+* Functions as Parameters
+
+Desired:
+
+```
+(defun f (x) (+ x 1))
+
+(f 1)
+;; 2
+
+(defun x (y) (y 1))
+
+(x f)
+;; you could expect "2", but instead get a "void variable" error
+```
+
+Correct way:
+
+```
+(defun f (x)
+  (1+ x))
+
+(defun x (y)
+  (funcall y 1))
+
+(x #'f)
+```
+* Macros
+
+ref: http://www.bookshelf.jp/texi/onlisp/onlisp_8.html
+
+Say we w

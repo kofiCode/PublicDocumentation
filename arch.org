@@ -11,6 +11,8 @@
 
 *** Hard Disks
 
+Make a swap partition, so 'suspend' works on laptop!
+
 # lsblk
 # cfdisk /dev/sda
 create a 15360 bootable, and then create another for the rest of the
@@ -43,6 +45,13 @@ ln -s /usr/share/zoneinfo/<Zone>/<SubZone> /etc/localtime
 # passwd
 
 *** Bootloader
+
+Consider using grub, which allows you to install gparted as a boot
+option so if you want to post-install modify your partitions it's
+easier.  I.e. I now want suspend to work with my laptop but it
+requires a swap partition, which requires gparted to change the
+partitions... 
+
 # pacman -S syslinux
 # syslinux-install_update -i -a -m
 # nano /boot/syslinux/syslinux.cfg
@@ -818,5 +827,7 @@ To list files associated with a package:
 
     pacman -Ql <package-name>
 * random password generation
+
+secure passwords
 
     $ apg -m 25 -M NC

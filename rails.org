@@ -52,6 +52,31 @@ We are using the natural language testing syntax by Capybara.
 http://rubydoc.info/github/jnicklas/capybara/file/README.md
 http://rubydoc.info/github/jnicklas/capybara
 
+** Debugging
+
+Debugging
+
+It can be useful to take a snapshot of the page as it currently is and
+take a look at it:
+
+    save_and_open_page
+
+You can also retrieve the current state of the DOM as a string using
+page.html.
+
+    print page.html
+
+This is mostly useful for debugging. You should avoid testing against
+the contents of page.html and use the more expressive finder methods
+instead.
+
+Finally, in drivers that support it, you can save a screenshot:
+
+    page.save_screenshot('screenshot.png')
+
+I didn't get save_screenshot to work!!!!
+** Overview
+
 We ALWAYS start with testing.  So first we decide what we want to
 build (what type of page), and think of what the test will be like.
 So lets build a page that says: "Hello World".  So first we'll design
@@ -740,6 +765,29 @@ attributes.
   <%= f.submit "Create my account", class: "btn btn-large btn-primary" %>
 <% end %>
 ```
+
+** undefine method ..._path
+
+Say I have a model: `Coordinates`, in my controller I have: `@coord =
+Coordinate.new`, then in my form_for I have: `form_for(@coord)` and I
+get error: `undefined method 'coordinates_path' for...`.  I need to
+create a route that will respond to this.
+
+`config/routes.rb`:
+
+    match '/about', to: 'static_pages#about'
+
+the code match ’/about’ also automatically creates named routes for
+use in the controllers and views:
+
+    about_path => '/about'
+    about_url => 'http://localhost:3000/about'
+
+So in our example we need a route like:
+
+    match '/coordinates', to: 'pages#locate'
+
+** Submitting form_for's
 
 Submitting this form will go to the `create` action/method where we'd
 use code like:

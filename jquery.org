@@ -8,8 +8,6 @@ Javascript is here: app/assets/javascript/test.js
 URL: http://127.0.0.1:3000/pages/shop
 View file: app/views/pages/shop.html.erb
 
-
-
 * Basics
 
 

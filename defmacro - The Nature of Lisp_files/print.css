@@ -1,0 +1,35 @@
+
+
+
+
+
+/*
+     FILE ARCHIVED ON 3:38:04 Mar 7, 2012 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 6:40:21 Apr 9, 2013.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+*/
+
+/* Turn off the navigation */
+.navigation 
+{
+    display: none;
+}
+
+/* Turn off the header */
+#header
+{
+    display: none;
+}
+#page-extra-1
+{
+    display: none;
+}
+
+/* Turn off footer images */
+#footer img
+{
+    display: none;
+}
