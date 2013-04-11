@@ -1,10 +1,3 @@
-Hello, Lisp!
-
-Everything we've learned about Lisp so far can be summarized by a
-single statement: Lisp is executable XML with a friendlier syntax. We
-haven't said a single word about how Lisp actually operates. It's time
-to fill this gap2.
-
 Lisp has a number of built in data types. Integers and strings, for
 example, aren't much different from what you're used to. The meaning
 of 71 or "hello" is roughly the same in Lisp as in C++ or Java. What
