@@ -69,3 +69,47 @@ appear in the mini-buffer.
 
 Now go read the following: [[file:lisp-basics.org][Lisp Basics]], it comes from The Nature of
 Lisp article, so no need to repeat it.
+
+* Projects
+
+** Todo List
+
+    '(:description "Buy Milk" :location "7-Eleven" :due-by "02-15-2013")
+
+Lets set this to a variable:
+
+    (setq todo1 '(:description "Buy Milk" :location "7-Eleven" :due-by
+    "02-15-2013"))
+
+Okay, lets grab the due-by date:
+
+    (getf todo1 :due-by)
+
+Lets create a second task:
+
+    (setq todo2 '(:description "Take out garbage" :location "Home" :due-by
+    "02-14-2013"))
+
+Now we want to create a list of all of our todos:
+
+    (setq todos (list todo1 todo2))
+
+So now `todos` is a list of lists or a list of plists.  Lets create a
+function to get the description:
+
+    (defun get-description (prop-list)
+      (getf prop-list :description))
+
+Now lets use this function to pull out all the descriptions:
+
+    (mapcar 'get-description todos)
+
+Lets persist our 'database' of todos:
+
+
+* CL REPL
+
+* CL Debugger
+
+Hit `RET` on any line of stack to get more info.
+

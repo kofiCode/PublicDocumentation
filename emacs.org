@@ -1,8 +1,8 @@
-# Reference
+* Reference
 
 [GNU Emacs Manuals Online](http://www.gnu.org/software/emacs/manual/)
 
-# Super Useful
+* Super Useful
 
 Key Stroke | Effect                           
 ---------- | -------------------------------- 
@@ -409,6 +409,13 @@ Now lets assign it properly with:
 ```
 
 * Org Mode
+** Cheatsheet
+
+| Key            | Effect                 |
+|----------------+------------------------|
+| A-LEFT/RIGHT   | promote/demote heading |
+| S-A-LEFT/RIGHT | promote/demote subtree |
+
 ** Tables
 
 | Keys    | Description     |
@@ -421,7 +428,6 @@ Now lets assign it properly with:
 |-----------+----------------|
 | C-c C-e h | Export to HTML |
 |           |                |
-
 
 ** Quickies
 | Keys  | Effect                                   |
@@ -717,35 +723,11 @@ the changes by pressing the = key (magit-diff-with-mark).
 | F | PULL                            |
 | P | PUSH                            |
 * ERC
-* Weblogger
-
-;; in .emacs file:
-;;
-;; (load-file "weblogger.el")
-
-then:
- M-x weblogger-setup-weblog
- M-x weblogger-start-entry
-
-;; C-x C-s    -- post-and-publish current buffer to the weblog.
-;;               Calling weblogger-publish-entry with an prefix argument
-;;               (i.e. C-u C-x C-s) will prompt for which weblog
-;;               to use.
-;; C-c C-c    -- save as draft and bury the buffer.
-;; C-c C-n    -- post (but not publish) the current entry and
-;;               load the next entry.
-;; C-c C-p    -- post (but not publish) the current entry and
-;;               load the previous entry.
-;; C-c C-k    -- delete the current entry.
-;; M-g        -- synchronise weblogger.el's idea of the entries available
-;;               with the weblog server.
-;; C-c C-t m  -- edit the main template.
-;; C-c C-t a  -- edit the Archive Index template
-;; C-c C-s s  -- Change the server being used.
-;; C-c C-s w  -- Change the weblog.
-;; C-c C-s u  -- Change the user (re-login).
-
 * org2blog
+
+** Create a new blog entry
+
+login > new entry > compose blog entry > ???
 
 |-----------------------+-----------|
 | function              | effect    |
@@ -755,15 +737,16 @@ then:
 | org2blog/wp-new-entry | new entry |
 |-----------------------+-----------|
 
-|-------+----------------------|
-| key   | effect               |
-|-------+----------------------|
-| C-c d | post buffer as draft |
-| C-c p | publish              |
-| C-c D | post as page draft   |
-| C-c P | post as page         |
-|-------+----------------------|
+NOTE: login to word press to be able to see drafts etc...
 
+|-------+--------------------------------------|
+| key   | effect                               |
+|-------+--------------------------------------|
+| C-c d | post buffer as draft (doesn't work?) |
+| C-c p | publish                              |
+| C-c D | post as page draft                   |
+| C-c P | post as page                         |
+|-------+--------------------------------------|
 
 * Keymaps & Function bindings
 
