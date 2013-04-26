@@ -1,0 +1,9 @@
+|------------+------------------------------------+--------------------------------------------------------------------------------------|
+| Key        | Function                           | Description                                                                          |
+|------------+------------------------------------+--------------------------------------------------------------------------------------|
+| A-.        | slime-edit-definition              | Go to the definition of the symbol at point.                                         |
+| A-, or A-* | slime-pop-find-definition-stack    | Go back to the point where M-. was invoked                                           |
+| C-x 4 .    | slime-edit-definition-other-window | Like slime-edit-definition but switchs to the other window to edit the definition in |
+| C-x 5 .    | slime-edit-definition-other-frame  |                                                                                      |
+
+

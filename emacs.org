@@ -438,7 +438,7 @@ Now lets assign it properly with:
 Use Shift and arrows to skip days or weeks. Use the mouse on the
 calendar or press Enter on a specific day to choose it.
 
-** File Links
+** Links
 
    Visit another file (target) and type: `C-c l`.  Then go back to the
    source file and insert the link to the target with: `C-c C-l`.
@@ -649,27 +649,32 @@ http://alexott.net/en/writings/emacs-vcs/EmacsGit.html#sec7
 
 ** magit
 
-|--------------+------------------------------|
-| magit-status | Start Magit                  |
-|--------------+------------------------------|
-| g            | refresh Magit buffer         |
-|--------------+------------------------------|
-| 1            | goto untracked               |
-| 2            | unstaged                     |
-| 3            | staged                       |
-| 4            | unpushed                     |
-|--------------+------------------------------|
-| k            | file unknown > delete        |
-| k            | file modified > drop changes |
-| i            | IGNORE                       |
-| RET          | OPEN                         |
-| c            | COMMIT, free form message    |
-| C            | COMMIT, files changed added  |
-| s, u         | stage (add), unstage         |
-| S, U         | stage, unstage ALL           |
-|--------------+------------------------------|
-| z, a, k      | stash, apply, kill           |
-|--------------+------------------------------|
+|--------------+----------------------|
+|  key/command | Effect               |
+|--------------+----------------------|
+| magit-status | Start Magit          |
+|            g | refresh buffer       |
+|            1 | goto untracked       |
+|            2 | unstaged             |
+|            3 | staged               |
+|            4 | unpushed             |
+|--------------+----------------------|
+
+|-------------+------------------------------|
+| key/command | Effect                       |
+|-------------+------------------------------|
+| k           | file unknown > delete        |
+| k           | file modified > drop changes |
+| i           | IGNORE                       |
+| RET         | OPEN                         |
+| c           | COMMIT, free form message    |
+| C           | COMMIT, files changed added  |
+| s, u        | stage (add), unstage         |
+| S, U        | stage, unstage ALL           |
+| P P         | Push                         |
+|-------------+------------------------------|
+| z, a, k     | stash, apply, kill           |
+|-------------+------------------------------|
 
 z will stash changes, a will take stashed changes and 'a'pply them to
 the current repo. k will 'k'ill the stashd changes.
@@ -750,14 +755,39 @@ NOTE: login to word press to be able to see drafts etc...
 
 * Keymaps & Function bindings
 
-| Command          | Meaning                                                                                                                                       |
-|------------------+-----------------------------------------------------------------------------------------------------------------------------------------------|
-| A-x describe-key | and hit the key (or key combination) in question. This will reveal the name of the key as well as the function it is currently bound to.      |
-| C-h f            | Display documentation on the Lisp function named function (describe-function). Since commands are Lisp functions, a command name may be used. |
+ref:
+http://www.masteringemacs.org/articles/2011/02/08/mastering-key-bindings-emacs/ 
 
-(global-set-key "\C-c\C-s" 'fold-dwim-show-all)
+keywords: keybind
 
-(setq wg-prefix-key (kbd "C-c w"))
+** Listing all the Mode Maps
+
+If you type this Emacs will give you an apropos buffer with all the
+known mode maps that follow the major mode naming scheme:
+
+    C-u M-x apropos-variable RET -mode-map$ RET
+
+** Define for a given mode map
+
+    (define-key paredit-mode-map (kbd "C-<left>") 'windmove-left)
+
+** Global Def
+
+    (global-set-key "\C-c\C-s" 'fold-dwim-show-all)
+
+** Using mode hooks
+
+```
+(defun mp-add-python-keys ()
+  (local-set-key (kbd "C-c q") 'shell))
+(add-hook 'python-mode-hook 'mp-add-python-keys)
+```
+
+** example (incomplete)
+
+Ctrl-right when i was working on *.el files was not define to be
+`windmove-right` as I wished but bound to:
+`paredit-forward-slurp-sexp`, by paredit minor mode.
 
 * Install the function
 
@@ -942,3 +972,7 @@ Correct way:
 ref: http://www.bookshelf.jp/texi/onlisp/onlisp_8.html
 
 Say we w
+   
+
+
+

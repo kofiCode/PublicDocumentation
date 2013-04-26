@@ -37,7 +37,6 @@ science on its head in less than a single second." -- from: The
 Nature of Lisp
 
 
-
 * Method
 
 This tutorial will assume you have emacs running on your computer.
@@ -106,10 +105,329 @@ Now lets use this function to pull out all the descriptions:
 
 Lets persist our 'database' of todos:
 
-
-* CL REPL
-
-* CL Debugger
+* Debugger
 
 Hit `RET` on any line of stack to get more info.
+
+* Functions
+
+|-------------+--------|
+| function    | effect |
+|-------------+--------|
+| apply       |        |
+| concatenate |        |
+| append      |        |
+
+* Setup Environment
+
+** Connect from Emacs
+
+    A-x slime-connect
+
+** Sample .emacs
+
+(eval-after-load “slime”
+‘(progn
+(setq slime-lisp-implementations
+‘((sbcl (“/usr/bin/sbcl”))
+(clisp (“/usr/bin/clisp”)))
+common-lisp-hyperspec-root “/home/sujoy/documents/hyperspec/”)
+(slime-setup ‘(slime-asdf
+slime-autodoc
+slime-editing-commands
+slime-fancy-inspector
+slime-fontifying-fu
+slime-fuzzy
+slime-indentation
+slime-mdot-fu
+slime-package-fu
+slime-references
+slime-repl
+slime-sbcl-exts
+slime-scratch
+slime-xref-browser))
+(slime-autodoc-mode)
+(setq slime-complete-symbol*-fancy t)
+(setq slime-complete-symbol-function ‘slime-fuzzy-complete-symbol)
+(add-hook ‘lisp-mode-hook (lambda () (slime-mode t)))))
+
+(require ‘slime)
+
+** Quicklisp
+
+Install/Setup quicklisp: http://www.quicklisp.org
+
+|-----------------------------------+-----------------------------------------------------|
+| command                           | effect                                              |
+|-----------------------------------+-----------------------------------------------------|
+| (ql:quickload "swank")            | install swank into sbcl                             |
+| (ql:system-apropos "some-string") | search for package: "some-string" in quicklist repo |
+|-----------------------------------+-----------------------------------------------------|
+
+** Swank on SBCL
+
+add following into: `~/.sbclrc` to start swank on sbcl startup.
+
+    (ql:quickload "swank")
+    (swank:create-server)
+
+fire up sbcl
+
+    $ sbcl
+
+swank will now be running in sbcl and you can connect to it from
+emacs. 
+
+** SBCL
+
+Download and install SBCL via pacman
+
+    $ sudo pacman -S sbcl
+
+in `~/.sbclrc` put:
+
+    (require :asdf)
+
+* REPL
+
+| key   | effect                         |
+|-------+--------------------------------|
+| A-C-x | Evaluate current toplevel form |
+|       |                                |
+
+* Tutorial
+
+A variable
+
+```
+CL-USER> (defparameter my-age 19)
+MY-AGE
+CL-USER> my-age
+19
+```
+
+Redefine the variable:
+
+```
+CL-USER> (defparameter my-age 20)
+MY-AGE
+CL-USER> my-age
+20
+```
+
+* Web
+
+** Hutchentoot
+
+*** references 
+
+Two great articles:
+
+http://www.adampetersen.se/articles/lispweb.htm
+
+and
+
+http://msnyder.info/posts/2011/07/lisp-for-the-web-part-ii/
+
+*** Install / Setup
+
+
+I'll abbreviate Hutchentoot to just H.
+
+First lets download and install hutchentoot with quicklisp
+
+    (ql:quickload "hunchentoot")
+
+Start the server:
+
+    (hunchentoot:start (make-instance 'hunchentoot:easy-acceptor :port
+    4242))
+
+Test it out in a browser:
+
+    http://127.0.0.1:4242/
+
+*** Routing
+
+now we want to route certain URLs to create different pages.  H. has
+a global variable:
+
+    *dispatch-table*
+
+that contains a `list` dispatch routes.  Example:
+
+```
+(setq *dispatch-table*
+ (list
+  (create-regex-dispatcher "^/index" 'controller-index)
+  (create-regex-dispatcher "^/about" 'controller-about)))
+```
+
+So any url with `/index` after the machine name, will execute the `controller
+* Package (system) Management
+** Defining a System
+*** Basics
+
+Say you have a project with name:
+
+    body-parts
+
+Put that in a folder called `body-parts`, with a file at the top level
+called: 
+
+    body-parts/body-parts.asd
+
+in `body-parts.asd`, at the top, as usual, put:
+
+```
+(defpackage #:body-parts
+  (:use :cl :asdf))
+(in-package :body-parts)
+```
+
+then the asdf specific part after that is:
+
+```
+(defsystem body-parts
+  :name "body-parts"
+  :version "0.0.0"
+  :maintainer "T. God"
+  :author "Desmon Table"
+  :licence "BSD sans advertising clause (see file COPYING for details)"
+  :description "Body-Parts"
+  :long-description "Lisp implementation of the body."
+```
+
+only `:name` is required, the others are optional.
+
+*** Specify Dependencies
+**** Simple
+
+The simplest case is when your dependencies are linear.  For example: 
+
+`head.lisp` depends on `torso.lisp` depends on `legs.lisp`
+
+In the asdf file this is specified like so:
+
+```
+:components ((:file "legs")
+             (:file "torso" :depends-on ("legs"))
+             (:file "head" :depends-on ("torso")))
+```
+
+`torso` depends on legs, and `head` depends on `torso` and hence
+transitively on `legs`.
+
+So the whole file at this point looks like this:
+
+```
+(defpackage #:body-parts
+  (:use :cl :asdf))
+(in-package :body-parts)
+(defsystem body-parts
+  :name "body-parts"
+  :version "0.0.0"
+  :components ((:file "legs")
+               (:file "torso" :depends-on ("legs"))
+               (:file "head" :depends-on ("torso"))))
+```
+
+i dropped the optional parts of the `defsystem` form for brevity, the
+folder would look like:
+
+```
+body-parts/
+|-- body-parts.asd
+|-- head.lisp
+|-- legs.lisp
+`-- torso.lisp
+```
+
+**** Sub-Systems / Modules
+
+A subsytem, or module, will be a sub-folder of `body-parts`, lets call
+it `art`, and put the files `tattoo.lisp` and `ink.lisp` in
+there.
+
+The folder tree looks like:
+
+```
+body-parts/
+|-- art
+|   |-- ink.lisp
+|   `-- tattoo.lisp
+|-- body-parts.asd
+|-- head.lisp
+|-- legs.lisp
+`-- torso.lisp
+```
+
+we add the following to the defsystem form:
+
+(:module circulation
+   :components ((:file "ink")
+                (:file "tattoo" :depends-on "ink")))
+
+So the file with a bit more context looks like:
+
+```
+(defsystem body-parts
+  :name "body-parts"
+  :version "0.0.0"
+  :components ((:file "legs")
+               (:file "torso" :depends-on ("legs"))
+               (:file "head" :depends-on ("torso"))
+               (:module circulation
+                  :components ((:file "ink")
+                               (:file "tattoo" :depends-on "ink")))))
+```
+
+NOTE: It is important to note that dependencies can only be defined
+inside a given set of components. So, the file `torso.lisp` cannot
+depend on the file `ink.lisp`, which is a component of a submodule.
+
+**** Depending on another System
+
+Just add a `:depends-on` parameter to the defsystem form.
+
+(defsystem body-parts
+  ;;; ...
+  :components (...)
+  :depends-on ("other-system"))
+
+** Using a System
+
+So in our `~/.sbclrc` file we'd put:
+
+```
+(require :asdf)
+(push "/home/fenton/projects/lisp/systems/" asdf:*central-registry*)
+```
+In the previous section we created a system called `body-parts`, lets
+say our folder system looks like this:
+
+```
+/home/
+`-- fenton/
+    `-- projects/
+        `-- lisp/
+            |-- body-parts/
+            `-- systems/
+```
+
+We simply create a symbolic link to `body-parts.asd` in
+`/home/fenton/projects/lisp/systems`:
+
+```
+$ cd /home/fenton/projects/systems
+$ ln -s /home/fenton/projects/body-parts/body-parts.asd
+```
+
+and then in SBCl we can load the project with:
+
+(asdf:operate 'asdf:load-op 'body-parts)
+
+** References
+
+[[http://common-lisp.net/~mmommer/asdf-howto.shtml][Getting Started with ASDF]]
 

@@ -4,11 +4,12 @@ Config file:
 
 `~/.i3/config`
 
-| Keys   | Effect                 |
-|--------+------------------------|
-| A-S-e  | stop i3 window manager |
-| S-WK-q | hard kill window       |
-
+| Keys     | Effect                 |
+|----------+------------------------|
+| WK-S-A-e | stop i3 window manager |
+| WK-S-q   | hard kill window       |
+| WK-S-r   | restart                |
+| WK-S-A-c | reload                 |
 
 Change the modifier key to `Alt`:
 
