@@ -6,4 +6,12 @@
 | C-x 4 .    | slime-edit-definition-other-window | Like slime-edit-definition but switchs to the other window to edit the definition in |
 | C-x 5 .    | slime-edit-definition-other-frame  |                                                                                      |
 
+* Commands (,)
 
+Press comma (,) then enter one of the below short cuts
+
+| key | effect           |
+|-----+------------------|
+| cl  | Compile and Load |
+| p!  | change Package   |
+|     |                  |
