@@ -109,14 +109,103 @@ Lets persist our 'database' of todos:
 
 Hit `RET` on any line of stack to get more info.
 
-* Functions
+* Macros
 
-|-------------+--------|
-| function    | effect |
-|-------------+--------|
-| apply       |        |
-| concatenate |        |
-| append      |        |
+A back quote (`) before an expression stops evaluation just like a
+forward quote.  
+
+in a back-quoted expression, any subexpression that’s
+preceded by a comma is evaluated.
+
+    `(1 2 ,(+ 1 2)) => (1 2 3)
+
+* Functions
+** Higher Order
+
+Must use `funcall` to call the function
+
+    (defun add-one (a) (+ 1 a))
+    (defun user-func (fn b) (funcall fn b)) 
+    (user-func #'add-one 10) => 11
+
+** Strings
+
+CONCATENATE creates new sequence and fills it with data from arguments. See also MAPCAN.
+
+    (concatenate 'string "hello" " " "world") => "hello world"
+    (concatenate 'list "hello" " " "world") => (#\h #\e #\l #\l #\o #\  #\w #\o #\r #\l #\d)
+    (concatenate 'vector "hello" " " "world") => #(#\h #\e #\l #\l #\o #\  #\w #\o #\r #\l #\d)
+    (concatenate 'vector '(1 2) '(3 4)) => #(1 2 3 4)
+
+** plist
+
+GETF searches supplied plist for value with matching key
+
+    (setf plist '(:name "Fenton" :age "10"))
+    (getf plist :name) => "Fenton"
+
+LET local variable binding
+
+    (let ((x 10) (y 20) z) ...)
+
+nice ref: http://jtra.cz/stuff/lisp/sclr/index.html
+
+|-------------+-------------------------------------------------|
+| function    | purpose                                         |
+|-------------+-------------------------------------------------|
+| apply       | call supplied function with specified arguments |
+| concatenate | like append but creates new list                |
+| append      | concatenates list arguments into one list       |
+| assoc       | find element in alist                           |
+|-------------+-------------------------------------------------|
+
+* Priting
+  
+** FORMAT
+
+    format destination control-string args(zero or more) => string or NIL
+
+    (setf x 10)
+    (format t "~d " x)
+
+t is output.  ~d is integer
+
+~a - output with aesthetics
+~s - standard output
+~% newline
+tilde parenthesis - flow control
+tilde tilde - escape sequence for tilde
+
+    (format nil "Items in list:~%~{~a, ~}" '(1 2 3 4)) => "Items in list:
+    1, 2, 3, 4, "
+    (format nil "~{~a~^, ~}" '(1 2 3 4)) => "1, 2, 3, 4"
+    (format nil "~f" 3.141592) => "3.141592"
+    (format nil "~2,3f" 3.141592) => "3.142"
+    (format nil "~7,3f" 3.141592) => "  3.142"
+    (format nil "~a ~s" "xyz" "xyz") => "xyz \"xyz\""
+
+* Loops
+
+** DOTIMES
+
+    (dotimes (x 10) (format t "~d " x))
+
+** LOOP
+
+Vectors: for x across vector
+
+```
+(with-output-to-string 
+  (final-string)
+  (loop
+   for curr-element across my-sequence
+   do (write-string curr-element final-string)))
+```
+
+Looping putting output into `final-string`.  Loop over
+`my-sequence`.  Each element goes into: `curr-element`
+
+Lists: for x in list
 
 * Setup Environment
 
@@ -220,7 +309,7 @@ CL-USER> my-age
 20
 ```
 
-* System (package) Management
+* System (package) Management ASDF
 ** Defining a System
 *** Basics
 
@@ -388,7 +477,6 @@ and then in SBCl we can load the `body-parts` project with:
 [[http://common-lisp.net/~mmommer/asdf-howto.shtml][Getting Started with ASDF]]
 
 * packages
-
 ** overview
     package:symbol-name
 
@@ -434,7 +522,6 @@ adding that symbol into your name-to-symbol table.
   (print s))
 
 * Web - Hunchentoot
-
 ** references 
 
 Two great articles:
@@ -482,4 +569,27 @@ that contains a `list` dispatch routes.  Example:
 
 So any url with `/index` after the machine name, will execute the `controller
 ** URL Params
+** Templating cl-who
+
+    (ql:quickload "cl-who")
+
+(defpackage #:my-package
+  (:use :cl :asdf :cl-who))
+
+
+```
+(defun ctrlr-index () 
+  (with-html-output-to-string
+      (*standard-output* nil :prologue t)
+    (:html
+     (:head (:title "Hello, world!"))
+     (:body
+      (:h1 "Hello, world!")
+      (:p "This is my Lisp web server, running on Hunchentoot,"
+          " as described in "
+          (:a :href
+              "http://newartisans.com/blog_files/hunchentoot.primer.php"
+              "this blog entry")
+          " on Common Lisp and Hunchentoot.")))))
+```
 
