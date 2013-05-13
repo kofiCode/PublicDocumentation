@@ -1,15 +1,27 @@
 SLIME
 * Debugger
+
+Put the following at the top of your file to ensure debugging
+variables are present:
+
+    (declaim (optimize (speed 0) (space 0) (debug 3)))
+
+Higher number means more important.  3 is highest.
+
+Set a breakpoint with:
+
+    (break)
+
 ** Stack Frames
 
 |-----+---------------------------|
 | key | effect                    |
 |-----+---------------------------|
-| t   | T.oggle variables display |
-| v   | V.iew source              |
-| e   | E.valuation expression    |
+| t   | Toggle variables display  |
+| v   | View source               |
+| e   | Evaluation expression     |
 | d   | eval and pretty print     |
-| i   | I.nspect                  |
+| i   | Inspect                   |
 |-----+---------------------------|
 
 ** Restarts

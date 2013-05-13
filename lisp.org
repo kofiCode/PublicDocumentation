@@ -111,6 +111,8 @@ Hit `RET` on any line of stack to get more info.
 
 * Macros
 
+** Basic
+
 A back quote (`) before an expression stops evaluation just like a
 forward quote.  
 
@@ -118,6 +120,20 @@ in a back-quoted expression, any subexpression that’s
 preceded by a comma is evaluated.
 
     `(1 2 ,(+ 1 2)) => (1 2 3)
+
+** Splice List Arguments ,@
+
+If you use the ,@ (splice) unescape instead of just a comma (,) unescape, then
+your parameter, which must be a list, will be removed from it's list.
+
+```
+(defmacro SIMPLE (arg)
+  `'("abc" ,arg))
+(defmacro SPLICE (arg)
+  `'("abc" ,@arg))
+(macroexpand (SIMPLE (1 2 3))) ;; ====> ("abc" (1 2 3))
+(macroexpand (SPLICE (1 2 3))) ;; ====> ("abc" 1 2 3)
+```
 
 * Functions
 ** Higher Order

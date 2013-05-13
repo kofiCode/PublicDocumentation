@@ -23,15 +23,6 @@ In workspace 10, start urxvt, then move to workspace 1:
 
     exec --no-startup-id i3-msg 'workspace 10; exec urxvt; workspace 1'
 
-
-
-
-
-
-
-
-
-
 * status
 
 ref: http://i3wm.org/i3status/manpage.html

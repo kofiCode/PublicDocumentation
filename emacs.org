@@ -1040,3 +1040,41 @@ Sexp functions
 (defun b ()
   "a function"
   (+ 2 2))
+* w3m
+
+|---------------+-------------------------------|
+| key           | effect                        |
+|---------------+-------------------------------|
+| S             | Google Search                 |
+| s             | History                       |
+| Q             | Quit                          |
+| B             | Back                          |
+| TAB / S-TAB   | Next / Prev Anchor            |
+| RET           | View this URL                 |
+| S-RET         | View URL in new session       |
+| SPC/BKSP      | Scroll up/down                |
+| g             | goto URL                      |
+| G             | Goto URL new session          |
+| R             | Reload                        |
+| c             | copy page                     |
+| T             | Toggle display images         |
+| =             | toggle display headers        |
+| C-c C-@       | bookmark location IN page     |
+| C-c C-v       | return to bookmarked location |
+| C-c C-t       | create new Tab                |
+| C-c C-w       | kill tab                      |
+| C-c C-s       | tab list navigate             |
+| C-c C-n/p     | next/previous tab             |
+| C-c C-. / C-, | move tab right / left         |
+| C-t a         | bookmark all tabs             |
+| A-S           | save session                  |
+| A-s           | session select                |
+|---------------+-------------------------------|
+
+
+
+
+
+
+
+
