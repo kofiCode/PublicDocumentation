@@ -558,8 +558,7 @@ To install H., just do the following once:
 
 To start the server:
 
-    (hunchentoot:start (make-instance 'hunchentoot:easy-acceptor :port
-    4242))
+    (hunchentoot:start (make-instance 'hunchentoot:easy-acceptor :port 4242))
 
 Test it out in a browser:
 
