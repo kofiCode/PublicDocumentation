@@ -655,16 +655,17 @@ Start Magit:
 
 Adding Files
 
-|-------------+------------------------------|
-| key/command | Effect                       |
-|-------------+------------------------------|
-| s, u        | stage (add), unstage         |
-| S, U        | stage, unstage ALL           |
-| c           | COMMIT, free form message    |
-| C           | COMMIT, files changed added  |
-| P P         | Push                         |
-| RET         | open file                    |
-|-------------+------------------------------|
+|-------------+-----------------------------|
+| key/command | Effect                      |
+|-------------+-----------------------------|
+| s, u        | stage (add), unstage        |
+| S, U        | stage, unstage ALL          |
+| c           | COMMIT, free form message   |
+| C           | COMMIT, files changed added |
+| P P         | Push                        |
+| F F         | Pull (Fetch)                |
+| RET         | open file                   |
+|-------------+-----------------------------|
 
 Ignore / delete files
 
