@@ -2,8 +2,6 @@
 
 Serial EDitor
 
-
-
 ## awk
 
 Print a given column

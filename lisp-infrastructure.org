@@ -1,0 +1,62 @@
+* Overview
+
+The file `~/.sbclrc` is run by SBCL on startup.
+
+We use ASDF to manage 'systems' aka: packages or projects.  In
+`~/.sbclrc` we specify the folder to find systems in.  This folder
+contains soft links to the `*.asd` system definition files.
+
+To manage two code bases, we'll use two users, each with their own
+~/.sbclrc file pointing to their own system folder.
+
+* Development
+
+In development we'll use the following settings:
+
+|----------------------+------------------------------------|
+| User                 | fenton                             |
+| System Folder        | /home/fenton/projects/lisp/systems |
+| Lisp Projects Folder | /home/fenton/projects/lisp         |
+| SBCL Swank Port      | 4005                               |
+|----------------------+------------------------------------|
+
+* Production
+
+|----------------------+------------------------------------|
+| User                 | prdusr                             |
+| System Folder        | /home/prdusr/projects/lisp/systems |
+| Lisp Projects Folder | /home/prdusr/projects/lisp         |
+| SBCL Swank Port      | 4006                               |
+|----------------------+------------------------------------|
+
+* Code Promotion
+
+1. Commit development code to git.
+2. As `prdusr` pull code.
+3. Connect with REPL from emacs and re: ASDF load the system.
+
+* ~/.sbclrc sample
+
+```
+(require :asdf)
+
+;; Add my systems dir onto the registry path
+(push #p"/home/fenton/projects/lisp/systems/" asdf:*central-registry*)
+
+;; Setup quicklisp
+#-quicklisp
+(let ((quicklisp-init (merge-pathnames "quicklisp/setup.lisp" (user-homedir-pathname))))
+  (when (probe-file quicklisp-init) (load quicklisp-init)))
+
+;; Start swank server
+(ql:quickload "swank")
+(swank:create-server :port 4006)
+```
+
+* Connecting to each others servers
+
+I think we need to use an SSH tunnel for this.  See Marco Baringers
+youtube video for tips on this.
+
+
+
