@@ -55,8 +55,13 @@ In development we'll use the following settings:
 
 * Connecting to each others servers
 
-I think we need to use an SSH tunnel for this.  See Marco Baringers
-youtube video for tips on this.
+** Development SBCL
+
+    ssh -L4005:127.0.0.1:4005 fenton@webhostsunshine.com
+
+** Prod
+
+    ssh -L4005:127.0.0.1:4005 fenton@webhostsunshine.com
 
 
 
