@@ -608,3 +608,15 @@ So any url with `/index` after the machine name, will execute the `controller
           " on Common Lisp and Hunchentoot.")))))
 ```
 
+* SQL - Elephant
+
+Documentation for reference:
+
+http://common-lisp.net/project/elephant/doc/
+http://common-lisp.net/project/elephant/doc/Tutorial.html#Tutorial
+
+See the notes in the elephant.lisp file:
+
+[[file:lisp-examples/elephant.lisp][file:~/projects/docs-DIR/documentation/lisp-examples/elephant.lisp]]
+* CLOS Objects
+
