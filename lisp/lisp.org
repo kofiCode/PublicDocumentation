@@ -1,51 +1,4 @@
 COMMON LISP
-* Objectives
-
-The purpose of this tutorial is to give you the eureka that lisp
-users talk about.  This should be done with the least amount of
-ceremony.   This tutorial is targetted at programmers who know some
-other languages, like java, etc...
-
-You can get a hint of what this 'lisp elightenment' by reading:  [[http://www.defmacro.org/ramblings/lisp.html][The
-Nature of Lisp]].  Or you can read the first chapter in: [[http://www.gigamonkeys.com/book/introduction-why-lisp.html][Practical
-Common Lisp]].  To paraphrase:
-
-* Endorsements
-
-"If you think the greatest pleasure in programming comes from getting a
-lot done with code that simply and clearly expresses your intention,
-then programming in Common Lisp is likely to be about the most fun you
-can have with a computer. You'll get more done, faster, using it than
-you would using pretty much any other language." -- Peter Seibel
-
-
-"Many extremely intelligent people I knew and had much respect for
-were praising Lisp with almost religious dedication. There had to be
-something there, something I couldn't afford not to get my hands on!
-Eventually my thirst for knowledge won me over [...] The enlightenment
-came instantaneously. One moment I understood nothing, and the next
-moment everything clicked into place. I've achieved nirvana. Dozens of
-times I heard Eric Raymond's statement quoted by different people:
-"Lisp is worth learning for the profound enlightenment experience you
-will have when you finally get it; that experience will make you a
-better programmer for the rest of your days, even if you never
-actually use Lisp itself a lot." I never understood this statement. I
-never believed it could be true. And finally, after all the pain, it
-made sense! There was more truth to it than I ever could have
-imagined. I've achieved an almost divine state of mind, an
-instantaneous enlightenment experience that turned my view of computer
-science on its head in less than a single second." -- from: The
-Nature of Lisp
-
-* Method
-
-This tutorial will assume you have emacs running on your computer.
-Many will argue this isn't a good start as it's trying to kill two
-birds with one stone.  My counter argument is that if you want to
-know lisp, you'll need to have an editor, and Emacs is arguably one
-of the best editors for lisp, being that it itself is written and
-extended in a lisp.
-
 * The Basics
 
 This section will go over the bare bones of lisp.  In one of your
@@ -201,7 +154,6 @@ tilde tilde - escape sequence for tilde
     (format nil "~a ~s" "xyz" "xyz") => "xyz \"xyz\""
 
 * Loops
-
 ** DOTIMES
 
     (dotimes (x 10) (format t "~d " x))

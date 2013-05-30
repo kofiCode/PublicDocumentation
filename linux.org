@@ -942,23 +942,28 @@ Remove Alt from all key bindings
 ** screen
 
 To keep a shell session on a remote server in its state, there is a
-little utility that can do that for you.
-It can be useful to let a long script running like an rsync backup over
-the network.
-A session of screen can also be “detached” and used by another user,
-making it easy to collaborate on a project.
+little utility that can do that for you.  It can be useful to let a
+long script running like an rsync backup over the network.  A session
+of screen can also be “detached” and used by another user, making it
+easy to collaborate on a project.
 
 To install screen (as root):
 
     yum -y install screen
 
+*** Create Session
+
 Then you can just start a screen session:
 
     screen -S MyTitle
 
+*** Detach
+
 To exit this session and go back to the regular shell press *ctrl+a*
 then *d*
 *ctrl+a* then *k* will kill the session.
+
+*** List
 
 To list the active screen sessions:
 
@@ -966,6 +971,13 @@ To list the active screen sessions:
 
 to reattach a screen, use `screen -r` if there is only one session open.
 If there are more, use `screen -r NNNN.SessionTitle`
+
+*** Detach Attached Screeen
+
+If a screen is attached and you want to detach it manually from
+outside of it do:
+
+    screen -D <screen-session-name>
 
 * Linux Commands / Cookbooks
 

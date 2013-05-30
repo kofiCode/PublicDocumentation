@@ -996,7 +996,6 @@ Say we w
    
 
 
-
 * lisp editing
 
 ref: http://cl-cookbook.sourceforge.net/emacs-ide.html
@@ -1073,9 +1072,94 @@ Sexp functions
 |---------------+-------------------------------|
 
 
+* Bookmarks+
+** Bookmark commands available anywhere
+
+| C-x p m     | bookmark-set        |
+| C-x r b     | bookmark-jump       |
+
+** In Bookmark+ list:
+
+Open bookmark list:  C-x r l
+
+| d | delete  |
+| m | mark    |
+| x | execute |
+| u | unmark  |
+
+Goto Bookmark in...
+
+| ret | this window           |
+| o   | other window          |
+| C-o | other, dont select    |
+| 1   | full window           |
+| 2   | and previous bookmark |
+
+  
+| S      | Save to file                  |
+| C-u g  | revert from file              |
+| C-down | show info, next               |
+| T > +  | Add tag(s) to marked          |
+| T > -  | Remove tag(s) from marked     |
+| T S    | Show bookmarks with tags      |
+
+While in the Bookmark+ list you can type:
+
+    C-x r m
+
+to create a bookmark-list bookmark.  The current sort order, filter,
+regexp pattern, title, and omit list are saved as part of the
+bookmark. Jumping to such a bookmark restores all of these.
+
+To tag all bookmarks belonging to the tags: 'uf'
+OR 'lisp' as 'My Project' do:
+
+    T m * uf RET lisp RET RET   - To mark them
+    T > + My Project RET RET    - To tag them (doesn't work!!!)
+
+** Sort Bookmark List
+
+| s r | reverse current sort    |
+| s b | last buffer/file access |
+| s v | by visit frequency      |
+
+** Omit/Un-omit
+
+| .   | show un-omitted        |
+| - S | show only omitted      |
+| - > | omit marked            |
+| - U | un-omit all (show all) |
+
+** Mark / Unmark
+
+| m     | mark          |
+| u     | unmark        |
+| t     | toggle marked |
+| U RET | unmark all    |
+
+** managing Projects with Tags
+
+| T +   | Add tag(s) to bookmark              |
+| T -   | Remove tag(s) from bookmark         |
+| T m + | Mark bookmarks that have tag(s)     |
+| T l   | List all known tags                 |
+| M-d > | Open marked files in a Dired buffer |
+| .     | show all bookmarks                  |
+| T e   | edit bookmark                       |
+
+‘m’ means mark
+‘u’ means unmark
+`>’ stands for the marked bookmarks
+‘*’ means AND (set intersection; all)
+`+’ means OR (set union; some/any)
+`~’ means NOT (set complement)
 
 
 
+** Setup/Config
+Enable by putting the following in `~/.emacs`
 
+    (require 'bookmark+)
 
-
+** Help
+| C-h m | Show help |

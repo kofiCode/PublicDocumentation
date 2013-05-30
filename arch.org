@@ -877,6 +877,13 @@ password: hhmspiritpoemnumberhardfamilyone
 just type:
 
     truecrypt -d
+** Troubleshoot
+
+If you get a message: failed to setup a loop device
+
+    # tee /etc/modules-load.d/truecrypt.conf <<< "loop"
+
+
 * pacman
 
 To list files associated with a package:
@@ -884,6 +891,11 @@ To list files associated with a package:
     pacman -Ql <package-name>
 * random password generation
 
-secure passwords
+** Install apg
+
+    $ sudo pacman -S apg
+
+** Generate secure passwords
 
     $ apg -m 25 -M NC
+

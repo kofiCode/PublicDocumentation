@@ -1,4 +1,16 @@
-# Modules
+* Basics
+
+** Functions
+
+Define a function:
+
+```
+def my-func(param):
+    "Optional Documentation"
+    print "hello"
+```
+
+* Modules
 
 A module is a file containing Python definitions and statements. The
 file name is the module name with the suffix .py appended.  
@@ -21,16 +33,16 @@ myFunction(23)
 
 This does not introduce the module name, so `my_module` is not defined.
 
-# Package Management - Python Eggs
+* Package Management - Python Eggs
 
-## Debian Setup
+** Debian Setup
 
 ```bash
 $ sudo apt-get install python-setuptools
 $ sudo easy_install -U PasteScript
 ```
 
-## Create Shell Project
+** Create Shell Project
 
 ```bash
 $ paster create --list-templates
@@ -41,7 +53,7 @@ After responding to some questions, such as project name, we get a
 folder created by the name we used for our project.  In this tutorial
 my project name is: **it_library**.
 
-## Release Egg
+** Release Egg
 
 You can create and upload the egg with:
 
@@ -52,11 +64,11 @@ Submitting dist/it_library-0.0.1dev-py2.7.egg to http://pypi.python.org/pypi
 Server response (200): OK
 ```
 
-## New Egg Version
+** New Egg Version
 
 Update version info in `setup.py` and re-release.
 
-## Share with others
+** Share with others
 
 Have people go to [pypi.python.org](http://pypi.python.org/), and put
 your project name into the search box at top right.
@@ -65,7 +77,7 @@ your project name into the search box at top right.
 $ sudo easy_install -U it_library
 ```
 
-## Local testing
+** Local testing
 
 If you want to install and test any changes you made, do:
 
@@ -78,7 +90,7 @@ $ sudo python setup.py install
 of your project.
 
 
-## References
+** References
 
 * [Reference](http://wiki.python.org/moin/CheeseShopTutorial)
 * [Python Eggs - Package Management](http://mrtopf.de/blog/en/a-small-introduction-to-python-eggs/)
