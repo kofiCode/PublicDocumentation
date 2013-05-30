@@ -1098,8 +1098,6 @@ Goto Bookmark in...
 | S      | Save to file                  |
 | C-u g  | revert from file              |
 | C-down | show info, next               |
-| T > +  | Add tag(s) to marked          |
-| T > -  | Remove tag(s) from marked     |
 | T S    | Show bookmarks with tags      |
 
 While in the Bookmark+ list you can type:
@@ -1135,6 +1133,12 @@ OR 'lisp' as 'My Project' do:
 | u     | unmark        |
 | t     | toggle marked |
 | U RET | unmark all    |
+
+** Tags
+
+| T m ~ + | Mark bkmk's not having any of following tags |
+| T > +   | Add tag(s) to marked                         |
+| T > -   | Remove tag(s) from marked                    |
 
 ** managing Projects with Tags
 
