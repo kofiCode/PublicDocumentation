@@ -995,7 +995,6 @@ ref: http://www.bookshelf.jp/texi/onlisp/onlisp_8.html
 Say we w
    
 
-
 * lisp editing
 
 ref: http://cl-cookbook.sourceforge.net/emacs-ide.html
@@ -1071,16 +1070,16 @@ Sexp functions
 | A-s           | session select                |
 |---------------+-------------------------------|
 
-
 * Bookmarks+
+
+Open bookmark list:  C-x r l
+
 ** Bookmark commands available anywhere
 
 | C-x p m     | bookmark-set        |
 | C-x r b     | bookmark-jump       |
 
 ** In Bookmark+ list:
-
-Open bookmark list:  C-x r l
 
 | d | delete  |
 | m | mark    |
