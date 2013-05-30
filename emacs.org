@@ -1072,12 +1072,12 @@ Sexp functions
 
 * Bookmarks+
 
-Open bookmark list:  C-x r l
+Open bookmark list:  
 
 ** Bookmark commands available anywhere
 
-| C-x p m     | bookmark-set        |
-| C-x r b     | bookmark-jump       |
+| C-x r l | open bookmark list |
+| C-x p m | set bookmark       |
 
 ** In Bookmark+ list:
 
@@ -1154,6 +1154,8 @@ OR 'lisp' as 'My Project' do:
 `~’ means NOT (set complement)
 
 
+| C-A-x | toggle save temp bookmark |
+| r     | rename bkmk               |
 
 ** Setup/Config
 Enable by putting the following in `~/.emacs`
@@ -1161,4 +1163,5 @@ Enable by putting the following in `~/.emacs`
     (require 'bookmark+)
 
 ** Help
+
 | C-h m | Show help |
