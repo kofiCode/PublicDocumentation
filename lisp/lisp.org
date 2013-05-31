@@ -577,3 +577,5 @@ See the notes in the elephant.lisp file:
 
 (defclass name (direct-superclass-name*)
 (slot-specifier*))
+* Symbols, Packages
+

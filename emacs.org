@@ -1168,7 +1168,7 @@ OR 'lisp' as 'My Project' do:
 
 | C-u S   | Save As                         |
 | C-x p y | create bkmk to bkmk file        |
-| C-x p L | switch to bkmk file             |
+| C-x p L | switch to bkmk file. open load  |
 | C-x p l | accumulate bkmks from bkmk file |
 
 
