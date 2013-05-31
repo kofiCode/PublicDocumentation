@@ -1095,10 +1095,10 @@ Goto Bookmark in...
 | 2   | and previous bookmark |
 
   
-| S      | Save to file                  |
-| C-u g  | revert from file              |
-| C-down | show info, next               |
-| T S    | Show bookmarks with tags      |
+| S      | Save bkmks to file now   |
+| C-u g  | revert from file         |
+| C-down | show info, next          |
+|        | Show bookmarks with tags |
 
 While in the Bookmark+ list you can type:
 
@@ -1137,18 +1137,21 @@ OR 'lisp' as 'My Project' do:
 ** Tags
 
 | T m ~ + | Mark bkmk's not having any of following tags |
+| T m +   | Mark bookmarks that have tag(s)              |
 | T > +   | Add tag(s) to marked                         |
 | T > -   | Remove tag(s) from marked                    |
+| T c     | Copy tags                                    |
+| T C-y   | Overwrite tags with copied ones              |
+| T q     | Add copied tags                              |
+| T S     | Show bookmarks with tags                     |
+| T l     | List ALL tags                                |
+| T +     | Add tag(s) to bookmark                       |
+| T -     | Remove tag(s) from bookmark                  |
+| T r     | Rename a tag everywhere                      |
 
-** managing Projects with Tags
-
-| T +   | Add tag(s) to bookmark              |
-| T -   | Remove tag(s) from bookmark         |
-| T m + | Mark bookmarks that have tag(s)     |
-| T l   | List all known tags                 |
-| M-d > | Open marked files in a Dired buffer |
-| .     | show all bookmarks                  |
-| T e   | edit bookmark                       |
+| M-d >   | Open marked files in a Dired buffer          |
+| .       | show all bookmarks                           |
+| T e     | edit bookmark                                |
 
 ‘m’ means mark
 ‘u’ means unmark
@@ -1160,6 +1163,14 @@ OR 'lisp' as 'My Project' do:
 
 | C-A-x | toggle save temp bookmark |
 | r     | rename bkmk               |
+
+** Bookmark-File bookmark
+
+| C-u S   | Save As                         |
+| C-x p y | create bkmk to bkmk file        |
+| C-x p L | switch to bkmk file             |
+| C-x p l | accumulate bkmks from bkmk file |
+
 
 ** Setup/Config
 Enable by putting the following in `~/.emacs`
