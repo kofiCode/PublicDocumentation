@@ -897,5 +897,5 @@ To list files associated with a package:
 
 ** Generate secure passwords
 
-    $ apg -m 25 -M NC
+    $ apg -m 25 -a 1 -s
 
