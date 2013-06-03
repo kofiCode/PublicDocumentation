@@ -579,3 +579,12 @@ See the notes in the elephant.lisp file:
 (slot-specifier*))
 * Symbols, Packages
 
+Bookmark File: lisp-examples.bkmk
+
+when u want to use function `foo` from package `lib-package` you use
+double colon `::`
+
+    lib-package::foo
+
+you must export that function in `lib-package`
+

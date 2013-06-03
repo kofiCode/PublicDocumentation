@@ -59,6 +59,7 @@
     (end-position . 1))
 #1=(#("model.lisp" 0 10
       (bmkp-full-record #1#))
+    (bmkp-temp)
     (tags "lisp" "todo")
     (filename . "~/projects/lisp/todo/model.lisp")
     (buffer-name . "model.lisp")

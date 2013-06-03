@@ -12,6 +12,10 @@ Set a breakpoint with:
 
     (break)
 
+| s | Step to the next expression in the frame      |
+| x | Step to the next form in the current function |
+| o | stOp single stepping                          |
+
 ** Stack Frames
 
 |-----+---------------------------|

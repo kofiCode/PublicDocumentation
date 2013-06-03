@@ -1171,7 +1171,9 @@ OR 'lisp' as 'My Project' do:
 | C-x p L | switch to bkmk file. open load  |
 | C-x p l | accumulate bkmks from bkmk file |
 
+** Temporary
 
+| C-A-X | Toggle temporary |
 ** Setup/Config
 Enable by putting the following in `~/.emacs`
 
