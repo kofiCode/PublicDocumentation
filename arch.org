@@ -117,7 +117,7 @@ Enable multilib in /etc/pacman.conf
 
 *** SSH, Git
 
-    $ sudo pacman -S openssh git net-tools rxvt-unicode
+    $ sudo pacman -S openssh git net-tools rxvt-unicode reflector
     $ sudo systemctl enable sshd.service
     $ sudo systemctl start sshd.service
 
