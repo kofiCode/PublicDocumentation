@@ -155,6 +155,8 @@ Modify /etc/pacman.conf so SigLevels are all: Optional TrustAll
     $ sudo mv fenton.tgz ..; cd ..; sudo tar xvfz fenton.tgz
     $ cd fenton
     $ chmod 600 .ssh/id_rsa
+    
+    $ cp .xinitrc-desktop .xinitrc
 
 *** Clone basic_user_settings
 
@@ -206,6 +208,18 @@ auto_login         yes
 
     $ wget https://aur.archlinux.org/packages/pa/package-query/package-query.tar.gz
     $ wget https://aur.archlinux.org/packages/ya/yaourt/yaourt.tar.gz
+
+    $ tar xvfz package-query.tar.gz
+    $ tar xvfz yaourt.tar.gz
+    $ cd package-query; makepkg -s; sudo pacman -U package-query...; cd ..
+    $ cd yaourt; makepkg -s; sudo pacman -U yaourt...; cd ..
+    $ rm -rf yaourt* package-query*
+
+    $ yaourt slime-cvs
+
+*** quicklisp
+
+    $ wget http://beta.quicklisp.org/quicklisp.lisp
 
 *** Extra monitors
 
