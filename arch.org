@@ -73,7 +73,7 @@ If this is a laptop:
 
 If a desktop: 
 
-    # systemctl enable net-auto-wire.service
+    # systemctl enable dhcpcd@enp0s25.service    # <-- your interface
     # passwd
 
 *** Bootloader
@@ -95,9 +95,6 @@ LABEL arch
         APPEND root=/dev/sda1 ro
         ...
 
-# exit
-# umount /mnt/{home,}
-# reboot
 
 *** User Management
 # useradd -m -g users -s /bin/bash fenton
@@ -105,7 +102,11 @@ LABEL arch
 # pacman -S sudo
 # visudo
 fenton ALL=(ALL) NOPASSWD: ALL
+
 # exit
+# umount /mnt/{home,}
+# reboot
+
 
 Login as fenton now.  Your wireless might have got adjusted so:
 $ iwconfig   # <-- find your new wireless adapter, eg:wlp3s0
@@ -116,10 +117,14 @@ Make sure that the correct wireless interface (e.g. wlp3s0) is set in
 Enable multilib in /etc/pacman.conf
 
 *** SSH, Git
-
-    $ sudo pacman -S openssh git net-tools rxvt-unicode reflector
-    $ sudo systemctl enable sshd.service
-    $ sudo systemctl start sshd.service
+    $ sudo pacman -S reflector
+    $ sudo cp -vf /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
+    $ sudo reflector --verbose -l 200 -p http --sort rate --save /etc/pacman.d/mirrorlist
+    $ sudo pacman -S openssh git net-tools rxvt-unicode ntp
+    $ sudo systemctl enable sshd
+    $ sudo systemctl start sshd
+    $ sudo systemctl enable ntpd
+    $ sudo systemctl start ntpd
 
 SSH into the machine from your other machine so have cut and paste,
 etc... 
@@ -132,25 +137,8 @@ Test with:
 
     $ ssh ftravers@spicevan.com
 
-Maybe do...but maybe not too...
-
-    $ sudo pacman -S ntp
-    $ sudo vi /etc/systemd/system/ntp-once.service
-
-```
-[Unit]
-Description=Network Time Service (once)
-After=network.target nss-lookup.target 
-
-[Service]
-Type=oneshot
-ExecStart=/usr/bin/ntpd -q -g -u ntp:ntp ; /sbin/hwclock -w
-
-[Install]
-WantedBy=multi-user.target
-```
-
-$ sudo systemctl enable ntp-once
+If preparing a computer for Fenton do following, otherwise go to next
+section: 
 
 *** Clone fenton git dir
 
@@ -167,14 +155,21 @@ Modify /etc/pacman.conf so SigLevels are all: Optional TrustAll
     $ sudo mv fenton.tgz ..; cd ..; sudo tar xvfz fenton.tgz
     $ cd fenton
     $ chmod 600 .ssh/id_rsa
-    $ sudo vi /etc/slim.conf
 
-```
-default_user        fenton
-auto_login         yes
-```
+*** Clone basic_user_settings
 
-    $ sudo systemctl enable slim.service
+    $ scp annie@192.168.1.45:/home/annie/.ssh/id_rsa.pub ~/projects/dh-gitosis/keydir/aspire_one.pub
+    $ cd ~/projects/dh-gitosis/; pul;
+
+edit `~/projects/dh-gitosis/gitosis.conf` adding pub file, and pus,
+then from new computer do:
+
+    $ git clone ft_git3@spicevan.com:basic-user-settings.git
+    $ mv basic-user-settings/ annie
+    $ tar cvfz annie.tgz annie/
+    $ sudo mv annie.tgz /home
+    $ cd /home
+    $ tar xvfz annie.tgz
 
 *** Install a video driver
 
@@ -188,7 +183,29 @@ for other cards see:
 
 https://wiki.archlinux.org/index.php/Beginners'_Guide#Install_a_video_driver
 
-    $ sudo reboot
+*** packages & documentation
+
+    $ mkdir -p ~/projects/docs-DIR/
+    $ cd !$
+    $ git clone ft_git3@spicevan.com:documentation.git
+    $ documentation/arch-packages.md
+
+*** slim
+
+    $ sudo vi /etc/slim.conf
+
+```
+default_user        fenton
+auto_login         yes
+```
+
+    $ sudo systemctl enable slim.service
+    
+
+*** yaourt
+
+    $ wget https://aur.archlinux.org/packages/pa/package-query/package-query.tar.gz
+    $ wget https://aur.archlinux.org/packages/ya/yaourt/yaourt.tar.gz
 
 *** Extra monitors
 
@@ -898,5 +915,6 @@ To list files associated with a package:
 
 ** Generate secure passwords
 
-    $ apg -m 25 -a 1 -s
+r    $ apg -m 12 -a 1 -s | grep -v [0O]
+
 

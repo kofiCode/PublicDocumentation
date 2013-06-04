@@ -2,6 +2,59 @@
 
 https://wiki.archlinux.org/index.php/BIND
 
+    sudo pacman -S bind
+
+** /etc/resolv.conf
+
+nameserver 127.0.0.1
+
+** zone file
+
+We are using domain: `webhostsunshine.com`, therefore:
+
+in `/var/named/webhostsunshine.com.zone` put:
+
+```
+$TTL 7200
+; domain.tld
+@       IN      SOA     ns01.webhostsunshine.com. postmaster.webhostsunshine.com. (
+                                        2007011601 ; Serial
+                                        28800      ; Refresh
+                                        1800       ; Retry
+                                        604800     ; Expire - 1 week
+                                        86400 )    ; Minimum
+                IN      NS      ns01
+                IN      NS      ns02
+ns01            IN      A       0.0.0.0
+ns02            IN      A       0.0.0.0
+localhost       IN      A       127.0.0.1
+@               IN      MX 10   mail
+imap            IN      CNAME   mail
+smtp            IN      CNAME   mail
+@               IN      A       0.0.0.0
+www             IN      A       0.0.0.0
+mail            IN      A       0.0.0.0
+@               IN      TXT     "v=spf1 mx"
+bkkdell         IN      A       192.168.1.44
+aspire_one      IN      A       192.168.1.45
+ss9             IN      A       192.168.1.46
+nexus4          IN      A       192.168.1.47
+```
+
+** /etc/named.conf 
+
+```
+zone "webhostsunshine.com" IN {
+        type master;
+        file "webhostsunshine.com.zone";
+        allow-update { none; };
+        notify no;
+};
+```
+
+    $ sudo systemctl enable named.service
+    $ sudo systemctl start named.service
+
 
 * Reference
 
@@ -23,68 +76,71 @@ use DNS.
 
 three files: named.conf, forward and reverse zone files.
 
+** named.conf
+
     vi /var/named/chroot/etc/named.conf
 
-    acl good-hosts {
-            192.168.8.0/24;
-    };
-    
-    options {
-       directory "/var/named";
-       dump-file "/var/named/data/cache_dump.db";
-       statistics-file "/var/named/data/named_stats.txt";
-       listen-on port 53 { 127.0.0.1; any; };
-            allow-query { good-hosts; };
-            allow-recursion { good-hosts; };
-    };
-    
-    //
-    // a caching only nameserver config
-    //
-    controls {
-       inet 127.0.0.1 allow { localhost; } keys { rndckey; };
-    };
-    
-    zone "." IN {
-       type hint;
-       file "named.ca";
-    };
-    
-    include "/etc/rndc.key";
-    
-    zone "ftravers.com" {
-            type master;
-            allow-query { 192.168.8.0/24; };
-            allow-update { none; };
-            file "ftravers.com.zone";
-    };
-    
-    zone "8.168.192.in-addr.arpa" IN {
-            type master;
-            file "ftravers.com.rev.zone";
-            allow-update { none; };
-            allow-query { 192.168.8.0/24; };
-    };
-    logging{
-      channel simple_log {
-        file "/var/log/bind.log" versions 3 size 5m;
-        severity info;
-        print-time yes;
-        print-severity yes;
-        print-category yes;
-      };
-      category default{
-        simple_log;
-      };
-    };
+```
+acl good-hosts {
+        192.168.8.0/24;
+};
 
+options {
+   directory "/var/named";
+   dump-file "/var/named/data/cache_dump.db";
+   statistics-file "/var/named/data/named_stats.txt";
+   listen-on port 53 { 127.0.0.1; any; };
+        allow-query { good-hosts; };
+        allow-recursion { good-hosts; };
+};
+
+//
+// a caching only nameserver config
+//
+controls {
+   inet 127.0.0.1 allow { localhost; } keys { rndckey; };
+};
+
+zone "." IN {
+   type hint;
+   file "named.ca";
+};
+
+include "/etc/rndc.key";
+
+zone "ftravers.com" {
+        type master;
+        allow-query { 192.168.8.0/24; };
+        allow-update { none; };
+        file "ftravers.com.zone";
+};
+
+zone "8.168.192.in-addr.arpa" IN {
+        type master;
+        file "ftravers.com.rev.zone";
+        allow-update { none; };
+        allow-query { 192.168.8.0/24; };
+};
+logging{
+  channel simple_log {
+    file "/var/log/bind.log" versions 3 size 5m;
+    severity info;
+    print-time yes;
+    print-severity yes;
+    print-category yes;
+  };
+  category default{
+    simple_log;
+  };
+};
+```
 bind.log file will be found in: /var/named/chroot/var/log/bind.log
 
-tail -f /var/log/messages
+    $ tail -f /var/log/messages
 
 then
 
-tail -f /var/named/chroot/var/log/bind.log
+    $ tail -f /var/named/chroot/var/log/bind.log
 
 Ensure permissions are correct:
 
@@ -92,7 +148,9 @@ Ensure permissions are correct:
     -rw-r----- 1 root  named 1115 Jan 29  2010 ftravers.com.rev.zone
     -rw-r----- 1 root  named 1109 Jan 29  2010 ftravers.com.zone
 
+** Zone file
 
+name -> ip
 
 Zone file example: vi /var/named/chroot/var/named/ftravers.com.zone
 
@@ -125,6 +183,11 @@ Zone file example: vi /var/named/chroot/var/named/ftravers.com.zone
     hp4             14400   IN      A       192.168.8.104
     nas             14400   IN      A       192.168.8.200
     ftp             14400   IN      CNAME   nas.ftravers.com.
+
+
+** reverse zone file
+
+ip -> name
 
 Zone file example:
 /var/named/chroot/var/named/ftravers.com.rev.zone
