@@ -35,6 +35,8 @@ Make a swap partition, so 'suspend' works on laptop!
 create a 15360 bootable, and then create another for the rest of the
 space. 
 
+if have alignment problem use `fdisk /dev/sda` instead.
+
     # mkfs.ext4 /dev/sda1
     # mkfs.ext4 /dev/sda2
     # mount /dev/sda1 /mnt
@@ -70,7 +72,6 @@ If this is a laptop:
     # systemctl enable net-auto-wireless.service
 
 If a desktop: 
-
 
     # systemctl enable net-auto-wire.service
     # passwd
