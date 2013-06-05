@@ -191,6 +191,11 @@ https://wiki.archlinux.org/index.php/Beginners'_Guide#Install_a_video_driver
     $ cd !$
     $ git clone ft_git3@spicevan.com:documentation.git
     $ documentation/arch-packages.md
+    
+    Optional additional git repos you might want to add:
+
+    $ cd ~/projects/docs-DIR; git clone ft_git3@spicevan.com:pers-docs.git
+    $ mkdir pers-docs/empty
 
 *** slim
 
