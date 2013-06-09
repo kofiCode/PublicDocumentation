@@ -220,11 +220,32 @@ auto_login         yes
     $ cd yaourt; makepkg -s; sudo pacman -U yaourt...; cd ..
     $ rm -rf yaourt* package-query*
 
-    $ yaourt slime-cvs
+    $ yaourt slime-cvs kdegraphics-okular google-talkplugin
 
 *** quicklisp
 
     $ wget http://beta.quicklisp.org/quicklisp.lisp
+    $ sbcl --load quicklisp.lisp
+    * (quicklisp-quickstart:install)
+    * (ql:quickload "quicklisp-slime-helper")
+    $ mkdir -p projects/lisp/systems
+
+*** Emacs
+
+    $ cd .emacs.d; cp workgroups.copy workgroups
+
+Install packages:
+
+    bookmark+, org2blog, workgroups, 
+
+
+*** Git Projects
+
+    $ cd ~/projects; git clone ft_git3@spicevan.com:gitosis-admin.git dh-gitosis
+    $ cd docs-DIR; git clone ft_git3@spicevan.com:pers-docs.git
+    $ cd ../lisp/; git clone ft_git3@spicevan.com:urban-farmer.git
+    $ git clone ft_git3@spicevan.com:common-socialisp.git
+    $ git clone ft_git3@spicevan.com:todo.git
 
 *** Extra monitors
 
@@ -238,10 +259,6 @@ saving the arandr config.
 $ chmod +x .screenlayout/lenovo_syncmaster.sh 
 $ cd scripts
 $ ln -s ../.screenlayout/lenovo_syncmaster.sh rar
-
-*** Emacs
-
-List packages and install bookmarks+
 
 *** Skype
 
@@ -454,6 +471,42 @@ get some rvm completions with:
 ```
 
 
+* Dynamic DNS Afraid
+** Get Dyn DNS URL
+
+left menu click `Dynamic DNS`
+Click 'direct URL' beside your root domain (i.e. not any
+`mail.domain.com` or something like that records, just the
+`domain.com` record.
+
+You'll see a URL something like:
+
+    http://freedns.afraid.org/dynamic/update.php?ZRRJZ...................bzo4Njc1M4DA
+
+install software:
+
+    $ sudo pacman -S cronie
+    $ crontab -e
+
+This will allow you to edit your crontab (Chronological Table). 
+
+Put in a line like:
+
+    */1 * * * * curl -ks http://freedns.afraid.org/dynamic/update.php?ZRRJZ...................bzo4Njc1M4DA > /dev/null
+
+Changing the URL to be what you got in the step above.
+
+Enable, starte and view status of `cronie` service
+
+    $ sudo systemctl enable cronie.service
+    ...
+    $ sudo systemctl start cronie.service
+    $ sudo systemctl status cronie.service
+    ...
+
+Monitor it runs with: 
+
+    $ sudo journalctl -u cronie.service -f
 
 * RVM - Ruby
 
