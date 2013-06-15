@@ -588,3 +588,32 @@ double colon `::`
 
 you must export that function in `lib-package`
 
+* Cookbook longer examples
+
+** Reading / Writing files
+
+In this example I want to manipulate 'rc' (resource configuration)
+files.  These files are ubiquitous in unix, and usually have the
+following qualities:
+
+- Comments begin with a hash
+- parameter names and values are spearated by a space
+- neither param names or values may contain a space
+
+```
+# this is a comment and should be ignored
+this.is.a.param.name this.is.the.value
+```
+* testing: lisp-unit
+
+** package.lisp
+in `<project>/test/package.lisp` put:
+
+```
+(defpackage #:<package-name>
+  (:use :cl :asdf :lisp-unit)
+  ...)
+```
+
+** <project-name>-test.lisp
+

@@ -492,6 +492,13 @@ Can use syntax like: `+2w` for two weeks from now.
 
 * Workgroups
 
+** Frequent Use
+
+|--------------+--------------------------|w
+| <prefix> u   | Update base from working |
+| <prefix> C-s | Save                     |
+|--------------+--------------------------|
+
 Set the prefix key with:
 
     (setq wg-prefix-key (kbd "C-c w"))
@@ -543,10 +550,10 @@ the current frame.
 You can move a workgroup leftward or rightward in the workgroups
 list.
 
-| Keys         | Description  |
-|--------------+--------------|
-| <prefix> C-, | Offset Left  |
-| <prefix> C-. | Offset Right |
+| Keys           | Description  |
+|----------------+--------------|
+| <prefix> C-S-< | Offset Left  |
+| <prefix> C-S-> | Offset Right |
 
 Clone a workgroup
 
@@ -587,6 +594,17 @@ interactive.  Looks like something like the following might work:
   (some-func str)
   (if bool (some-other-func str)))
 ```
+
+** workgroups2
+
+Not using workgroups 2 seemed to have too many bugs.
+
+| c   | create workgroup    |
+| k   | kill workgroup      |
+| v   | switch to workgroup |
+| C-s | save session        |
+| C-f | load session        |
+
 * Syntax Highlighting
 
 I want to highlight code that falls between:
@@ -994,7 +1012,6 @@ ref: http://www.bookshelf.jp/texi/onlisp/onlisp_8.html
 
 Say we w
    
-
 * lisp editing
 
 ref: http://cl-cookbook.sourceforge.net/emacs-ide.html
@@ -1072,7 +1089,11 @@ Sexp functions
 
 * Bookmarks+
 
-Open bookmark list:  
+|---------+-----------------------------------------------|
+| C-x p L | switch to bkmk file. open load, revert/reload |
+| C-u S   | Save As                                       |
+| S       | Save                                          |
+|---------+-----------------------------------------------|
 
 ** Bookmark commands available anywhere
 
@@ -1086,7 +1107,7 @@ Open bookmark list:
 | x | execute |
 | u | unmark  |
 
-Goto Bookmark in...
+Goto (open) Bookmark in...
 
 | ret | this window           |
 | o   | other window          |
