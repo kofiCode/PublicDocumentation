@@ -2,6 +2,7 @@
 (defpackage :lib-pkg 
   (:use :cl) 
   (:export :say-hello)
+  (:nicknames :lp)
   )
 (defun say-hello () "hello")
 

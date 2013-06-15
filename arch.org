@@ -359,6 +359,10 @@ Add a user, default group: `users`, shell is `bash`
     # useradd -m -g users -s /bin/bash fenton; passwd fenton
     # visudo
 
+how to add a user to a group:
+
+    $ sudo gpasswd -a user group
+
 allow docs to do everything with an entry like:
 
     fenton ALL=(ALL) ALL
