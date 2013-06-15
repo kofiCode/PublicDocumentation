@@ -1,0 +1,23 @@
+Log into interactive psql:
+
+    $ psql -d my-p-db
+
+Connect to a particular database
+
+    =# \c my-p-db
+
+List all users
+
+    =# \du
+
+Table Info
+
+    =# \dt
+
+Quit
+
+    =# \q or CTRL-d
+
+Restart Daemon
+
+    $ sudo systemctl restart postgresql
