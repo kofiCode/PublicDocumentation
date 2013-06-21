@@ -1441,3 +1441,12 @@ $ sudo chmod +x /etc/init.d/nginx
 $ sudo /usr/sbin/update-rc.d -f nginx defaults
 $ sudo /etc/init.d/nginx start
 ```
+* rc files read
+
+** Login
+.bash_profile (only calls .bashrc)
+.profile
+
+** non-login & interactive
+Non-login means when you just statup a terminal locally.
+.bashrc
