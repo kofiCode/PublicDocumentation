@@ -446,43 +446,46 @@ and then in SBCl we can load the `body-parts` project with:
 
 * packages
 ** overview
+
++ single colon `:` will access only symbols that the package author has
+externalized.  
+
     package:symbol-name
 
-single colon `:` will access only symbols that the package author has
-externalized.  
++ access NON externalized symbols.  BAD idea normally.
 
     package::symbol-name
 
-access NON externalized symbols.  BAD idea normally.
++ to get a specified package
 
     (find-package "pkg-name")
 
-to get a specified package
++ a synonym for the CURRENT package
 
     *PACKAGE*
 
-a synonym for the CURRENT package
++ `intern` like `find-symbol` except if not found creates (intern)
+`symbol-name` 
+
 
     (find-symbol "symbol-name")
     (intern "symbol-name")
 
-`intern` like `find-symbol` except if not found creates (intern)
-`symbol-name` 
++ similar to regular keywords, except NOT interned in the KEYWORDS
+package. 
 
     #:symbol-name
 
-similar to regular keywords, except NOT intened in the KEYWORDS
-package. 
++ When I `use` another package, I inherit all it's `external` symbols.
+Symbols are made external by `exporting` them.
 
     :use "package-name"
 
-When I `use` another package, I inherit all it's `external` symbols.
-Symbols are made external by `exporting` them.
++ you can import a symbol without using it's home package, thereby
+adding that symbol into your name-to-symbol table.
 
     importing
 
-you can import a symbol without using it's home package, thereby
-adding that symbol into your name-to-symbol table.
 
 ** find all symbols
 
@@ -490,6 +493,12 @@ adding that symbol into your name-to-symbol table.
   (print s))
 
 * Web - Hunchentoot
+
+you may need to run the following command to allow binding to a low '<1024' 
+'root' port:
+
+    $ sudo setcap 'cap_net_bind_service=+ep' /usr/bin/sbcl
+
 ** references 
 
 Two great articles:
@@ -616,4 +625,31 @@ in `<project>/test/package.lisp` put:
 ```
 
 ** <project-name>-test.lisp
+* equality predicates
+
+http://www.cs.cmu.edu/Groups/AI/html/cltl/clm/node74.html
+
+** eq
+
+(eq x y) is true if and only if x and y are the same identical
+object. (Implementationally, x and y are usually eq if and only if
+they address the same identical memory location.)
+
+It should be noted that things that print the same are not necessarily
+eq to each other. Symbols with the same print name usually are eq to
+each other because of the use of the intern function. However, numbers
+with the same value need not be eq, and two similar lists are usually
+not eq. For example:
+
+** eql x y
+
+The eql predicate is true if its arguments are eq, or if they are
+numbers of the same type with the same value, or if they are character
+objects that represent the same character.
+
+** equal x y
+
+The equal predicate is true if its arguments are structurally similar
+(isomorphic) objects. A rough rule of thumb is that two objects are
+equal if and only if their printed representations are the same.
 

@@ -38,7 +38,9 @@ space.
 if have alignment problem use `fdisk /dev/sda` instead.
 
     # mkfs.ext4 /dev/sda1
-    # mkfs.ext4 /dev/sda2
+!!! put in instructions on how to make a swap partition, so can hibernate.
+    # mkfs.ext4 /dev/sda3
+
     # mount /dev/sda1 /mnt
     # mkdir /mnt/home
     # mount /dev/sda2 /mnt/home
@@ -63,7 +65,7 @@ FONT=Lat2-Terminus16
 ```
     # ln -s /usr/share/zoneinfo/<Zone>/<SubZone> /etc/localtime
     # hwclock --systohc --utc
-    # echo ft_lenovo > /etc/hostname    # <-- pick a different hostname 
+    # echo <hostname> > /etc/hostname    # <-- pick a different hostname 
 
 If this is a laptop:
 
@@ -84,9 +86,6 @@ easier.  I.e. I now want suspend to work with my laptop but it
 requires a swap partition, which requires gparted to change the
 partitions... 
 
-# pacman -S syslinux
-# syslinux-install_update -i -a -m
-# nano /boot/syslinux/syslinux.cfg
 ...
 TIMEOUT 5
 ...
@@ -94,14 +93,31 @@ LABEL arch
         ...
         APPEND root=/dev/sda1 ro
         ...
+# pacman -S syslinux
+# syslinux-install_update -i -a -m
+# nano /boot/syslinux/syslinux.cfg
 
 
 *** User Management
-# useradd -m -g users -s /bin/bash fenton
+
+# useradd -m -g users -s /usr/bin/zsh fenton
 # passwd fenton
 # pacman -S sudo
 # visudo
 fenton ALL=(ALL) NOPASSWD: ALL
+
+From another computer you might want to do:
+$ ssh-copy-id fenton@<ip-address>
+$ scp id_rsa <ip-address>:~/.ssh/
+$ scp id_rsa.pub <ip-address>:~/.ssh/
+
+Back on original computer clone the git repo
+% git clone ft_git3@spicevan.com:ft.home.dir.git
+% mv ft.home.dir fenton
+% tar cvfz fenton.tgz fenton
+% sudo cp fenton.tgz ..
+% cd ..
+% tar xvfzm fenton.tgz
 
 # exit
 # umount /mnt/{home,}
@@ -117,6 +133,7 @@ Make sure that the correct wireless interface (e.g. wlp3s0) is set in
 Enable multilib in /etc/pacman.conf
 
 *** SSH, Git
+
     $ sudo pacman -S reflector
     $ sudo cp -vf /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
     $ sudo reflector --verbose -l 200 -p http --sort rate --save /etc/pacman.d/mirrorlist
@@ -994,3 +1011,28 @@ To list files associated with a package:
 r    $ apg -m 12 -a 1 -s | grep -v [0O]
 
 
+* wake on lan
++ setup in bios
+** servers
+   
+in: `/etc/netctl/<PROFILE>` put:
+
+    ExecUpPost='/usr/bin/ethtool -s enp0s25 wol g'
+
+NOTE: change enp0s25 to the device reported by: `ip link`
+
+Might have a line like the following to auto-shutdown after 20 mins:
+
+    xautolock -locker slimlock -time 10 -killer "sudo shutdown -h now" -killtime 10 &
+
+** client machines
+
++ Over intranet:
+
+    alias wbi='wol -i 192.168.1.44 bc:30:5b:9c:d3:56'
+
+where machine address is retrieved with: `ip link`
+
++ Over internet:
+
+    alias wbe='wol -i  bc:30:5b:9c:d3:56'
