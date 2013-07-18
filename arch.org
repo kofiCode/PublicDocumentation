@@ -117,6 +117,7 @@ Make sure that the correct wireless interface (e.g. wlp3s0) is set in
 Enable multilib in /etc/pacman.conf
 
 *** SSH, Git
+
     $ sudo pacman -S reflector
     $ sudo cp -vf /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
     $ sudo reflector --verbose -l 200 -p http --sort rate --save /etc/pacman.d/mirrorlist
