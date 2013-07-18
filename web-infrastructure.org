@@ -104,3 +104,7 @@ Then run:!
     A-x slime-connect
 
 from emacs, choose the local host: `127.0.0.1` and port `4081`.
+
+To quit:
+
+    A-x slime-disconnect

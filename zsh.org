@@ -1,0 +1,80 @@
+* Git Prompt
+
+Enable vcs_info and call it in a pre-command:
+
+```
+autoload -Uz vcs_info
+zstyle ':vcs_info:*' enable git
+precmd() {
+    vcs_info
+}
+setopt prompt_subst
+```
+
+Next we have zstyle lines, that write to the `vcs_info_msg_0_` and
+`vcs_info_msg_1_` variables, which we'll assign to PROMPT and
+RPROMPT, like so:
+
+PROMPT='${vcs_info_msg_0_}'
+RPROMPT='${vcs_info_msg_1_}'
+
+PROMPT = regular prompt
+RPROMPT = right prompt
+
+There three different prompt scenarios we'll consider, each have a
+label.  
+
+|---------------+-------------------------------------------------------------|
+| label         | meaning                                                     |
+|---------------+-------------------------------------------------------------|
+| formats       | when we are in a git repository folder                      |
+| nvcsformat    | when we are not in a git repo folder                        |
+| actionformats | when we have a pending git action like merge, rebase, etc.. |
+|---------------+-------------------------------------------------------------|
+
+
+The following works on the `formats` prompt:
+
+```
+zstyle ':vcs_info:git*' formats "%s  %r/%S %b %m%u%c "
+```
+
+|----+------------------------------------------------------------|
+| %s | The current version control system, like git or svn.       |
+| %r | The name of the root directory of the repository           |
+| %S | The current path relative to the repository root directory |
+| %b | Branch information, like master                            |
+| %m | In case of Git, show information about stashes             |
+| %u | Show unstaged changes in the repository                    |
+| %c | Show staged changes in the repository                      |
+| %a | ‘actions’ i.e.: currently performing a merge or rebase     |
+|----+------------------------------------------------------------|
+
+`check-for-changes` is disabled by default because it might slow
+things down, it tell the back-end to check for working-copy changes
+and staged changes, so you can use the %c and %u sequences. Enable it
+with:
+
+```
+zstyle ':vcs_info:*' check-for-changes true 
+```
+
+So here is a full example:
+
+```
+autoload -Uz vcs_info
+zstyle ':vcs_info:*' enable git
+precmd() {
+    vcs_info
+}
+ 
+setopt prompt_subst
+zstyle ':vcs_info:git:*' check-for-changes true
+zstyle ':vcs_info:*'    formats "%f[%%n@%%m %1~] $ " "%f%a %F{3}%m%u%c %f%b:%r/%S" 
+zstyle ':vcs_info:*'    nvcsformats   "%f[%n@%m %1~]$ " ""
+zstyle ':vcs_info:*'    actionformats '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f '
+
+PROMPT='${vcs_info_msg_0_}'
+RPROMPT='${vcs_info_msg_1_}'
+```
+

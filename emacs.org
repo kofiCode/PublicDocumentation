@@ -1092,7 +1092,7 @@ Sexp functions
 |---------+-----------------------------------------------|
 | C-x p L | switch to bkmk file. open load, revert/reload |
 | C-u S   | Save As                                       |
-| S       | Save                                          |
+| S       | Save bookmarks to file                        |
 |---------+-----------------------------------------------|
 
 ** Bookmark commands available anywhere
