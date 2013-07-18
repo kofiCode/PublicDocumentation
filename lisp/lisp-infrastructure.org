@@ -9,25 +9,37 @@ contains soft links to the `*.asd` system definition files.
 To manage two code bases, we'll use two users, each with their own
 ~/.sbclrc file pointing to their own system folder.
 
+* All Environments
+
+|----------------------+-------------------------|
+| System Folder        | ~/projects/lisp/systems |
+| Lisp Projects Folder | ~/projects/lisp         |
+|----------------------+-------------------------|
+
+** setup
+
+% mkdir -p ~/projects/lisp/systems
+
 * Development
 
-In development we'll use the following settings:
+|-----------------+--------|
+| User            | fenton |
+| SBCL Swank Port |   4005 |
+|-----------------+--------|
 
-|----------------------+------------------------------------|
-| User                 | fenton                             |
-| System Folder        | /home/fenton/projects/lisp/systems |
-| Lisp Projects Folder | /home/fenton/projects/lisp         |
-| SBCL Swank Port      | 4005                               |
-|----------------------+------------------------------------|
+** setup
 
 * Production
 
-|----------------------+------------------------------------|
-| User                 | prdusr                             |
-| System Folder        | /home/prdusr/projects/lisp/systems |
-| Lisp Projects Folder | /home/prdusr/projects/lisp         |
-| SBCL Swank Port      | 4006                               |
-|----------------------+------------------------------------|
+|-----------------+------|
+| User            |  prd |
+| SBCL Swank Port | 4006 |
+|-----------------+------|
+
+** setup
+
+    % sudo useradd -m -g users -s /usr/bin/zsh prd
+    
 
 * Code Promotion
 

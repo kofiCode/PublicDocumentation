@@ -272,8 +272,8 @@ Back on original computer clone the git repo
 % mv ft.home.dir fenton
 % tar cvfz fenton.tgz fenton
 % sudo cp fenton.tgz ..
-% cd ..
-% tar xvfzm fenton.tgz
+% cd ..; tar xvfzm fenton.tgz
+% sudo rm -f fenton.tgz
 
 # exit
 # umount /mnt/{home,}
@@ -410,7 +410,7 @@ auto_login         yes
 
 Install packages:
 
-    bookmark+, org2blog, workgroups, 
+    bookmark+, org2blog, workgroups, icicles
 
 ** Git Projects
 
