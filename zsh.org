@@ -78,3 +78,179 @@ PROMPT='${vcs_info_msg_0_}'
 RPROMPT='${vcs_info_msg_1_}'
 ```
 
+* arrays
+
++ initialize 
+
+    % myarr=(2 4 3)  
+
++ access, index
+
+ Access starts from 1 not 0
+
+    % echo $myarr[2]
+    4
+
++ access: negative index
+
+    % echo $myarr[-1]
+    3
+
++ delete element
+
+    % myarr[2]=()
+    % print $myarr
+    2 3
+
++ loop over array
+
+    myarray=(1 2 3 4 7)
+    for i in $myarray
+    do
+      print $i
+    done
+
+* hashes
+
+    % typeset -A hash
+    % hash=(wife emily)
+    % print $hash
+    emily
+    % print $hash[wife]
+    james
+
++ add element
+
+    % hash[child]=kevin
+    % print $hash
+    emily kevin
+    % print $hash[child]
+    kevin
+
++ remove elements
+
+    % unset "hash[child]"
+    % print $hash
+    emily
+* zparseopts
+
++ presense of parameter
+
+look for a parameter: `-a` and put it into the array `a_option`
+
+test.sh:
+
+    zparseopts a=a_option
+    echo $a_option[1]
+
+output:
+
+    % ./test.sh -a
+    -a
+
++ parameter with a required value
+
+We add a single colon `:` after the required parameter name.
+
+test.sh:
+
+    zparseopts a:=a_option
+    echo $a_option[1]
+    echo $a_option[2]
+
+output
+
+    % ./test.sh -a 1
+    -a
+    1
+    % ./test.sh -a
+    ./test.sh:zparseopts:3: missing argument for option: a
+
++ a longname option
+
+We preceed the option with a `-`.
+
+test.sh:
+
+    zparseopts -file=file_option
+    echo $file_option[1]
+
+output:
+
+    % ./test.sh --file
+    --file
+
+Normally processing stops when we encounter an option we didn't tell
+`zparseopts` about, but we can use the -E flag to carry on processing
+all the arguments
+
+    zparseopts a=a_option
+    echo $a_option[1]
+
+output:
+
+    % ./test.sh -b -a
+     
+    ~ % ./test.sh -a -b
+    -a
+
+Lets now add the `-E` flag to see the difference:
+
+test.sh:
+
+    zparseopts -E a=a_option
+    echo $a_option[1]
+
+output:
+
+    % ./test.sh -b -a
+    -a
+
+
++ a long and short option meaning the same thing
+
+We just specify the same destination array: `file_option`
+
+test.sh:
+
+    zparseopts f=file_option -file=file_option
+    if (( -n $file_option[1] )); then
+      echo "file option specified."
+    fi
+
+output:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+looks for a parameter 
+
+$foo = -a    
+
+-D = Remove the parameter for the options list after it is processed
+-E = Keep parsing options even if you run into one that isn't asked
+for (specified/known) in your script
+-A = put args into an Associative/Hash.  Key is argument name, value
+is what was passed in.
