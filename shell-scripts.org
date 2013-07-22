@@ -1,16 +1,20 @@
-# Shell Scripting
+* Shell Scripting
 
-* (Shell Dorado)[http://shelldorado.com/]
+Take a file and for each line execute a command 
+
+    # pacman -S $(< pkglist.txt)
+
++ (Shell Dorado)[http://shelldorado.com/]
 
 
-## General
+** General
 
 | Category      | Comments                                              |
 | ------------- | ----------------------------------------------------- |
 Comments        | Comments begin with a hash `#` symbol
 
 
-## Command Line Arguments
+** Command Line Arguments
 
 | Variable      | Meaning                            |
 | ------------- | ---------------------------------- |
@@ -19,13 +23,13 @@ $1, $2, ...     | first, second, etc... param
 $#              | number of params
 $@              | list of all parameters
 
-## Shell Commands
+** Shell Commands
 
 | Command       | Effect                             |
 | ------------- | ---------------------------------- |
 shift           | shift command line arguments to the left, ie $1 becomes the value of $2, $3 shifts into $2, etc. The command, "shift 2" will shift 2 places meaning the new value of $1 will be the old value of $3 and so forth.
 
-## Testing
+** Testing
 
 [Ref](http://tldp.org/LDP/abs/html/comparison-ops.html)
 
@@ -57,7 +61,7 @@ Op | Meaning
 -d | file is a directory
 
 
-## Iteration, control and if statements
+** Iteration, control and if statements
 
     case $NUM of
     1)
@@ -71,7 +75,7 @@ Op | Meaning
       ;;
     esac
 
-## Functions
+** Functions
 
 define function
 
@@ -93,7 +97,7 @@ calling function
 
     myFunc "Fenton"
 
-## Looping over an array
+** Looping over an array
 
 ```bash
 dirs=("tmp" "src" "dist")
@@ -104,7 +108,7 @@ do
 done
 ```
 
-## Capture command output
+** Capture command output
 
     var=`date`
     echo $var
@@ -118,9 +122,9 @@ OnVpn=$(ifconfig | grep cscotun0)
 if [ -n "$OnVpn" ]
 ```
 
-# Samples
+* Samples
 
-## Copy / Backup files
+** Copy / Backup files
 
     timestamp=`date +%s`
     echo "Setting the timestamp: ${timestamp} into the file timestamp."
