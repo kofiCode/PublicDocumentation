@@ -94,3 +94,14 @@ x[:2]   # 'He'          Keep front
 x[:-2]  # 'Hello Worl'  Trim end
 x[-2:]  # 'd!'          Keep end
 x[2:-2] # 'llo Worl'    Trim front & end
+
+## Array
+# Declare an array:
+
+myvariable = []
+
+## Modules
+# look at the file: helper.py
+# first off we import it
+import helper  # notice we leave off the file extension
+helper.hello()

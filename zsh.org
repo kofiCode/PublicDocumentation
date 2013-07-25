@@ -132,59 +132,69 @@ RPROMPT='${vcs_info_msg_1_}'
     % unset "hash[child]"
     % print $hash
     emily
+* arithmatic
+a=1
+b=1
+((c=a+b))
 * zparseopts
 
-+ presense of parameter
+reference:
+http://lavica.fesb.hr/cgi-bin/info2html?(zsh)The%20zsh/zutil%20Module
 
-look for a parameter: `-a` and put it into the array `a_option`
+** option
+
+look for a single `-f` flag passed to script.  If found put into
+array called: `my_options_array`.
 
 test.sh:
 
-    zparseopts a=a_option
-    echo $a_option[1]
+    zparseopts -a my_options_array f
+    echo $my_options_array[1]
 
 output:
 
-    % ./test.sh -a
-    -a
+    % ./test.sh -f
+    -f
 
-+ parameter with a required value
+** option with required value
 
 We add a single colon `:` after the required parameter name.
 
 test.sh:
 
-    zparseopts a:=a_option
-    echo $a_option[1]
-    echo $a_option[2]
+    zparseopts -a my_options_array f:
+    echo $my_options_array[1]
+    echo $my_options_array[2]
 
 output
 
-    % ./test.sh -a 1
-    -a
-    1
-    % ./test.sh -a
-    ./test.sh:zparseopts:3: missing argument for option: a
+    % ./test.sh -f abc
+    -f
+    abc
+    % ./test.sh -f
+    ./test.sh:zparseopts:4: missing argument for option: f
 
-+ a longname option
+** a longname option
 
-We preceed the option with a `-`.
+We can take an options like: `--file abc.txt` instead of just `-f
+abc` by preceeding the option with a `-`
 
 test.sh:
 
-    zparseopts -file=file_option
-    echo $file_option[1]
+    zparseopts -a my_options_array -file
+    echo $my_options_array[1]
 
 output:
 
     % ./test.sh --file
     --file
 
-Normally processing stops when we encounter an option we didn't tell
-`zparseopts` about, but we can use the -E flag to carry on processing
-all the arguments
+** skip (dont stop at) unknown options
 
-    zparseopts a=a_option
+Normally processing stops when we encounter an option we didn't tell
+`zparseopts` about.  
+
+    zparseopts -a a_option a
     echo $a_option[1]
 
 output:
@@ -194,11 +204,12 @@ output:
     ~ % ./test.sh -a -b
     -a
 
-Lets now add the `-E` flag to see the difference:
+However we can use the -E flag to carry on processing all the
+arguments:
 
 test.sh:
 
-    zparseopts -E a=a_option
+    zparseopts -E -a a_option a
     echo $a_option[1]
 
 output:
@@ -206,19 +217,77 @@ output:
     % ./test.sh -b -a
     -a
 
+** per option array
 
-+ a long and short option meaning the same thing
-
-We just specify the same destination array: `file_option`
+We can put each option into a named array.  So the following line:
 
 test.sh:
 
-    zparseopts f=file_option -file=file_option
-    if (( -n $file_option[1] )); then
-      echo "file option specified."
-    fi
+    zparseopts a=a_opt b=b_opt
+    echo $a_opt[1]
+    echo $b_opt[1]
 
 output:
+
+    % ./test.sh -a -b
+    -a
+    -b
+
+This is helpful for the next use case:
+
+** a long AND short option
+
+Maybe we want an option to be specified at either `-f` or `--file`
+
+test.sh:
+
+#+BEGIN_SRC SH
+
+    zparseopts f=file_option -file=file_option
+    if [[ $#file_option -ge 1 ]]; then
+      echo "either an -f or an --file option was used"
+    fi
+
+#+END_SRC
+
+output:
+
+     ./test.sh --file
+    ither an -f or an --file option was used
+     ./test.sh -f
+    ither an -f or an --file option was used
+     ./test.sh -f --file
+    ither an -f or an --file option was used
+     ./test.sh
+                     
+** Other notes
+
+*** Hash instead of array.
+
+a hash or associative array can be used in place of an array.
+
+    zparseopts -A my_opt_hash a:b:c:
+
+The keys of the hash will be the options, the values will be the
+option if it doesn't have a required value, or the value if it does. 
+
+
+*** Optional values to options
+
+if you want to be able to do:
+
+    test.sh -f
+
+or
+
+    test.sh -f fenton.txt
+
+you use double colon, as in:
+
+    zparseopts -a my_opts f::
+
+
+
 
 
 
@@ -254,3 +323,14 @@ $foo = -a
 for (specified/known) in your script
 -A = put args into an Associative/Hash.  Key is argument name, value
 is what was passed in.
+* output shell script usage string
+
+usage() {
+  cat <<EOF
+
+specify one of -u (install to USB) or -c (install to computer), not
+both or neither :)
+
+specify device with -d <device>.  For example: `-d /dev/sdb`.
+EOF
+}

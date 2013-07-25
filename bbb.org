@@ -1,0 +1,39 @@
+This guide is for using Arch Linux with your Beagle Bone Black.
+
+Before you connect your BBB to your computer run: `ifconfig -a` and
+note which interfaces you have, mine has: eth0, lo, and wlan0.
+
+This assumes you are ONLY connecting to your BBB via a USB cable.
+
+After you've plugged it in you can do an `lsblk` to determine the
+device, mine was `/dev/sdc`.
+
+You can mount and browse this easily enough with:
+
+    % sudo mkdir -p /mnt/bbb
+    % sudo mount /dev/sdc /mnt/bbb
+    % cd /mnt/bbb; ls
+
+Next you want to issue: `ipconfig -a`, my system shows: eth0, eth1,
+lo, wlan0, after having connected the BBB, therefore the network
+device that will connect to the BBB is eth1.
+
+I used `netctl`.  I copied and edited the `
+
+    % cd /etc/netctl
+    % sudo cp /examples/ethernet-dhcp bbb
+    % cat bbb
+    Description='A basic dhcp ethernet connection'
+    Interface=eth1
+    Connection=ethernet
+    IP=dhcp
+
+I enabled and started the network with: 
+
+    % sudo netctl enable bbb
+    % sudo netctl start bbb
+
+Now `ifconfig -a` reveals the IP address, which is 192.168.7.1.  Keep
+in mind that this is the computer side of the network's IP, the BBB
+should have the IP address: 192.168.7.2.  So you can now browse via a
+browser, or ssh in.  There is no password for the `root` user.
