@@ -27,8 +27,6 @@ To manage two code bases, we'll use two users, each with their own
 | SBCL Swank Port |   4005 |
 |-----------------+--------|
 
-** setup
-
 * Production
 
 |-----------------+------|
@@ -39,7 +37,26 @@ To manage two code bases, we'll use two users, each with their own
 ** setup
 
     % sudo useradd -m -g users -s /usr/bin/zsh prd
-    
+    % sudo passwd prd
+    % sudo cp ~fenton/.sbclrc ~prd/
+    % su - prd
+    % sed -i 's/fenton/prd/' .sbclrc
+    % sed -i 's/4082/4080/' .sbclrc
+    % sed -i 's/8082/80/' .sbclrc
+    % mv .sbclrc .sbclrc.bak
+    % sbcl --load quicklisp.lisp
+    * (quicklisp-quickstart:install)
+    * (ql:quickload "quicklisp-slime-helper")
+    * (SB-EXT:EXIT)
+    % mv .sbclrc.bak .sbclrc
+    % sbcl
+    * (SB-EXT:EXIT)
+    % git clone ft_git3@spicevan.com:basic-user-settings.git
+    % mv basic-user-settings prd
+    % tar cvf prd.tar prd
+    # cp ~prd/prd.tar /home
+    % cd /home
+    % tar xvf prd.tar
 
 * Code Promotion
 
