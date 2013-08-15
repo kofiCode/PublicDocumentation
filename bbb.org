@@ -89,3 +89,8 @@ finished.
 + Yank the power cord.  Remove the SD card.  Reinsert the power and off
 you go!
 
+
+* Install Arch Linux
+
+ref: http://archlinuxarm.org/platforms/armv7/ti/beaglebone-black
+

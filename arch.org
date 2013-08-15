@@ -395,8 +395,7 @@ auto_login         yes
    $ wget https://aur.archlinux.org/packages/pa/package-query/package-query.tar.gz
    $ wget https://aur.archlinux.org/packages/ya/yaourt/yaourt.tar.gz
 
-   $ tar xvfz package-query.tar.gz
-   $ tar xvfz yaourt.tar.gz
+   $ tar xvfz package-query.tar.gz; tar xvfz yaourt.tar.gz
    $ cd package-query; makepkg -s; sudo pacman -U package-query...; cd ..
    $ cd yaourt; makepkg -s; sudo pacman -U yaourt...; cd ..
    $ rm -rf yaourt* package-query*
@@ -1240,3 +1239,20 @@ Each time you modify exports file you must run:
 + services
 
 Start/enable `rpc-idmapd.service` and `rpc-mountd.service`
+* modules
+
+Show currently loaded modules
+
+    % lsmod
+
+Info about a module
+
+    % modinfo <module_name>
+
+See the module files
+
+    % tree -d /lib/modules/3.9.9-1-ARCH/kernel/
+
+Remove a module called foo
+
+    # modprobe -r foo

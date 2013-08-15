@@ -143,6 +143,8 @@ http://lavica.fesb.hr/cgi-bin/info2html?(zsh)The%20zsh/zutil%20Module
 
 ** option
 
+*** using -a flag
+
 look for a single `-f` flag passed to script.  If found put into
 array called: `my_options_array`.
 
@@ -155,6 +157,15 @@ output:
 
     % ./test.sh -f
     -f
+
+*** appending array to option
+
+You can achieve exactly the same effect like so:
+
+    zparseopts f=my_options_array
+
+so instead of passing an `-a` flag to specify where the param should
+be stored, the array is appended to the option.
 
 ** option with required value
 
@@ -238,6 +249,9 @@ This is helpful for the next use case:
 ** a long AND short option
 
 Maybe we want an option to be specified at either `-f` or `--file`
+
+Here we check the length of the array with the `$#` notation.  So
+`$#file_option` is the length of the `file_option` array.
 
 test.sh:
 
@@ -334,3 +348,36 @@ both or neither :)
 specify device with -d <device>.  For example: `-d /dev/sdb`.
 EOF
 }
+* functions
+
+** Simple
+
+Define function called `fenton` that prints "hello".
+
+```
+# Define function first
+fenton() {
+  echo "hello"
+}
+# Call function
+fenton
+```
+
+outputs: "hello"
+
+** Function with parameter
+
+Function dont have named parameter but instead use `$1`, `$2`,
+etc... as default names for parameters passed to function.
+
+Here we have a function that takes a name too.
+
+```
+fenton() {
+  echo "hello $1" 
+}
+# Call function
+fenton "fenton"
+```
+
+outputs: "hello fenton"

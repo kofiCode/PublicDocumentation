@@ -328,11 +328,6 @@ Then do:
 
     M-x package-list-packages 	
 						
-						
-						
-						
-						
-				
 ** Emacs mail reader (incomplete)
 notmuch is, like, [0] an emacs mail-reader frontend over a xapian database; see http://keithp.com/blogs/notmuch/ or http://notmuchmail.org                                              │ Athas
 11:33:21        fsbot | [1] see *notmuch                                                                                                                                                                        │ atrus`
