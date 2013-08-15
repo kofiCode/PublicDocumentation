@@ -28,7 +28,15 @@ USE: /dev/sdx instead of /dev/sdx1
 *** Layout
 
     # lsblk
-    # gdisk /dev/sda
+
+####    # gdisk /dev/sda
+
+We'll use sgdisk
+
+    # sgdisk -Z /dev/sdb             # zero out the disk
+    # sgdisk -n 1:0:+2m /dev/sdb     # format: <partition #>:<start>:<end>
+    # sgdisk -n 2:0:0 /dev/sdb     # a 0 means use default
+    # sgdisk -n 1:0:+2m /dev/sdb
 
 Determine how much ram your system has:
 
@@ -190,6 +198,7 @@ assume we have packages cache mounted to: /mnt/pm
 
     # pacstrap -i /mnt base base-devel
     # genfstab -U -p /mnt >> /mnt/etc/fstab
+    # echo 'genfstab -U -p /mnt/na >> /mnt/etc/fstab' | sudo bash
 
 Add an entry to file system table `/mnt/etc/fstab` for the swap.
 
@@ -219,8 +228,6 @@ If this is a laptop:
 
     # pacman -S iw wireless_tools wpa_supplicant wpa_actiond dialog
     # wifi-menu wlan0
-    # systemctl enable netctl-auto@<interface_name>.service
-
 
 If a desktop: 
 

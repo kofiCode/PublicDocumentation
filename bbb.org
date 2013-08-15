@@ -1,0 +1,91 @@
+* First Steps
+
+This guide is for using Arch Linux with your Beagle Bone Black.
+
+Before you connect your BBB to your computer run: `ifconfig -a` and
+note which interfaces you have, mine has: eth0, lo, and wlan0.
+
+This assumes you are ONLY connecting to your BBB via a USB cable.
+
+After you've plugged it in you can do an `lsblk` to determine the
+device, mine was `/dev/sdc`.
+
+You can mount and browse this easily enough with:
+
+    % sudo mkdir -p /mnt/bbb
+    % sudo mount /dev/sdc /mnt/bbb
+    % cd /mnt/bbb; ls
+
+Next you want to issue: `ipconfig -a`, my system shows: eth0, eth1,
+lo, wlan0, after having connected the BBB, therefore the network
+device that will connect to the BBB is eth1.
+
+I used `netctl`.  I copied and edited the `
+
+    % cd /etc/netctl
+    % sudo cp /examples/ethernet-dhcp bbb
+    % cat bbb
+    Description='A basic dhcp ethernet connection'
+    Interface=eth1
+    Connection=ethernet
+    IP=dhcp
+
+I enabled and started the network with: 
+
+    % sudo netctl enable bbb
+    % sudo netctl start bbb
+
+I also enable the dhcp client with:
+ 
+    % sudo systemctl enable dhcpcd.service
+
+Now `ifconfig -a` reveals the IP address, which is 192.168.7.1.  Keep
+in mind that this is the computer side of the network's IP, the BBB
+should have the IP address: 192.168.7.2.  So you can now browse via a
+browser, or ssh in.  There is no password for the `root` user.
+
+    % ssh root@192.168.7.2
+
+Now get your Angstrom version:
+
+    # cat /etc/dogtag 
+    Cloud9 GNOME Image 2013.06.20
+
+* Updating to the latest Angstrom
+
+Someone recommended doing this as a first step with my BBB.  So I
+bought a 16GB uSD flash card.  Apparently anything 4GB and up is okay.
+
+Went here: http://beagleboard.org/latest-images
+
+Got the image that is for the BBB.  On my Arch Linux i had to install
+7zip
+
+    % sudo pacman -S p7zip
+
+Extract the file with:
+
+    % 7za e demo_beaglebone_BBB-eMMC-flasher-2013.06.20.img.xz
+
+Copy it over to the uSD card with:
+
+    % sudo dd if=demo_beaglebone_BBB-eMMC-flasher-2013.06.20.img of=/dev/sdb bs=1M
+
+It took a long time, maybe more than 10 minutes for the previous step.
+
++ Then in the powered down BBB I put the micro SD (uSD) card in.  
+
++ I used a 5V/2A wall wart power supply (do NOT power through even a
+powered USB) and while holding the boot button, plugged the device in.
+The boot button is the one near the uSD card side.  
+
++ Hold the button down until the 4 LEDs all light simultaneously.  This
+took about 15 seconds.
+
++ Then release the BBB boot button, and came back maybe 45 minutes
+later.  All four LEDs will be constantly on when the process is
+finished.
+
++ Yank the power cord.  Remove the SD card.  Reinsert the power and off
+you go!
+
