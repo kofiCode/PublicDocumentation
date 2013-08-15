@@ -402,6 +402,10 @@ auto_login         yes
    $ sbcl --load quicklisp.lisp
    * (quicklisp-quickstart:install)
    * (ql:quickload "quicklisp-slime-helper")
+   * (SB-EXT:EXIT)
+   % mv .sbclrc.bak .sbclrc
+   % sbcl
+   * (SB-EXT:EXIT)
    $ mkdir -p projects/lisp/systems
 
 ** Emacs
@@ -1149,6 +1153,7 @@ just type:
 If you get a message: failed to setup a loop device
 
     # tee /etc/modules-load.d/truecrypt.conf <<< "loop"
+    % sudo modprobe loop
 
 * pacman
 
