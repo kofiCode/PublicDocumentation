@@ -1169,7 +1169,7 @@ To list files associated with a package:
 
 this should give you a list of explicitly installed packages
 
-    % pacman -Qe
+    % pacman -Qet
 
 ** cache and database
 
@@ -1261,3 +1261,5 @@ See the module files
 Remove a module called foo
 
     # modprobe -r foo
+
+** 

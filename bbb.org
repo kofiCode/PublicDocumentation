@@ -69,28 +69,71 @@ Extract the file with:
 
 Copy it over to the uSD card with:
 
-    % sudo dd if=demo_beaglebone_BBB-eMMC-flasher-2013.06.20.img of=/dev/sdb bs=1M
+    % time sudo dd if=demo_beaglebone_BBB-eMMC-flasher-2013.06.20.img of=/dev/sdb bs=1M
 
 It took a long time, maybe more than 10 minutes for the previous step.
 
 + Then in the powered down BBB I put the micro SD (uSD) card in.  
 
-+ I used a 5V/2A wall wart power supply (do NOT power through even a
-powered USB) and while holding the boot button, plugged the device in.
-The boot button is the one near the uSD card side.  
++ I used a 5V/2A wall-wart power supply (do NOT power through even a
+powered USB), and while holding the boot button, plugged the device
+in.  The boot button is the one near the uSD card side.
 
 + Hold the button down until the 4 LEDs all light simultaneously.  This
-took about 15 seconds.
+took about 6 seconds.
 
-+ Then release the BBB boot button, and came back maybe 45 minutes
++ Then release the BBB boot button, and came back maybe 65 minutes
 later.  All four LEDs will be constantly on when the process is
 finished.
 
 + Yank the power cord.  Remove the SD card.  Reinsert the power and off
 you go!
 
-
 * Install Arch Linux
 
 ref: http://archlinuxarm.org/platforms/armv7/ti/beaglebone-black
 
+If re-installing make sure to delete the files under /boot/* and
+/root/* since a 'tar xf' will not overwrite files with the same name
+that already exist.  
+
+* Arch Setup
+
+** Have more space on eMMC
+
+on your install SD card, create two partitions, the first for /usr and
+second for /home.  Maybe 4 GB and 12 GB respectively.
+
+boot up with card in and do:
+
+    # mkdir /mnt/new_usr
+    # mount /dev/mmcblk1p1 /mnt/newusr
+    # cp -a /usr/* /mnt/newusr/
+
+Add a line like the following to /etc/fstab
+
+/dev/mmcblk1p1  /usr   ext4    defaults        0       2
+
+reboot
+
+then lets delete the old /usr to free up space:
+
+    # mount --bind / /mnt
+    # rm -rf /mnt/usr
+    # umount /mnt
+
+boot up as normal with SD card in and do:
+
+
+** Wireless USB
+
+It's a realtek 
+
+    # pacman -S dkms-8188eu
+
+
+** Video
+
+Install this driver:
+
+    % sudo pacman -S xf86-video-fbdev

@@ -794,6 +794,9 @@ example:
     alias vms='ssh root@vms.lab.com'
 
 ** Misc Commands
+*** wget recursively
+
+wget -r -np -c -U "Mozilla/5.0 (X11; U; Linux i686; nl; rv:1.7.3) Gecko/20040916" -e robots=off http://voxel.dl.sourceforge.net/proj..._linux.tar.bz2
 
 *** Grep
 
