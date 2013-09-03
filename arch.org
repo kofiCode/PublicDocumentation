@@ -1184,7 +1184,7 @@ this should give you a list of explicitly installed packages
 
 ** Generate secure passwords
 
-r    $ apg -m 12 -a 1 -s | grep -v [0O]
+    $ apg -m 20 -a 1 -s | grep -v [0O]
 
 * wake on lan
 + setup in bios
