@@ -97,6 +97,17 @@ If re-installing make sure to delete the files under /boot/* and
 /root/* since a 'tar xf' will not overwrite files with the same name
 that already exist.  
 
+Actually the boot files get modified on the SD card and we must copy
+those over to the eMMC boot dir.
+
+# mkdir good_boot
+# mount /dev/mmcblk0p1 good_boot
+# mount /dev/mmcblk1p1 boot
+# rm -f boot/*
+# cp good_boot/MLO boot/
+# cp good_boot/u* boot/
+# umount boot; umount good_boot; poweroff
+
 * Arch Setup
 
 ** Have more space on eMMC
@@ -112,18 +123,13 @@ boot up with card in and do:
 
 Add a line like the following to /etc/fstab
 
-/dev/mmcblk1p1  /usr   ext4    defaults        0       2
+/dev/mmcblk0p1  /usr   ext4    defaults        0       2
 
 reboot
 
+CANNOT delete old '/usr' as I believe it is used in the bootup
+process before the '/etc/fstab' is read.  So just leave it there...
 then lets delete the old /usr to free up space:
-
-    # mount --bind / /mnt
-    # rm -rf /mnt/usr
-    # umount /mnt
-
-boot up as normal with SD card in and do:
-
 
 ** Wireless USB
 

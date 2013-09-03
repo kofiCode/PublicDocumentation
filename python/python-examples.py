@@ -17,7 +17,7 @@ call(["ls", "-l"])
 output = s.check_output(["git", "status"]).decode("utf-8")
 print (output)
 
-# Open a terminal window: `urxvt` is my terminal program
+# Open a terminal window: `urxvt` is my terminal programii
 import subprocess
 child = subprocess.Popen("urxvt", shell=True)
 # OR
@@ -86,8 +86,9 @@ a = { "a": 123, "b": 456, "c": 789 }
 for key, value in a.items():
     print ( "Key: " + key + ", Value: " + value )
 print ( a["b"] )
+a['b'] = 101112
 
-# Strings
+# Strings. Substring
 x = "Hello World!"
 x[2:]   # 'llo World!'  Trim front
 x[:2]   # 'He'          Keep front
@@ -105,3 +106,32 @@ myvariable = []
 # first off we import it
 import helper  # notice we leave off the file extension
 helper.hello()
+
+# Global variables
+globvar = 0
+def set_globvar_to_one():
+    global globvar    # Needed to modify global copy of globvar
+    globvar = 1
+def print_globvar():
+    print globvar     # No need for global declaration to read value of globvar
+set_globvar_to_one()
+print_globvar()       # Prints 1
+
+# Measuring elapsed time in fractional seconds
+import time
+start_time = time.time()
+time.sleep(5) # delays for 5 seconds
+elapsed_time = time.time() - start_time
+
+# boolean True and False
+True # True
+False # False :)
+
+# find a substring
+x = "Hello World"
+x.find('World') # --> 6
+x.find('Aloha'); # --> -1
+
+# convert float to String
+a = 1.2
+print( str(a) )

@@ -1,3 +1,10 @@
+* Debugger
+
+import pdb
+pdb.set_trace()
+
+Now run your program and it'll break at the 'set_trace' method.
+
 * Basics
 
 ** Functions

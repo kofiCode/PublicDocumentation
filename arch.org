@@ -1263,3 +1263,17 @@ Remove a module called foo
     # modprobe -r foo
 
 ** 
+* Change keyboard language
+
+To be able to easily switch keyboard layouts, modify the Options used
+in either of the above two methods. For example, to switch between a
+US and a Swedish layout using the Caps Lock key, create a file
+/etc/X11/xorg.conf.d/01-keyboard-layout.conf with the following
+content:
+
+Section "InputClass"
+    Identifier             "keyboard-layout"
+    MatchIsKeyboard        "on"
+    Option "XkbLayout"     "us, se"
+    Option "XkbOptions"    "grp:caps_toggle"
+EndSection
