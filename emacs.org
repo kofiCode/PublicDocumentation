@@ -769,7 +769,6 @@ Prefix: C-x v
 | d | show files not up to date |
 | m | merge                     |
 
-
 * ERC
 * org2blog
 
@@ -940,4 +939,4 @@ Try the interactive elisp buffer with: `A-x ielm`
     A-x info RET
     C-h i
 
-|   |                           |
+

@@ -10,3 +10,4 @@ log.txt
 *.fasl
 index.org
 /python/__init__.py
+/python/__pycache__/helper.cpython-33.pyc
