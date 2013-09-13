@@ -40,16 +40,91 @@ myFunction(23)
 
 This does not introduce the module name, so `my_module` is not defined.
 
-* Package Management - Python Eggs
+* current package management
 
-** Debian Setup
+Folder layout:
+
+    |-- README.txt
+    |-- test
+    |   `-- test.py
+    |-- setup.py
+    `-- weechat_notifier
+        |-- __init__.py
+        `-- weechat_plugin.py
+  
+Contents of setup.py:
+
+    from setuptools import setup
+    the_version='0.1.4'
+    setup(
+        name = 'weechat_notifier',
+        version = the_version,
+        packages = ['weechat_notifier'],
+        description = 'Weechat Notification Plugin',
+        author='Fenton Travers',
+        author_email='fenton.travers@gmail.com',
+        url='https://pypi.python.org/packages/source/w/weechat_notifier/weechat_notifier-' + the_version + '.tar.gz',
+        license='Creative Commons Attribution-Noncommercial-Share Alike license',
+        long_description='A notification plugin for weechat',
+        classifiers=[
+            'Programming Language :: Python :: 3.3',
+        ]
+    )
+
+Build the distribution:
+
+    % python setup.py sdist
+
+Upload to PyPi:
+
+    % python setup.py sdist upload
+
+* adding system commands
+
+if I want to add additional system commands to linux using python i
+use the following project and project structure:
+
+    pscripts
+    |-- pscripts
+    |   |-- deployment.py
+    |   `-- __init__.py
+    |-- README.txt
+    |-- scripts
+    |   `-- inc-ver
+    `-- setup.py
+
+all the python code lives, primarily, in 'pscripts/pscripts/py'.  
+
+The files under scripts are what I'd call on the command line.  In
+this example I want to create a script that will automatically update
+the version number inside of setup.py, so I don't need to do it
+manually each time I release.
+
+* 3to2
+
+If you have a python 3.x compliant file you can convert to a 2.x
+compliant file by using 3to2.
+
+    % pip install 3to2
+    % 3to2 test.py > test.diff
+
+3to2 creates a patch, so apply it.
+
+    % patch < test.diff
+
+in the same folder as test.py.
+
+* old package management (ignore)
+** Package Management - Python Eggs
+
+*** Debian Setup
 
 ```bash
 $ sudo apt-get install python-setuptools
 $ sudo easy_install -U PasteScript
 ```
 
-** Create Shell Project
+*** Create Shell Project
 
 ```bash
 $ paster create --list-templates
@@ -60,7 +135,7 @@ After responding to some questions, such as project name, we get a
 folder created by the name we used for our project.  In this tutorial
 my project name is: **it_library**.
 
-** Release Egg
+*** Release Egg
 
 You can create and upload the egg with:
 
@@ -71,11 +146,11 @@ Submitting dist/it_library-0.0.1dev-py2.7.egg to http://pypi.python.org/pypi
 Server response (200): OK
 ```
 
-** New Egg Version
+*** New Egg Version
 
 Update version info in `setup.py` and re-release.
 
-** Share with others
+*** Share with others
 
 Have people go to [pypi.python.org](http://pypi.python.org/), and put
 your project name into the search box at top right.
@@ -84,7 +159,7 @@ your project name into the search box at top right.
 $ sudo easy_install -U it_library
 ```
 
-** Local testing
+*** Local testing
 
 If you want to install and test any changes you made, do:
 
@@ -97,10 +172,10 @@ $ sudo python setup.py install
 of your project.
 
 
-** References
+*** References
 
-* [Reference](http://wiki.python.org/moin/CheeseShopTutorial)
-* [Python Eggs - Package Management](http://mrtopf.de/blog/en/a-small-introduction-to-python-eggs/)
+** [Reference](http://wiki.python.org/moin/CheeseShopTutorial)
+** [Python Eggs - Package Management](http://mrtopf.de/blog/en/a-small-introduction-to-python-eggs/)
 
 # Language Reference
 
@@ -261,4 +336,7 @@ def print_globvar():
 set_globvar_to_one()
 print_globvar()       # Prints 1
 ```
+* virtualenv
+
+
 

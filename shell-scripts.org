@@ -30,16 +30,37 @@ $@              | list of all parameters
 shift           | shift command line arguments to the left, ie $1 becomes the value of $2, $3 shifts into $2, etc. The command, "shift 2" will shift 2 places meaning the new value of $1 will be the old value of $3 and so forth.
 
 ** Testing
+*** Integer Comparison
+
+ref: http://tldp.org/LDP/abs/html/comparison-ops.html
+
+is equal to:
+
+#+BEGIN_SRC sh
+
+if [[ "$a" -eq "$b" ]]
+
+#+END_SRC
+
++ ne not equal, 
++ gt greater than,
++ lt, 
++ ge greater than or equal to,
++ le
+
+*** String Comparison
 
 [Ref](http://tldp.org/LDP/abs/html/comparison-ops.html)
 
 String comparison operators: `==`, and `!=`
 
-```
-if [ "$var" == "" ]
+#+BEGIN_SRC sh
+
+if [[ "$var" == "" ]]; then
    echo variable is null
 fi
-```
+
+#+END_SRC
 
 Integer comparison operators: `-eq`, `-ne`, `-gt`, `-lt`, `-ge`,
 `-le`.  Equal, not equal, greater than, less than, greater than or
@@ -47,9 +68,14 @@ equal to, less than or equal to.
 
 Test if command was passed any arguments
 
-```
-if [ $# -gt 0 ]
-```
+#+BEGIN_SRC sh 
+
+if [[ $# -gt 0 ]]; then
+
+fi
+
+#+END_SRC
+
 
 File testing operators: 
 

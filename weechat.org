@@ -1,6 +1,6 @@
-* [Getting Started Guide](http://www.weechat.org/files/doc/stable/weechat_quickstart.en.html)
-* [FAQ](http://weechat.org/files/doc/weechat_faq.en.html)
-* [KeyBindings](http://www.weechat.org/files/doc/stable/weechat_user.en.html#key_bindings)
++ [Getting Started Guide](http://www.weechat.org/files/doc/stable/weechat_quickstart.en.html)
++ [FAQ](http://weechat.org/files/doc/weechat_faq.en.html)
++ [KeyBindings](http://www.weechat.org/files/doc/stable/weechat_user.en.html#key_bindings)
 
 Start: `weechat-curses`
 
@@ -18,11 +18,11 @@ Enable auto-connect to server `freenode`, defined above, on startup:
 
 To auto-join channels, do:
 
-    /set irc.server.freenode.autojoin "#emacs,#archlinux,#haskell,#xmonad,#yesod,#gentoo"
+    /set irc.server.freenode.autojoin "#emacs,#archlinux,#lisp,#python,#archlinux-arm"
 
 Where `#clojure,...` are the names of the channels u want to autojoin.
 
-## Identify
+** Identify
 
 Some networks require you to register before you can post questions.
 You do this by doing:
@@ -52,7 +52,7 @@ switch to your regular nick, in this case: ftravers, with:
 
     /msg NickServ IDENTIFY ftravers password
 
-## Tab Shortcut nicknames
+** Tab Shortcut nicknames
 
 To message someone, do first letter then <TAB> complete it out their
 nick to save you typing it.
@@ -84,3 +84,22 @@ To add proxy server:
     /proxy add myproxy http sample.host.org 8888
     /set irc.server.freenode.proxy "myproxy"
 
+* plugin
+
+put in: 
+
+    ~/.weechat/python/autoload/
+
+name whatever you want, sample contents:
+
+    import weechat
+    def my_print_cb(data, buffer, date, tags, displayed, highlight, prefix, message):
+        who = prefix.encode('ascii','ignore')[0:]
+        chan = weechat.buffer_get_string(buffer, "name").split('.')[1][1:]
+        msg = message.split(':')
+        if len(msg) > 1:
+            msg = msg[1]
+        weechat.prnt( "", "[who]: " + who + "  [chan]: " + chan + "  [msg]: " + msg + "  [tome]: " + highlight )
+        return weechat.WEECHAT_RC_OK
+    weechat.register("Chat_Notifier", "FlashCode", "1.0", "GPL3", "Test script", "", "")
+    hook = weechat.hook_print("", "", "", 1, "my_print_cb", "")

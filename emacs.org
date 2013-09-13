@@ -128,21 +128,22 @@ ctags -Re
 
 * Diff
 
--   [Reference](http://www.gnu.org/software/emacs/manual/html_node/emacs/Diff-Mode.html)
++ [Reference](http://www.gnu.org/software/emacs/manual/html_node/emacs/Diff-Mode.html)
 
-| Command  | Meaning                           |
-| -------- | -------------------------------- |
-C-c C-n    | Restrict the view to the current hunk (diff-restrict-view). See Narrowing. With a prefix argument of C-u, restrict the view to the current file of a multiple-file patch. 
-C-x n w    | To widen again
-A-n        | Move to the next hunk-start (diff-hunk-next).
-A-p        | Move to the previous hunk-start (diff-hunk-prev).
+| Command  | Meaning                                           |
+| -------- | --------------------------------                  |
+| C-c C-n  | only show current diff                            |
+| C-x n w  | To widen again                                    |
+| A-n      | Move to the next hunk-start (diff-hunk-next).     |
+| A-p      | Move to the previous hunk-start (diff-hunk-prev). |
+| C-c C-a  | Apply current diff                                |
+| C-c C-b  | increase granularity diff (show just characters)  |
 
 Additional commands: 
 
 ```
 diff-buffer-with-file
 ```
-
 
 ** Flyspell
 
@@ -443,6 +444,17 @@ calendar or press Enter on a specific day to choose it.
 | C-c l   | Clipboard link to current file |
 | C-c C-l | Paste link to file             |
 | C-c C-o | Open URL / follow link         |
+
+** Escape code
+
+ref: http://orgmode.org/manual/Working-With-Source-Code.html#Working-With-Source-Code
+
+shell code often uses double square brackets ]] to display these in
+org mode without creating a link use:
+
+#+BEGIN_SRC sh
+if [[ -z file ]]
+#+END_SRC
 
 ** TODO
 
@@ -756,6 +768,7 @@ Movement between sections
 | f | fetch remote updates            |
 | F | PULL                            |
 | P | PUSH                            |
+
 * VCS
 
 Prefix: C-x v

@@ -84,9 +84,20 @@ your parameter, which must be a list, will be removed from it's list.
   `'("abc" ,arg))
 (defmacro SPLICE (arg)
   `'("abc" ,@arg))
-(macroexpand (SIMPLE (1 2 3))) ;; ====> ("abc" (1 2 3))
+(macroexpand (SIMPLE (1 2 3))) ;; ====> ("abc" (1 2 3)) 
 (macroexpand (SPLICE (1 2 3))) ;; ====> ("abc" 1 2 3)
 ```
+
+** Why Use (Motivation)
+
+The reason to use macros is to follow the DRY (Dont Repeat Yourself)
+principle.   
+
+
+(defun paint (items-to-paint) 
+  ())
+(paint "house" "car" "fence")
+(clean house car pool)
 
 * Functions
 ** Higher Order

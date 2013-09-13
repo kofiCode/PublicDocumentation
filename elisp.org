@@ -1,4 +1,6 @@
+* Use Case
 
+Want to leverage 'ido-find-file' to pick a filename.
 
 
 (setq org-base-path (expand-file-name "~/smcho/time"))
@@ -7,3 +9,4 @@
       todo-file-path              (format "%s/%s" org-base-path "gtd.org")
       journal-file-path           (format "%s/%s" org-base-path "journal.org")
       today-file-path             (format "%s/%s" org-base-path "2010.org"))
+

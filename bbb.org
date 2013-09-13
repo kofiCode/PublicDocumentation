@@ -109,7 +109,6 @@ those over to the eMMC boot dir.
 # umount boot; umount good_boot; poweroff
 
 * Arch Setup
-
 ** Have more space on eMMC
 
 on your install SD card, create two partitions, the first for /usr and
@@ -136,7 +135,6 @@ then lets delete the old /usr to free up space:
 It's a realtek 
 
     # pacman -S dkms-8188eu
-
 
 ** Video
 

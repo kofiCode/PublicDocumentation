@@ -158,14 +158,52 @@ output:
     % ./test.sh -f
     -f
 
-*** appending array to option
+*** two (or more ) positional options
 
-You can achieve exactly the same effect like so:
+To parse the following:
 
-    zparseopts f=my_options_array
+    % ./junk.sh -ab                                                                                                       U fenton/.
+    % ./junk.sh -a -b   
 
-so instead of passing an `-a` flag to specify where the param should
-be stored, the array is appended to the option.
+you can do:
+
+    zparseopts -a ma a b
+    echo $ma[1]
+    echo $ma[2]
+
+results:
+
+    % ./junk.sh -a -b                                                                                                     U fenton/.
+    -a
+    -b
+    % ./junk.sh -ab                                                                                                       U fenton/.
+    -a
+    -b
+
+The problem with the above approach is that it is positional
+
+    % ./junk.sh -b                                                                                                        U fenton/.
+    -b
+     
+    %
+
+So $ma[1] now contains '-b', not '-a'
+
+*** store each option in it's own named array
+
+Instead of putting all options into a single array, you can specify
+one array per option by appending the option with: '=<array_name>'
+like so:
+
+    zparseopts l=long_array t=time_array 
+    echo "l: $long_array[1]"
+    echo "t: $time_array[1]"
+
+output:
+
+    % ./test.sh -lt
+    -f
+    -t
 
 ** option with required value
 
@@ -227,24 +265,6 @@ output:
 
     % ./test.sh -b -a
     -a
-
-** per option array
-
-We can put each option into a named array.  So the following line:
-
-test.sh:
-
-    zparseopts a=a_opt b=b_opt
-    echo $a_opt[1]
-    echo $b_opt[1]
-
-output:
-
-    % ./test.sh -a -b
-    -a
-    -b
-
-This is helpful for the next use case:
 
 ** a long AND short option
 
