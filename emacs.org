@@ -434,6 +434,7 @@ Now lets assign it properly with:
 Use Shift and arrows to skip days or weeks. Use the mouse on the
 calendar or press Enter on a specific day to choose it.
 
+
 ** Links
 
    Visit another file (target) and type: `C-c l`.  Then go back to the
@@ -445,7 +446,11 @@ calendar or press Enter on a specific day to choose it.
 | C-c C-l | Paste link to file             |
 | C-c C-o | Open URL / follow link         |
 
-** Escape code
+#+BEGIN_SRC sh
+[[link][description]] or alternatively [[link]]
+#+END_SRC
+
+** Escape double square brackets [[ code
 
 ref: http://orgmode.org/manual/Working-With-Source-Code.html#Working-With-Source-Code
 
@@ -948,6 +953,44 @@ Try the interactive elisp buffer with: `A-x ielm`
        body...)
 
 * Info Mode
+
+** Across Nodes
+   
+| n   | next node             |
+| p   | prev node             |
+| ^   | up                    |
+| m   | pick menu             |
+| d   | directory             |
+| <   | top node of file      |
+| >   | final node of file    |
+| ]   | forward node          |
+| [   | backward node         |
+| TAB | next menu or link     |
+| f   | follow link           |
+| l   | go back last node     |
+| r   | foRward node          |
+| L   | menu of visited nodes |
+| T   | TOC for file          | 
+
+** Move within node:
+
+| SPC | forward page      |
+| DEL | backwards page    |
+| b   | beginning of node |
+
+** Search
+
+function: info-apropos
+
+will search *ALL* info docs.  The rest of the commands below are only
+for one doc at a time (blech!). :(
+
+| s          | regex search                   |
+| S          | case sensitive regex search    |
+| C-s, C-A-s | Isearch through multiple nodes |
+| i          | search index                   |
+| ,          | next match from 'i' command    |
+| I          |                                |
 
     A-x info RET
     C-h i

@@ -1190,7 +1190,13 @@ this should give you a list of explicitly installed packages
 
 ** Generate secure passwords
 
-    % apg -m 20 -a 1 -n 50 | grep -v "[0Ol1o}\`]"
+    % apg -m 20 -x 40 -a 1 -n 20 -E \"\[0Ol1\|o\}\\\`\']
+
+| -m   | minimum length                  |
+| -x   | max length                      |
+| -n   | number of passwords to generate |
+| -E   | characters to avoid             |
+| -a 1 | use random password generation  |
 
 * wake on lan
 + setup in bios

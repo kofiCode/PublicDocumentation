@@ -35,3 +35,25 @@ Want to leverage 'ido-find-file' to pick a filename.
       todo-file-path              (format "%s/%s" org-base-path "gtd.org")
       journal-file-path           (format "%s/%s" org-base-path "journal.org")
       today-file-path             (format "%s/%s" org-base-path "2010.org"))
+* symbols
+
+ref: http://ftp.gnu.org/old-gnu/Manuals/elisp-manual-20-2.5/html_node/elisp_100.html
+
+symbols and variables are synonymous.  
+
+** get values from symbols
+
+| symbolp 'symbol         | is token a symbol               |
+| symbol-name 'symbol     | get symbols name                |
+| symbol-value 'symbol    | get value of symbol             |
+| symbol-function 'symbol | get function attached to symbol |
+| symbol-plist 'symbol    | get symbol property list        |
+  
+** from string do symbol action
+
+| import symbol        | add symbol into obarray                      |
+| intern "string"      | use "string" as new symbol in obarray        |
+| make-symbol "string" | return uninterned symbol whos name is string |
+| intern-soft "string" | get symbol by name, if none return nil       |
+| mapatoms function    | calls function on each symbol in obarray     |
+| unintern symbol      | remove symbol from obarray                   |

@@ -1,0 +1,36 @@
+* start project
+
+Use a scaffold, see which are available:
+
+    % pcreate --list
+
+** create
+
+This time lets use `starter`, naming our project `pyr1`.
+
+    % pcreate -s starter pyr1
+
+** install
+
+    % cd pyr1
+    % python setup.py develop
+
+** run
+
+   % pserve development.ini
+
+* Templating
+
+
+
+* testing
+
++ [[http://docs.pylonsproject.org/projects/pyramid_tutorials/en/latest/getting_started/05-tests/index.html][tutorial reference]]
+
+** install test frameworks
+
+    % pip install webtest nose
+
+** run tests
+
+    % nosetests . 
