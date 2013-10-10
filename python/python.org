@@ -340,3 +340,11 @@ print_globvar()       # Prints 1
 
 
 
+* pip
+
+** requirements.txt - freeze
+
+   When you want to stabalize your application it is helpful to freeze
+   your dependencies.  In your application do:
+
+       % pip freeze > stable-req.txt

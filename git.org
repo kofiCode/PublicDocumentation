@@ -305,11 +305,9 @@ The rest is the same for either version.
 
     [remote]$ git clone git://eagain.net/gitosis.git
 
-If the `git clone git://eagain.net/gitosis.git` line doesn’t work
-for you  
-like it didn’t for me once, you can download the tar.gz off the web
-and   
-untar it in your root folder so `cd; ls` shows the `gitosis`
+If the `git clone git://eagain.net/gitosis.git` line doesn’t work for
+you like it didn’t for me once, you can download the tar.gz off the
+web and untar it in your root folder so `cd; ls` shows the `gitosis`
 directory.
 
 Maybe get it here:

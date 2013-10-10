@@ -1,3 +1,9 @@
+* install
+
+** dependencies
+
+   + 
+   
 * start project
 
 Use a scaffold, see which are available:
@@ -10,6 +16,14 @@ This time lets use `starter`, naming our project `pyr1`.
 
     % pcreate -s starter pyr1
 
+** set port
+
+In `<proj>/development.ini` we have a section like:
+
+    [server:main]
+    host = 0.0.0.0
+    port = 6543
+
 ** install
 
     % cd pyr1
@@ -19,9 +33,93 @@ This time lets use `starter`, naming our project `pyr1`.
 
    % pserve development.ini
 
-* Templating
+* routes
+
+In `<proj>/<proj>/__init__.py` we put:
+
+    from pyramid.config import Configurator
+    def main(global_config, **settings):
+        config = Configurator(settings=settings)
+        config.add_route('hello', '/')
+        config.scan()
+        return config.make_wsgi_app()
+
+This means the root url will resolve to the view: `hello` 
+
+* views
+
+In `<proj>/<proj>/views.py` put:
+
+    from pyramid.response import Response
+    from pyramid.view import view_config
+    @view_config(route_name='hello')
+    def hello_world(request):
+        return Response('Hello')
+
+* templating
+** basics
+
+Extend the view annotation to add a template
+
+    @view_config(route_name='home', renderer='templates/t1.pt')
+    def my_view(request):
+        return {'project': 'annie'}
+
+This returns a hashtable to the template with the single key: project,
+with it's value being 'annie'.  This can then be used in a template
+like so:
+
+    <h1>Project: ${project}</h1>
+
+** Generic Layout Templates
+
+Often you'll want to have one file that is the generic layout of your
+website and it will have sections that get filled in, like the body.
+It will define the header/footer/navigation, etc.
+
+To achieve that first lets create the generic layout template in the
+file: `<proj>/<proj>/templates/base_layout.pt`
+
+    <html>
+      <body>
+        <div metal:define-slot="content"></div> 
+      </body>
+    </html>
+
+Then we can use this layout template to create an 'about us' page.  In
+file: `.../templates/about_us.pt` put:
+
+    <div metal:use-macro="load: base_layout.pt">
+        <div metal:fill-slot="content">
+            <p>Hello World.</p>
+        </div>
+    </div>
+
+** Includes
+
+   We will use the examle of having a copyright statement that we want
+   to include in many places on our website, but when next year rolls
+   around we only want to update it with the new year once.
+
+   In file: `<proj>/<proj>/templates/snippets.pt` put:
+
+     <p metal:define-macro="copyright">
+       Copyright 2011, <em>Foobar</em> Inc.
+     </p>
+   
+   Lets include this in our 'about us' page, in file:
+   `<proj>/<proj>/templates/about.pt` put:
+
+     <span metal:use-macro="load: copyright.pt"/>
+
+   Try:
+     
+     <span metal:use-macro="container['copyright.pt'].macros.copyright"/>
 
 
+     load('032-master-template.pt').macros['title']
+
+     
 
 * testing
 

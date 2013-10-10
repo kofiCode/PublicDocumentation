@@ -667,8 +667,11 @@ get some rvm completions with:
 * Dynamic DNS Afraid
 ** Get Dyn DNS URL
 
-left menu click `Dynamic DNS`
-Click 'direct URL' beside your root domain (i.e. not any
+afriad.org
+
++ left menu click `Dynamic DNS`
+
++ Click 'direct URL' beside your root domain (i.e. not any
 `mail.domain.com` or something like that records, just the
 `domain.com` record.
 
