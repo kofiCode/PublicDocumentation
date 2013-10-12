@@ -1292,3 +1292,16 @@ Section "InputClass"
     Option "XkbLayout"     "us, se"
     Option "XkbOptions"    "grp:caps_toggle"
 EndSection
+* xwindows over ssh
+
+How to launch x window applications over SSH
+
+on server in file: `/etc/ssh/sshd_config` set 
+
+    X11Forwarding on
+
+Then login to server with `-X` flag:
+
+    ssh -X user@server.com
+
+Now launch an xwindow application and should show up on local laptop. 
