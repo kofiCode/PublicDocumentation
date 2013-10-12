@@ -405,12 +405,25 @@ Now lets assign it properly with:
 ```
 
 * Org Mode
-** Cheatsheet
 
-| Key            | Effect                 |
-|----------------+------------------------|
-| A-LEFT/RIGHT   | promote/demote heading |
-| S-A-LEFT/RIGHT | promote/demote subtree |
+** Common
+| A-Left/Right | promote/demote item |
+| S-Left/Right | todo/done/nothing   |
+| S-Tab        | expand whole tree   |
+| C-Tab        | expand this node    |
+| A-Up/Down    | move item up/down   |
+
+| C-c a a | agenda view        |
+| C-c / t | sparse todo list   |
+| C-c [   | add org to agenda  |
+| C-c ]   | remove from agenda |
+| C-c a t | global todo list   |
+| C-c C-s | schedule           |
+| C-c C-c | tag                |
+
+Agenda View
+
+| l | show log |
 
 ** Tables
 
@@ -460,12 +473,6 @@ org mode without creating a link use:
 #+BEGIN_SRC sh
 if [[ -z file ]]
 #+END_SRC
-
-** TODO
-
-This toggles between TODO/DONE/and nothing
-
-    C-c C-t
   
 ** Move entries
 
