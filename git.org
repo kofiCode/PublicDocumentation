@@ -8,7 +8,9 @@ away everything as you might have something useful in there
 
 Now to find out what is in that stash that you might need you can do:
 
-* gitolite for security, more maintained that gitosis
+* gitolite for security
+
+more maintained that gitosis
 
 
 * Adding a new Repository
