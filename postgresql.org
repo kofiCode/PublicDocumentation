@@ -1,23 +1,39 @@
-Log into interactive psql:
+* New user & database
 
-    $ psql -d my-p-db
+    % sudo -u postgres createuser -d -R -P <username>
+    % sudo -u postgres createdb -O <username> <dbname>
 
-Connect to a particular database
 
-    =# \c my-p-db
+| % psql <dbname>                     | login to psql with <dbname> DB |
+| \c <db>                             | connect to <db>                |
+| \du                                 | display users                  |
+| \dt                                 | display tables                 |
+| \q or C-d                           | quit                           |
+| % sudo systemctl restart postgresql | Restart Daemon                 |
 
-List all users
+* PG System Views
 
-    =# \du
+pg_tables, pg_shadow, pg_settings
 
-Table Info
+* User management
 
-    =# \dt
+| create user     | CREATE USER george WITH PASSWORD 'password';       |
+| change password | ALTER USER postgres PASSWORD '[Iv;=v,u';           |
+| show user info  | SELECT * FROM pg_shadow;                           |
+| grant all       | GRANT ALL PRIVILEGES ON DATABASE money TO cashier; |
+| revoke          | REVOKE ALL PRIVILEGES ON money FROM cashier;       |
 
-Quit
+* Describe Table
 
-    =# \q or CTRL-d
+    # \d+ <tablename>
 
-Restart Daemon
+* Help
+ 
+    # \?
 
-    $ sudo systemctl restart postgresql
+is quite good help!
+
+
+
+
+  
