@@ -58,3 +58,15 @@ annie % v pyr
 ** routes
 
    routes allocated in the file: `<proj>/
+
+* git
+
+| st                    | git status       |
+| git add -f <filename> | add file to git  |
+| com "optional msg"    | commit changes   |
+| pus                   | push to server   |
+| pul                   | pull from server |
+|                       |                  |
+
+
+
