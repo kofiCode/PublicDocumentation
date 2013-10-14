@@ -667,8 +667,11 @@ get some rvm completions with:
 * Dynamic DNS Afraid
 ** Get Dyn DNS URL
 
-left menu click `Dynamic DNS`
-Click 'direct URL' beside your root domain (i.e. not any
+afriad.org
+
++ left menu click `Dynamic DNS`
+
++ Click 'direct URL' beside your root domain (i.e. not any
 `mail.domain.com` or something like that records, just the
 `domain.com` record.
 
@@ -1190,7 +1193,7 @@ this should give you a list of explicitly installed packages
 
 ** Generate secure passwords
 
-    % apg -m 20 -x 40 -a 1 -n 20 -E \"\[0Ol1\|o\}\\\`\']
+    % apg -m 20 -a 1 -n 50 | grep -v "[0Ol1o}\`]"
 
 | -m   | minimum length                  |
 | -x   | max length                      |
@@ -1289,19 +1292,16 @@ Section "InputClass"
     Option "XkbLayout"     "us, se"
     Option "XkbOptions"    "grp:caps_toggle"
 EndSection
+* xwindows over ssh
 
+How to launch x window applications over SSH
 
+on server in file: `/etc/ssh/sshd_config` set 
 
+    X11Forwarding on
 
+Then login to server with `-X` flag:
 
+    ssh -X user@server.com
 
-
-
-
-
-
-
-
-
-
-
+Now launch an xwindow application and should show up on local laptop. 

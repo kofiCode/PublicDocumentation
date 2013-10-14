@@ -1,3 +1,51 @@
+* bangkok router
+
+Billion Wireless-N 150 Mbps ADSL2+ Router
+
+192.168.1.1
+
+** Password
+
+Maintenance
+
+** Wifi
+
+Interface Setup > Wireless 
+
+Wifi name: SSID Settings > SSID = beer
+Wifi password: WPA-PSK > Pre-Shared Key = bombeerbiew
+
+** NAT
+
++ Advanced Setup > Firewall > Disabled
+
++ Advanced Setup > NAT > Virtual Server
+
+    _Start Port_ is external port
+    _End Port_ is internal port
+
+| extern | intern |  ip |
+|--------+--------+-----|
+|     22 |     22 | .44 |
+|     80 |  50080 | .44 |
+|     81 |  50081 | .44 |
+|     82 |  50082 | .44 |
+
+* nginx reverse proxy / load balancer
+
++ [[http://www.cyberciti.biz/tips/using-nginx-as-reverse-proxy.html][reference]]
+
+
+* dynamic DNS
+
+username: ftravers
+
+see: [[file:arch.org::*Get%20Dyn%20DNS%20URL][Get Dyn DNS URL]]
+
+** Name servers
+
+ns1-ns4.afraid.org
+
 * Round Robin
 
 round robin domain: `www.webhostsunshine.com`

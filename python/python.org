@@ -336,7 +336,16 @@ def print_globvar():
 set_globvar_to_one()
 print_globvar()       # Prints 1
 ```
+* virtualenv
 
 
 
 
+* pip
+
+** requirements.txt - freeze
+
+   When you want to stabalize your application it is helpful to freeze
+   your dependencies.  In your application do:
+
+       % pip freeze > stable-req.txt

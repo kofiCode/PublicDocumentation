@@ -8,7 +8,9 @@ away everything as you might have something useful in there
 
 Now to find out what is in that stash that you might need you can do:
 
+* gitolite for security
 
+more maintained that gitosis
 
 
 * Adding a new Repository
@@ -305,11 +307,9 @@ The rest is the same for either version.
 
     [remote]$ git clone git://eagain.net/gitosis.git
 
-If the `git clone git://eagain.net/gitosis.git` line doesn’t work
-for you  
-like it didn’t for me once, you can download the tar.gz off the web
-and   
-untar it in your root folder so `cd; ls` shows the `gitosis`
+If the `git clone git://eagain.net/gitosis.git` line doesn’t work for
+you like it didn’t for me once, you can download the tar.gz off the
+web and untar it in your root folder so `cd; ls` shows the `gitosis`
 directory.
 
 Maybe get it here:
