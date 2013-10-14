@@ -2,6 +2,8 @@
 
 Billion Wireless-N 150 Mbps ADSL2+ Router
 
+192.168.1.1
+
 ** Password
 
 Maintenance
@@ -15,27 +17,34 @@ Wifi password: WPA-PSK > Pre-Shared Key = bombeerbiew
 
 ** NAT
 
-Advanced Setup > NAT > Virtual Server
++ Advanced Setup > Firewall > Disabled
+
++ Advanced Setup > NAT > Virtual Server
 
     _Start Port_ is external port
     _End Port_ is internal port
 
-| external | internal |           ip |
-|    50022 |       22 | 192.168.1.44 |
-|       80 |    50080 |        ...44 |
-|       81 |    50081 |        ...44 |
-|       82 |    50082 |        ...44 |
-  
+| extern | intern |  ip |
+|--------+--------+-----|
+|     22 |     22 | .44 |
+|     80 |  50080 | .44 |
+|     81 |  50081 | .44 |
+|     82 |  50082 | .44 |
 
-** Remote Access Management
+* nginx reverse proxy / load balancer
 
-Access Management > ACL > Access Control Editing > Interface = Both
++ [[http://www.cyberciti.biz/tips/using-nginx-as-reverse-proxy.html][reference]]
+
 
 * dynamic DNS
 
 username: ftravers
 
 see: [[file:arch.org::*Get%20Dyn%20DNS%20URL][Get Dyn DNS URL]]
+
+** Name servers
+
+ns1-ns4.afraid.org
 
 * Round Robin
 
