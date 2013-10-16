@@ -1,3 +1,4 @@
+
 * Start Web Server
 
   Goto to directory:
@@ -55,15 +56,14 @@ annie % v pyr
 
 
 * pyramid 
-** routes
 
-   routes allocated in the file: `<proj>/
+[[file:python/pyramid.org::*start%20project][Pyramid Notes]]
 
 * git
 
 | st                    | git status       |
 | git add -f <filename> | add file to git  |
-| com "optional msg"    | commit changes   |
+| com                   | commit changes   |
 | pus                   | push to server   |
 | pul                   | pull from server |
 |                       |                  |

@@ -1292,6 +1292,10 @@ Section "InputClass"
     Option "XkbLayout"     "us, se"
     Option "XkbOptions"    "grp:caps_toggle"
 EndSection
+
+or from the command line:
+
+ % setxkbmap -model pc104 -layout us,th -option grp:caps_toggle
 * xwindows over ssh
 
 How to launch x window applications over SSH
