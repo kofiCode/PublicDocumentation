@@ -1193,7 +1193,7 @@ this should give you a list of explicitly installed packages
 
 ** Generate secure passwords
 
-    % apg -m 20 -x 40 -a 1 -n 20 -E \"\[0Ol1\|o\}\\\`\']
+    % apg -m 20 -a 1 -n 50 | grep -v "[0Ol1o}\`]"
 
 | -m   | minimum length                  |
 | -x   | max length                      |
@@ -1292,6 +1292,10 @@ Section "InputClass"
     Option "XkbLayout"     "us, se"
     Option "XkbOptions"    "grp:caps_toggle"
 EndSection
+
+or from the command line:
+
+ % setxkbmap -model pc104 -layout us,th -option grp:caps_toggle
 * xwindows over ssh
 
 How to launch x window applications over SSH
