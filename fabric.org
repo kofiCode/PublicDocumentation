@@ -1,0 +1,18 @@
+* first step
+
+** steps
+requires python 2
+
+in file: `fabfile.py` put:
+
+    def hello():
+        print("Hello world!")
+
+from command prompt:
+
+    % fab hello
+
+** interpretation
+
+`fab` will look for a file called: `fabfile.py` for defined methods to
+run in it. 

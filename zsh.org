@@ -401,3 +401,52 @@ fenton "fenton"
 ```
 
 outputs: "hello fenton"
+* completions
+
+Zsh completion system loads completion functions from the 
+directories listed in `$fpath` variable:
+
+
+I created a separate directory for my functions: `~/.zsh`
+So, to initialize the compsys add the following code into 
+your `.zshrc` file:
+
+
+    # COMPLETION SETTINGS
+    # add custom completion scripts
+    fpath=(~/.zsh $fpath) 
+    # compsys initialization
+    autoload -U compinit
+    compinit
+    # show completion menu when number of options is at least 2
+    zstyle ':completion:*' menu select=2
+
+Completion filenames have to start with an underscore, 
+otherwise it won’t be loaded.
+
+I'm going to have a command that is the letter `c`, short for change
+directory.  It will then be followed by something like: `docs` or 
+`projects`.  This will eventually run the command:
+
+    cd ~/projects/docs-DIR/documentation/
+
+or
+
+    cd ~/projects/python/
+                    
+The `~/.zsh/_c` file:                    
+                    
+    #compdef c
+    _arguments "1: :(docs projects)"                    
+
+Lets breakdown: "1: :(docs projects)" 
+
+| 1               | Means the first argument of the function.           |
+| :Directories:   | "Directories" will be displayed in completion menu. |
+| (docs projects) | completion options                                  |
+
+the single word list: `(World)`.
+
+. We don't need any message here because no menu 
+will be shown as there is only one option.                
+                    
