@@ -1,3 +1,28 @@
+* software architecture
+
+** nginx
+nginx is the load balancer
+
+conf file: /etc/nginx/conf.d/sierra.conf
+
+access logs: /home/qa/logs/sierra.spicevan.com/access.log
+
+** pserve
+pserve actually serves up the python code
+
+startup script: 
+/home/qa/projects/python/sierra.spicevan.com/scripts/prod_deamon_start.sh
+
+conf file:
+/home/qa/projects/python/sierra.spicevan.com/production.ini
+
+** supervisor
+supervisor starts up 2 pserves and ensures they stay running
+
+conf: /etc/supervisor.d/sierra.spicevan.com.ini
+log files: /home/qa/sierra.spicevan.com-[01].log
+
+
 
 * bangkok router
 
