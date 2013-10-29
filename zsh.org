@@ -102,12 +102,16 @@ RPROMPT='${vcs_info_msg_1_}'
     % print $myarr
     2 3
 
++ for ((i = 0; i < 42; i++)); do 
+    somecommand; 
+  done
+
 + loop over array
 
     myarray=(1 2 3 4 7)
-    for i in $myarray
+    for i in $myarray;
     do
-      print $i
+      print $i;
     done
 
 * hashes
@@ -402,10 +406,9 @@ fenton "fenton"
 
 outputs: "hello fenton"
 * completions
-
+** setup
 Zsh completion system loads completion functions from the 
 directories listed in `$fpath` variable:
-
 
 I created a separate directory for my functions: `~/.zsh`
 So, to initialize the compsys add the following code into 
@@ -415,28 +418,156 @@ your `.zshrc` file:
     # COMPLETION SETTINGS
     # add custom completion scripts
     fpath=(~/.zsh $fpath) 
+    
+    # remove the zcompdump file which is like a cached version
+    # of your completions if you want new definitions to show up
+    rm -f ~/.zcompdump
+
     # compsys initialization
-    autoload -U compinit
+    autoload -Uz compinit
     compinit
+
     # show completion menu when number of options is at least 2
     zstyle ':completion:*' menu select=2
 
-Completion filenames have to start with an underscore, 
-otherwise it won’t be loaded.
+** custom completions
 
-I'm going to have a command that is the letter `c`, short for change
-directory.  It will then be followed by something like: `docs` or 
-`projects`.  This will eventually run the command:
+put in folder: ~/.zsh/
 
-    cd ~/projects/docs-DIR/documentation/
+begin filename with underscore, if have a function called: 'c' 
+then filename should be:
 
-or
+    ~/.zsh/_c
 
-    cd ~/projects/python/
-                    
-The `~/.zsh/_c` file:                    
-                    
+Top of file should have:
+
     #compdef c
+    typeset -A opt_args
+    local state context line
+
+*** breakdown
+
+    #compdef c
+
+This means this file is for completing the command: 'c'
+    
+    opt_args
+
+is an associative array that contains command-line options like -d or
+-f as its keys and the actual parameters to those options (if any) as
+its values.
+
+    $state 
+
+is a scalar variable used by the state mechanism in the _arguments()
+function (we’ll talk about state later on in this article). 
+
+    $words
+
+contains list of words from current command line
+
+    $context $line
+
+The other two variables, $context and $line won’t be used directly in
+this function, but _arguments() uses them behind the scenes.
+
+** _arguments
+
+[[http://www.linux-mag.com/id/1106/][ref]]
+
+*** single letter options
+
+_arguments -s -S \
+     "(-l -c -r)-x[use default justification of font]" \
+
+looking at the above line the first set of parameters is an exclusion
+list.  Meaning if you are using the option '-x', you cannot also use
+-l, -c or -r.
+
+Then comes the option itself -x
+
+Finally the helptext is in square brackets.
+
+*** options with a value
+
+    "(-t)-w+[specify output width]:output width (in columns):" \
+
+The '+' after 'w' means: this option can take another argument in the
+ same word or in the next word. For example, -w 64 and -w72 would both
+ be valid.
+
+The second difference is that there’s an additional string after the
+help text that’s used as a hint when the user presses the tab key
+(output width (in columns)). However, this text is displayed only if
+you’ve enabled verbose mode
+
+Set verbose with:
+
+    zstyle ':completion:*' verbose yes
+
+The final colon is a separator between the hint and an action, but
+there’s no action for -w.
+
+*** with action
+
+    "(-v)-I+[display info]:info code:(-1 0 1 2 3 4)" \
+
+Here the option (-I) takes an argument. There are only six possible
+ values that can be used with -I; after the hint, we list those six
+ arguments in parentheses.
+
+*** file completion as arg value
+
+    "-d+[specify font directory]:font directory:_files -/" \
+
+The -d option requires a directory as an argument. We use the zsh
+internal function called _files() to build and present the list. We
+pass -/ as an argument so that only directories are presented in the
+completion list.
+
+*** custom
+
+    "-f+[specify font]:font:->fonts" \
+
+Sometimes, building a completion list for an option’s arguments is
+non-trivial and might have to be done with custom code. That’s when we
+use the state mechanism. See where it says, "->fonts"? That means,
+"Set the $state variable to ‘fonts’ and let me handle it."
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+** junk
+#---------------------------
+
+
     _arguments "1: :(docs projects)"                    
 
 Lets breakdown: "1: :(docs projects)" 

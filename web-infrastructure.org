@@ -1,42 +1,14 @@
+
 * bangkok router
 
-Billion Wireless-N 150 Mbps ADSL2+ Router
-
-192.168.1.1
-
-** Password
-
-Maintenance
-
-** Wifi
-
-Interface Setup > Wireless 
-
-Wifi name: SSID Settings > SSID = beer
-Wifi password: WPA-PSK > Pre-Shared Key = bombeerbiew
-
-** NAT
-
-+ Advanced Setup > Firewall > Disabled
-
-+ Advanced Setup > NAT > Virtual Server
-
-    _Start Port_ is external port
-    _End Port_ is internal port
-
-| extern | intern |  ip |
-|--------+--------+-----|
-|     22 |     22 | .44 |
-|     80 |  50080 | .44 |
-|     81 |  50081 | .44 |
-|     82 |  50082 | .44 |
+Only works with windows 8 and 
+192.168.2.1
 
 * nginx reverse proxy / load balancer
 
 + [[http://www.cyberciti.biz/tips/using-nginx-as-reverse-proxy.html][reference]]
 
-
-* dynamic DNS
+* Dynamic DNS
 
 username: ftravers
 
@@ -46,7 +18,7 @@ see: [[file:arch.org::*Get%20Dyn%20DNS%20URL][Get Dyn DNS URL]]
 
 ns1-ns4.afraid.org
 
-* Round Robin
+* DDNS Round Robin
 
 round robin domain: `www.webhostsunshine.com`
 
@@ -64,12 +36,14 @@ bkk.webhostsunshine.com
 
 on each of these hosts there will be users: `prod` and `qa`.
 
-* Steel Bank Common Lisp
+
+* OLD:
+** Steel Bank Common Lisp
 
 Is a bit like the java virtual machine, but we have `screen` sessions
 with `sbcl` running in each.  
 
-** Web Server Port
+*** Web Server Port
 
     ~/.sbclrc
 
@@ -88,7 +62,7 @@ on.
 `sbclrc-file:*webserver-port*` can now be used to start a
 `hunchentoot` webserver.
 
-** Swank/Slime port
+*** Swank/Slime port
 
     ~/.sbclrc
 
@@ -100,7 +74,7 @@ connections.
 (swank:create-server :port 4082 :dont-close t)   ; <--- ENV SPECIFIC!!!
 ```
 
-* Code Development/Deployment cycle
+** Code Development/Deployment cycle
 
 Emacs and slime are used locally to develop code.  When you are ready
 to push, we `git push` it to the server.  Then we log into the
@@ -109,7 +83,7 @@ After the pulling has been done, we do a lisp `(ql:quickload
 'project-name)`, which will pull in the code that has been `git
 pull`'ed over.
 
-* Folder Layout/Structure
+** Folder Layout/Structure
 
 /
 `-- home
@@ -127,7 +101,7 @@ pull`'ed over.
 To allow a project to be accessible from SBCL, you must symbolic link
 the `*.asd` file from the `systems` folder.
 
-* Slime
+** Slime
 
 The swank server will be running on ports:
 

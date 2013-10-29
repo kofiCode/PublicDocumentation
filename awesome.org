@@ -57,6 +57,7 @@ All commands below must also use the Windows Key
 | t         | mark window                 |
 * Black wallpaper
 
-/usr/share/awesome/themes/default/theme.lua
+    % sudo sed -i 's/^theme.wallpaper.*/theme.wallpaper_cmd = { "xsetroot -solid black" }/' /usr/share/awesome/themes/default/theme.lua
+    % awesome -k
 
-   theme.wallpaper_cmd = { "xsetroot -solid black" }
+  Need to reboot.  Simply restarting awesome isn't enough!

@@ -1,6 +1,10 @@
 * sed
+** print matching line
 
-Serial EDitor
+    % sed -n '/word/p' input.file
+
+| -n | quiet |
+| p  | print |
 
 ** Inplace edit
 

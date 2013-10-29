@@ -1,22 +1,14 @@
 * start project
 
-Use a scaffold, see which are available:
-
-    % pcreate --list
-
 ** create
 
 This time lets use `starter`, naming our project `pyr1`.
 
     % pcreate -s starter pyr1
 
-** set port
+NOTE: to see a list of project types do:
 
-In `<proj>/development.ini` we have a section like:
-
-    [server:main]
-    host = 0.0.0.0
-    port = 6543
+    % pcreate --list
 
 ** install
 
@@ -26,6 +18,14 @@ In `<proj>/development.ini` we have a section like:
 ** run
 
    % pserve development.ini
+
+** set port
+
+In `<proj>/development.ini` we have a section like:
+
+    [server:main]
+    host = 0.0.0.0
+    port = 6543
 
 * routes
 
@@ -113,7 +113,9 @@ file: `.../templates/about_us.pt` put:
 
      load('032-master-template.pt').macros['title']
 
-     
+* forms
+
+Use 'deform' library.
 
 * testing
 
