@@ -21,7 +21,8 @@ logs:
 ** supervisor
 supervisor starts up 2 pserves and ensures they stay running
 
-conf: [[file:/etc/supervisor.d/sierra.spicevan.com.ini][/etc/supervisor.d/sierra.spicevan.com.ini]]
+
+conf: [[file:/sudo:root@b-dell:/etc/supervisor.d/sierra.spicevan.com.ini][/etc/supervisor.d/sierra.spicevan.com.ini]]
 log files: 
    [[file:/sudo:qa@localhost:/home/qa/sierra.spicevan.com-0.log][/home/qa/sierra.spicevan.com-0.log]] 
    [[file:/sudo:qa@localhost:/home/qa/sierra.spicevan.com-1.log][/home/qa/sierra.spicevan.com-1.log]]
