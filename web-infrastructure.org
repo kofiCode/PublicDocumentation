@@ -9,15 +9,20 @@ access logs: [[file:/sudo:qa@localhost:/home/qa/logs/sierra.spicevan.com/access.
 ** pserve
 pserve actually serves up the python code
 
-startup script:  [[file:/sudo:qa@localhost:/home/qa/projects/python/sierra.spicevan.com/scripts/prod_deamon_start.sh][/home/qa/projects/python/sierra.spicevan.com/scripts/prod_deamon_start.sh]]
+startup script: [[file:/sudo:qa@localhost:/home/qa/projects/python/sierra.spicevan.com/scripts/prod_deamon_start.sh][/home/qa/projects/python/sierra.spicevan.com/scripts/prod_deamon_start.sh]]
 
 conf file:
 [[file:/sudo:qa@localhost:/home/qa/projects/python/sierra.spicevan.com/production.ini][/home/qa/projects/python/sierra.spicevan.com/production.ini]]
 
+logs:
+ [[file:/sudo:qa@localhost:/home/qa/projects/python/sierra.spicevan.com/pyramid_5000.log][/home/qa/projects/python/sierra.spicevan.com/pyramid_5000.log]]
+ [[file:/sudo:qa@localhost:/home/qa/projects/python/sierra.spicevan.com/pyramid_5001.log][/home/qa/projects/python/sierra.spicevan.com/pyramid_5001.log]]
+
 ** supervisor
 supervisor starts up 2 pserves and ensures they stay running
 
-conf: [[file:/etc/supervisor.d/sierra.spicevan.com.ini][/etc/supervisor.d/sierra.spicevan.com.ini]]
+
+conf: [[file:/sudo:root@b-dell:/etc/supervisor.d/sierra.spicevan.com.ini][/etc/supervisor.d/sierra.spicevan.com.ini]]
 log files: 
    [[file:/sudo:qa@localhost:/home/qa/sierra.spicevan.com-0.log][/home/qa/sierra.spicevan.com-0.log]] 
    [[file:/sudo:qa@localhost:/home/qa/sierra.spicevan.com-1.log][/home/qa/sierra.spicevan.com-1.log]]
