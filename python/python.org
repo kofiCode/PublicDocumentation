@@ -1,3 +1,15 @@
+* Cookbook
+** List all modules
+
+In python shell: help('modules')
+
+** find out what is in a module
+
+module = __import__("abc")
+for name in dir(module):
+    print(name)
+
+
 * Debugger
 
 import pdb

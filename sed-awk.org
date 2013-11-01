@@ -1,4 +1,9 @@
 * sed
+** print only matching group
+
+    % echo 'Mono:pixelsize=20:anti' | sed 's/.*pixelsize=\(..\):.*/\1/' 
+    20
+
 ** print matching line
 
     % sed -n '/word/p' input.file

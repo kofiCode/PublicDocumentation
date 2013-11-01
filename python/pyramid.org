@@ -1,5 +1,4 @@
 * start project
-
 ** create
 
 This time lets use `starter`, naming our project `pyr1`.
@@ -9,7 +8,6 @@ This time lets use `starter`, naming our project `pyr1`.
 NOTE: to see a list of project types do:
 
     % pcreate --list
-
 ** install
 
     % cd pyr1
@@ -113,9 +111,174 @@ file: `.../templates/about_us.pt` put:
 
      load('032-master-template.pt').macros['title']
 
+* database, models, sqlalchemy
+
+  + [[http://docs.pylonsproject.org/projects/pyramid/en/latest/tutorials/wiki2/definingmodels.html][reference]]
+
+** Create project
+Use the sqlalchemy scaffold:
+
+    % pcreate -s sqlalchemy <project_name>
+
+** Init the database
+
+The database is setup to use SqlLite to begin with.  
+This is fine as as we can move to PostgreSQL at a
+later date.
+
+A script is installed into your virtual environment
+called: 'initialize_<project_name>_db'.  Run that 
+now like so:
+
+    % initialize_<proj>_db development.ini
+
+** Add/Change model
+
+Lets create a model called 'friend', which keeps track of
+your friends names and ages.
+
+In file: <proj>/<proj>/models.py put something like:
+
+    class Friend(Base):
+        __tablename__ = 'friends'
+        id = Column(Integer, primary_key=True)
+        name = Column(Text)
+        age = Column(Integer)
+     
+        def __init__(self, name, age):
+            self.name = name
+            self.age = age
+
+Re-run:
+
+    % initialize_<proj>_db development.ini
+
+to have your friends table be created.
+
+* add some data
+
+My project is called: 'sierraspicevancom', so replace those
+strings with your own project name.
+
+Lets add some data into the database by hand.  First add
+the following into 'development.ini'
+
+```
+[pshell]
+m = sierraspicevancom.models
+session = sierraspicevancom.models.DBSession
+t = transaction
+```
+
+Now start up the 'pshell'
+
+    % pshell development.ini
+
+Create a 'Friend' object:
+
+```
+from sierraspicevancom.models import *
+friend = Friend(name="fenton",age=10)
+session.add(friend)
+t.commit()
+session.query(Friend).all()
+```
+
+* viewing data
+
+Now we get the application to fetch this data for us.
+
+Create the basic route, view and template, called: 'show_friends'.  See:  
+[[*routes][routes]], [[*views][views]] and [[*templating][templating]] for how to do that.
+
+The view portion should look like this:
+
+```python
+@view_config(route_name='show_friends', renderer='templates/show_friends.pt')
+def show_friends_view(request):
+    friends = DBSession.query(Friend).all()
+    return {"friends": friends}
+```
+
+Now lets access this from the command line (pshell).  In the '[pshell]' 
+section of 'development.ini' add:
+
+    setup = sierraspicevancom.pshell.setup
+
+Now create the file: '<proj>/<proj>/pshell.py' and put the following in it:
+
+```python
+from webtest import TestApp
+def setup(env):
+    env['request'].host = 'sierra.spicevan.com'
+    env['request'].scheme = 'http'
+    env['testapp'] = TestApp(env['app'])
+```
++ [[http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/commandline.html#extending-the-shell][reference]]
+
+here we get access to a 'TestApp' variable testapp that lets us interact
+with our application from the command line.
+
 * forms
 
-Use 'deform' library.
+Create a route, view and template, see:  [[*routes][routes]], [[*views][views]] 
+and [[*templating][templating]] for how to do that.
+
+In our 'views.py' file add the following imports:
+
+```python
+import deform.widget as w
+import colander
+from deform.form import Form
+from deform.schema import FileData
+```
+
+For forms we create a Colander schema.  These are the fields
+that you want to see on your form.  In our case we'll make
+a trivial schema called 'Person' with one field called 'Name'.
+
+    class Person(colander.MappingSchema):
+        name = colander.SchemaNode(colander.String())
+
+Next lets make use of this in a view.  Here is the view code:
+
+```python
+@view_config(route_name='add_person', renderer="templates/add_person.pt")
+def add_person_view(request):
+    schema = Person()
+    myform = Form(schema, buttons=('submit',))
+    if 'submit' in request.POST: # we got here from a submit
+        controls = request.POST.items()
+        try: 
+            appstruct = myform
+        except ValidationFailure, e:
+            return {"form": e.render(), "values": False}
+        values = {
+    else:
+        return {"form": myform.render()}
+```
+
+The method 'add_person_view' is used to both display the
+empty form 
+* Model, View, Template, and Form
+
+Now lets put together our view and model.  Open 'views.py' 
+file.
+
+In the section:
+
+    from .models import (
+
+add our
+
+    Friends,
+
+model.  
+
+** Add route, view, template called: 'add_friend"
+
+see: [[*routes][routes]], [[*views][views]] and [[*templating][templating]] for how to do that.
+
 
 * testing
 
@@ -128,3 +291,5 @@ Use 'deform' library.
 ** run tests
 
     % nosetests . 
+* shell
+There is a REPL shell.  'pshell'.

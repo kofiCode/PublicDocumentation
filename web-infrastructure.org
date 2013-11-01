@@ -24,6 +24,13 @@ log files:
 
 * deployment steps
 
+** developer edits code
+
+** log in as qa
+
+
+
+
 * bangkok router
 
 Only works with windows 8 and 
