@@ -4,6 +4,7 @@
     % sudo -u postgres createdb -O <username> <dbname>
 
 
+| psql -l                             | list all databases             |
 | % psql <dbname>                     | login to psql with <dbname> DB |
 | \c <db>                             | connect to <db>                |
 | \du                                 | display users                  |

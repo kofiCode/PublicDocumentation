@@ -1,5 +1,4 @@
 * start project
-
 ** create
 
 This time lets use `alchemy`, naming our project `pyr1`.  
@@ -11,7 +10,6 @@ Characters to use: alpha_numeric and '_' only.  Don't use '.'
 NOTE: to see a list of project types do:
 
     % pcreate --list
-
 ** install
 
     % cd pyr1
@@ -115,9 +113,306 @@ file: `.../templates/about_us.pt` put:
 
      load('032-master-template.pt').macros['title']
 
+* chameleon
+
+** show database query results
+
+Queries return a list of dictionary objects.  Say we have 
+a list of friends:
+
+| name   | age |
+|--------+-----|
+| fenton | 10  |
+| annie  | 30  |
+
+friends = [{"name": "fenton, "age": 10},
+           {"name": "annie,  "age": 30}]
+
+We use 'tal:repeat="curr list", where list would be 'friends'
+in this case, and curr holds the current friend.
+
+You could use this in a table like so:
+
+```html
+<table border=1>
+  <tr><th>Name</th><th>Age</th></tr>
+  <tr tal:repeat="friend friends">
+      <td>${friend.name}</td>
+      <td>${friend.age}</td>
+  </tr>
+</table>
+```
+
+You could use it in bulleted list like so:
+
+<ul tal:repeat="friend friends">
+  <li>Name: ${friend.name}, Age: ${friend.age}</li>
+</ul>
+
+** links
+* database, models, sqlalchemy
+
+  + [[http://docs.pylonsproject.org/projects/pyramid/en/latest/tutorials/wiki2/definingmodels.html][reference]]
+
+** Create project
+Use the sqlalchemy scaffold:
+
+    % pcreate -s sqlalchemy <project_name>
+
+** Init the database
+
+The database is setup to use SqlLite to begin with.  
+This is fine as as we can move to PostgreSQL at a
+later date.
+
+A script is installed into your virtual environment
+called: 'initialize_<project_name>_db'.  Run that 
+now like so:
+
+    % initialize_<proj>_db development.ini
+
+** Add/Change model
+
+Lets create a model called 'friend', which keeps track of
+your friends names and ages.
+
+In file: <proj>/<proj>/models.py put something like:
+
+    class Friend(Base):
+        __tablename__ = 'friends'
+        id = Column(Integer, primary_key=True)
+        name = Column(Text)
+        age = Column(Integer)
+     
+        def __init__(self, name, age):
+            self.name = name
+            self.age = age
+
+Re-run:
+
+    % initialize_<proj>_db development.ini
+
+to have your friends table be created.
+
+* add some data
+
+My project is called: 'sierraspicevancom', so replace those
+strings with your own project name.
+
+Lets add some data into the database by hand.  First add
+the following into 'development.ini'
+
+```
+[pshell]
+m = sierraspicevancom.models
+session = sierraspicevancom.models.DBSession
+t = transaction
+```
+
+Now start up the 'pshell'
+
+    % pshell development.ini
+
+Create a 'Friend' object:
+
+```
+from sierraspicevancom.models import *
+friend = Friend(name="fenton",age=10)
+session.add(friend)
+t.commit()
+session.query(Friend).all()
+```
+
+* viewing data
+
+Create the basic route, view and template, called: 'show_friends'.  See:  
+[[*routes][routes]], [[*views][views]] and [[*templating][templating]] for how to do that.
+
+** The view
+
+The view portion should look like this:
+
+```python
+@view_config(route_name='show_friends', renderer='templates/show_friends.pt')
+def show_friends_view(request):
+    friends = DBSession.query(Friend).all()
+    return {"friends": friends}
+```
+
+** commandline test view
+
+Test from the command line (pshell).  
+
+```python
+import sierraspicevancom.views as view
+fs = views.show_friends_view(request)
+fs
+```
+
+The output should basically be quite similar to the 
+[[*add%20some%20data][session.query(Friend).all()]] call.
+
+** template
+
+Now lets get the web page showing this, the template should look like:
+
+```html
+These are your friends:<br/>
+<table border=1>
+  <tr><th>Name</th><th>Age</th></tr>
+  <tr tal:repeat="friend friends">
+      <td>${friend.name}</td>
+      <td>${friend.age}</td>
+  </tr>
+</table>
+```
+
+visit: http://localhost:6543/show_friends to see the results.
+
+(bonus): log into pshell and add another friend, see that the 
+web page updates accordingly.
+
 * forms
 
-Use 'deform' library.
+Lets now add a form so we can add friends via the web too,
+not just throught the pshell/dbalchemy.
+
+Reusing our show friends code.  Lets create a new route, view, 
+template that is: 'add_friend'.
+
+** Imports
+
+In our 'views.py' file add the following imports:
+
+```python
+import colander
+from deform.form import Form
+from deform import ValidationFailure
+from pyramid.httpexceptions import HTTPFound
+```
+
+For forms we create a Colander schema.  These are the fields
+that you want to see on your form.  In our case we'll make
+a trivial schema called 'Friend' with two fields: 'name', and
+'age'.
+
+** Colander Schema
+
+```python
+class Person(colander.MappingSchema):
+    name = colander.SchemaNode(colander.String())
+    age = colander.SchemaNode(colander.Integer())
+```
+
+** View code
+
+Now the view function
+
+```python
+@view_config(route_name='add_person', renderer="templates/add_person.pt")
+def add_person_view(request):
+    schema = Person()
+    myform = Form(schema, buttons=('submit',))
+    return {"form": myform.render()}
+
+```
+
+** Template code
+
+    <div tal:content="structure form">form</div>
+
++ [[http://chameleon.readthedocs.org/en/latest//reference.html#tal-content][tal:content reference]]
+
+Basically the 'structure' keyword just passes through whatever 
+is in form.  Allowing you to insert HTML directly.
+
+** Process the post submit
+
+Okay our code only SHOWS the form, it doesn't take the data
+and store it in the database!  To do that we'll modify our
+view function to look for a post submit like so:
+
+*** Detect POST
+
+```python
+if 'submit' not in request.POST: # process the filled out form
+    return {"form": my_form.render()}
+else: # process form
+```
+
+So we check if there is an element called 'submit' in the 
+request.POST array, that is we are receiving the posted 
+results of a filled out form, we fall into the 'else:' branch
+of the if statement.
+
+*** Validate
+
+The first thing we want to do is VALIDATE our returned data.
+That is what our Colander Schema above provides us.  We do that
+like so:
+
+```python
+controls = request.POST.items()
+try:
+    appstruct = my_form.validate(controls)
+except ValidationFailure as e:
+    return {"form": e.render(), "values": False}
+```
+
+So we extract the 'items()' from the post.
+
+Then we validate the form: 'my_form.validate(...)'
+
+If the validation fails we return the form, but it'll highlight
+the errors because of the 'ValidationFailure.render()' part.
+
+*** Submit data to database
+
+Okay, assuming the validation passes we'd now like to save our 
+result into the database.  We can do that with:
+
+```python
+name = appstruct['name']
+age = appstruct['age']
+friend = Friend(name,age)
+DBSession.add(friend)
+```
+
+*** Redirect to show_friends
+
+It nice to see the result of adding a friend in your friend list
+so we can redirect there with:
+
+```python
+url = request.route_url('show_friends') 
+return HTTPFound(location=url)
+```
+
+* Authorization / Authentication
+
++ [[http://michael.merickel.org/projects/pyramid_auth_demo/intro.html][AA Tutorial]]
+
+
+
+* Model, View, Template, and Form
+
+Now lets put together our view and model.  Open 'views.py' 
+file.
+
+In the section:
+
+    from .models import (
+
+add our
+
+    Friends,
+
+model.  
+
+** Add route, view, template called: 'add_friend"
+
+see: [[*routes][routes]], [[*views][views]] and [[*templating][templating]] for how to do that.
+
 
 * testing
 
@@ -130,3 +425,27 @@ Use 'deform' library.
 ** run tests
 
     % nosetests . 
+* shell
+There is a REPL shell.  'pshell'.
+
+* Not sure where to file yet
+
+** test application from pshell
+
+In the '[pshell]' section of 'development.ini' add:
+
+    setup = sierraspicevancom.pshell.setup
+
+Now create the file: '<proj>/<proj>/pshell.py' and put the following in it:
+
+```python
+from webtest import TestApp
+def setup(env):
+    env['request'].host = 'sierra.spicevan.com'
+    env['request'].scheme = 'http'
+    env['testapp'] = TestApp(env['app'])
+```
++ [[http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/commandline.html#extending-the-shell][reference]]
+
+here we get access to a 'TestApp' variable 'testapp' that lets us interact
+with our application from the command line.
