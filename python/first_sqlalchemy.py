@@ -17,6 +17,11 @@ users_table = Table('users', metadata,
                     Column('password', String)
 )
 
+groups_table = Table('groups', metadata,
+                     Column('id',Integer, primary_key=True),
+                     Column('name', String),
+                     Column('user_id', Integer, ForeignKey('users.id'))
+
 metadata.create_all(engine)
 
 class User(object):

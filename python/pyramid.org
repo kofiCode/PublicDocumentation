@@ -1,17 +1,17 @@
 * start project
 ** create
 
-This time lets use `starter`, naming our project `pyr1`.
+This time lets use =alchemy=, naming our project =pyr1=.
 
-    % pcreate -s starter pyr1
+ : % pcreate -s alchemy pyr1
 
 NOTE: to see a list of project types do:
 
-    % pcreate --list
+ : % pcreate --list
 ** install
 
-    % cd pyr1
-    % python setup.py develop
+ : % cd pyr1
+ : % python setup.py develop
 
 ** run
 
@@ -19,49 +19,57 @@ NOTE: to see a list of project types do:
 
 ** set port
 
-In `<proj>/development.ini` we have a section like:
+In =<proj>/development.ini= we have a section like:
 
-    [server:main]
-    host = 0.0.0.0
-    port = 6543
+#+BEGIN_SRC conf
+[server:main]
+host = 0.0.0.0
+port = 6543
+#+END_SRC
 
 * routes
 
-In `<proj>/<proj>/__init__.py` we put:
+In =<proj>/<proj>/__init__.py= we put:
 
-    from pyramid.config import Configurator
-    def main(global_config, **settings):
-        config = Configurator(settings=settings)
-        config.add_route('hello', '/')
-        config.scan()
-        return config.make_wsgi_app()
+#+BEGIN_SRC python
+from pyramid.config import Configurator
+def main(global_config, **settings):
+    config = Configurator(settings=settings)
+    config.add_route('hello', '/')
+    config.scan()
+    return config.make_wsgi_app()
+#+END_SRC
 
-This means the root url will resolve to the view: `hello` 
+This means the root url will resolve to the view: =hello= 
 
 * views
 
-In `<proj>/<proj>/views.py` put:
+In =<proj>/<proj>/views.py= put:
 
-    from pyramid.response import Response
-    from pyramid.view import view_config
-    @view_config(route_name='hello')
-    def hello_world(request):
-        return Response('Hello')
+#+BEGIN_SRC python
+from pyramid.response import Response
+from pyramid.view import view_config
+@view_config(route_name='hello')
+def hello_world(request):
+    return Response('Hello')
+#+END_SRC
 
 * templating
 ** basics
 
 Extend the view annotation to add a template
 
-    @view_config(route_name='home', renderer='templates/t1.pt')
-    def my_view(request):
-        return {'project': 'annie'}
+#+BEGIN_SRC python
+@view_config(route_name='home', renderer='templates/t1.pt')
+def my_view(request):
+    return {'project': 'annie'}
+#+END_SRC
 
 This returns a hashtable to the template with the single key: project,
 with it's value being 'annie'.  This can then be used in a template
 like so:
 
-    <h1>Project: ${project}</h1>
+ : <h1>Project: ${project}</h1>
 
 ** Generic Layout Templates
 
@@ -70,22 +78,26 @@ website and it will have sections that get filled in, like the body.
 It will define the header/footer/navigation, etc.
 
 To achieve that first lets create the generic layout template in the
-file: `<proj>/<proj>/templates/base_layout.pt`
+file: =<proj>/<proj>/templates/base_layout.pt=
 
-    <html>
-      <body>
-        <div metal:define-slot="content"></div> 
-      </body>
-    </html>
+#+BEGIN_SRC html
+<html>
+  <body>
+    <div metal:define-slot="content"></div> 
+  </body>
+</html>
+#+END_SRC
 
 Then we can use this layout template to create an 'about us' page.  In
-file: `.../templates/about_us.pt` put:
+file: =.../templates/about_us.pt= put:
 
-    <div metal:use-macro="load: base_layout.pt">
-        <div metal:fill-slot="content">
-            <p>Hello World.</p>
-        </div>
+#+BEGIN_SRC html
+<div metal:use-macro="load: base_layout.pt">
+    <div metal:fill-slot="content">
+        <p>Hello World.</p>
     </div>
+</div>
+#+END_SRC
 
 ** Includes
 
@@ -93,23 +105,25 @@ file: `.../templates/about_us.pt` put:
    to include in many places on our website, but when next year rolls
    around we only want to update it with the new year once.
 
-   In file: `<proj>/<proj>/templates/snippets.pt` put:
+   In file: =<proj>/<proj>/templates/snippets.pt= put:
 
-     <p metal:define-macro="copyright">
-       Copyright 2011, <em>Foobar</em> Inc.
-     </p>
+#+BEGIN_SRC html
+<p metal:define-macro="copyright">
+  Copyright 2011, <em>Foobar</em> Inc.
+</p>
+#+END_SRC
    
-   Lets include this in our 'about us' page, in file:
-   `<proj>/<proj>/templates/about.pt` put:
+   Lets include this in our =about us= page, in file:
+   =<proj>/<proj>/templates/about.pt= put:
 
-     <span metal:use-macro="load: copyright.pt"/>
+ : <span metal:use-macro="load: copyright.pt"/>
 
    Try:
      
-     <span metal:use-macro="container['copyright.pt'].macros.copyright"/>
+ : <span metal:use-macro="container['copyright.pt'].macros.copyright"/>
 
 
-     load('032-master-template.pt').macros['title']
+ : load('032-master-template.pt').macros['title']
 
 * chameleon
 
@@ -131,7 +145,7 @@ in this case, and curr holds the current friend.
 
 You could use this in a table like so:
 
-```html
+#+BEGIN_SRC html
 <table border=1>
   <tr><th>Name</th><th>Age</th></tr>
   <tr tal:repeat="friend friends">
@@ -139,13 +153,15 @@ You could use this in a table like so:
       <td>${friend.age}</td>
   </tr>
 </table>
-```
+#+END_SRC
 
 You could use it in bulleted list like so:
 
+#+BEGIN_SRC html
 <ul tal:repeat="friend friends">
   <li>Name: ${friend.name}, Age: ${friend.age}</li>
 </ul>
+#+END_SRC
 
 ** links
 * database, models, sqlalchemy
@@ -155,7 +171,7 @@ You could use it in bulleted list like so:
 ** Create project
 Use the sqlalchemy scaffold:
 
-    % pcreate -s sqlalchemy <project_name>
+ : % pcreate -s sqlalchemy <project_name>
 
 ** Init the database
 
@@ -167,28 +183,30 @@ A script is installed into your virtual environment
 called: 'initialize_<project_name>_db'.  Run that 
 now like so:
 
-    % initialize_<proj>_db development.ini
+ : % initialize_<proj>_db development.ini
 
 ** Add/Change model
 
-Lets create a model called 'friend', which keeps track of
+Lets create a model called =friend=, which keeps track of
 your friends names and ages.
 
-In file: <proj>/<proj>/models.py put something like:
+In file: =<proj>/<proj>/models.py= put something like:
 
-    class Friend(Base):
-        __tablename__ = 'friends'
-        id = Column(Integer, primary_key=True)
-        name = Column(Text)
-        age = Column(Integer)
-     
-        def __init__(self, name, age):
-            self.name = name
-            self.age = age
+#+BEGIN_SRC python
+class Friend(Base):
+    __tablename__ = 'friends'
+    id = Column(Integer, primary_key=True)
+    name = Column(Text)
+    age = Column(Integer)
+ 
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+#+END_SRC
 
 Re-run:
 
-    % initialize_<proj>_db development.ini
+ : % initialize_<proj>_db development.ini
 
 to have your friends table be created.
 
@@ -200,26 +218,27 @@ strings with your own project name.
 Lets add some data into the database by hand.  First add
 the following into 'development.ini'
 
-```
+#+BEGIN_SRC conf
 [pshell]
 m = sierraspicevancom.models
 session = sierraspicevancom.models.DBSession
 t = transaction
+#+END_SRC
 ```
 
 Now start up the 'pshell'
 
-    % pshell development.ini
+ : % pshell development.ini
 
 Create a 'Friend' object:
 
-```
+#+BEGIN_SRC python
 from sierraspicevancom.models import *
 friend = Friend(name="fenton",age=10)
 session.add(friend)
 t.commit()
 session.query(Friend).all()
-```
+#+END_SRC
 
 * viewing data
 
@@ -230,22 +249,23 @@ Create the basic route, view and template, called: 'show_friends'.  See:
 
 The view portion should look like this:
 
-```python
+#+BEGIN_SRC python
 @view_config(route_name='show_friends', renderer='templates/show_friends.pt')
 def show_friends_view(request):
     friends = DBSession.query(Friend).all()
     return {"friends": friends}
-```
+#+END_SRC
+
 
 ** commandline test view
 
 Test from the command line (pshell).  
 
-```python
+#+BEGIN_SRC python
 import sierraspicevancom.views as view
 fs = views.show_friends_view(request)
 fs
-```
+#+END_SRC
 
 The output should basically be quite similar to the 
 [[*add%20some%20data][session.query(Friend).all()]] call.
@@ -254,7 +274,7 @@ The output should basically be quite similar to the
 
 Now lets get the web page showing this, the template should look like:
 
-```html
+#+BEGIN_SRC html
 These are your friends:<br/>
 <table border=1>
   <tr><th>Name</th><th>Age</th></tr>
@@ -263,7 +283,7 @@ These are your friends:<br/>
       <td>${friend.age}</td>
   </tr>
 </table>
-```
+#+END_SRC
 
 visit: http://localhost:6543/show_friends to see the results.
 
@@ -282,42 +302,42 @@ template that is: 'add_friend'.
 
 In our 'views.py' file add the following imports:
 
-```python
+#+BEGIN_SRC python
 import colander
 from deform.form import Form
 from deform import ValidationFailure
 from pyramid.httpexceptions import HTTPFound
-```
+#+END_SRC
 
 For forms we create a Colander schema.  These are the fields
 that you want to see on your form.  In our case we'll make
-a trivial schema called 'Friend' with two fields: 'name', and
+a trivial schema called 'FriendSchema' with two fields: 'name', and
 'age'.
 
 ** Colander Schema
 
-```python
-class Person(colander.MappingSchema):
+#+BEGIN_SRC python
+class FriendSchema(colander.MappingSchema):
     name = colander.SchemaNode(colander.String())
     age = colander.SchemaNode(colander.Integer())
-```
+#+END_SRC
 
 ** View code
 
 Now the view function
 
-```python
+#+BEGIN_SRC python
 @view_config(route_name='add_person', renderer="templates/add_person.pt")
 def add_person_view(request):
-    schema = Person()
+    schema = FriendSchema()
     myform = Form(schema, buttons=('submit',))
     return {"form": myform.render()}
 
-```
+#+END_SRC
 
 ** Template code
 
-    <div tal:content="structure form">form</div>
+ : <div tal:content="structure form">form</div>
 
 + [[http://chameleon.readthedocs.org/en/latest//reference.html#tal-content][tal:content reference]]
 
@@ -332,11 +352,11 @@ view function to look for a post submit like so:
 
 *** Detect POST
 
-```python
+#+BEGIN_SRC python
 if 'submit' not in request.POST: # process the filled out form
     return {"form": my_form.render()}
 else: # process form
-```
+#+END_SRC
 
 So we check if there is an element called 'submit' in the 
 request.POST array, that is we are receiving the posted 
@@ -349,13 +369,13 @@ The first thing we want to do is VALIDATE our returned data.
 That is what our Colander Schema above provides us.  We do that
 like so:
 
-```python
+#+BEGIN_SRC python
 controls = request.POST.items()
 try:
     appstruct = my_form.validate(controls)
 except ValidationFailure as e:
     return {"form": e.render(), "values": False}
-```
+#+END_SRC
 
 So we extract the 'items()' from the post.
 
@@ -369,29 +389,25 @@ the errors because of the 'ValidationFailure.render()' part.
 Okay, assuming the validation passes we'd now like to save our 
 result into the database.  We can do that with:
 
-```python
+#+BEGIN_SRC python
 name = appstruct['name']
 age = appstruct['age']
 friend = Friend(name,age)
 DBSession.add(friend)
-```
+#+END_SRC
 
 *** Redirect to show_friends
 
 It nice to see the result of adding a friend in your friend list
 so we can redirect there with:
 
-```python
+#+BEGIN_SRC python
 url = request.route_url('show_friends') 
 return HTTPFound(location=url)
-```
+#+END_SRC
 
 * Authorization / Authentication
-
 + [[http://michael.merickel.org/projects/pyramid_auth_demo/intro.html][AA Tutorial]]
-
-
-
 * Model, View, Template, and Form
 
 Now lets put together our view and model.  Open 'views.py' 
@@ -411,18 +427,17 @@ model.
 
 see: [[*routes][routes]], [[*views][views]] and [[*templating][templating]] for how to do that.
 
-
 * testing
 
 + [[http://docs.pylonsproject.org/projects/pyramid_tutorials/en/latest/getting_started/05-tests/index.html][tutorial reference]]
 
 ** install test frameworks
 
-    % pip install webtest nose
+ : % pip install webtest nose
 
 ** run tests
 
-    % nosetests . 
+ : % nosetests . 
 * shell
 There is a REPL shell.  'pshell'.
 
@@ -432,18 +447,129 @@ There is a REPL shell.  'pshell'.
 
 In the '[pshell]' section of 'development.ini' add:
 
-    setup = sierraspicevancom.pshell.setup
+ : setup = sierraspicevancom.pshell.setup
 
 Now create the file: '<proj>/<proj>/pshell.py' and put the following in it:
 
-```python
+#+BEGIN_SRC python
 from webtest import TestApp
 def setup(env):
     env['request'].host = 'sierra.spicevan.com'
     env['request'].scheme = 'http'
     env['testapp'] = TestApp(env['app'])
-```
+#+END_SRC
+
 + [[http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/commandline.html#extending-the-shell][reference]]
 
 here we get access to a 'TestApp' variable 'testapp' that lets us interact
 with our application from the command line.
+* Security
+** first cut
+
+Put the following into: =<proj>/<app>/__init__.py=
+
+#+BEGIN_SRC python -n
+def groupfinder(userid, request):
+    return ['g:employee']
+class Root(object):
+    __acl__ = [(Allow, Authenticated, 'employee'),]
+    def __init__(self, request):
+        self.request = request
+def main():
+    authn_policy = AuthTktAuthenticationPolicy(
+        'the_seekrit',
+        callback=groupfinder,
+    )
+    authz_policy = ACLAuthorizationPolicy()
+    config = Configurator(
+        authentication_policy=authn_policy,
+        authorization_policy=authz_policy,
+        root_factory=Root,
+    )
+    # ... the rest of your main code
+#+END_SRC
+
+#+BEGIN_SRC python
+
+#+END_SRC
+
+** the code
+
+#+BEGIN_SRC python
+# ----- SOME VIEWS -----
+@view_config(route_name='home')
+def home(request):
+    msg = 'Home page open to ANYONE!'
+    return Response(msg)
+@view_config(route_name='employee_login')
+def employee_login(request):
+    headers = remember(request, 'joe')
+    url = request.route_url('company')
+    return HTTPFound(url, headers=headers)
+@view_config(route_name='company', permission='employee')
+def company(request):
+    msg = 'This is the company page.<b/>'
+    msg += 'To see this page you must simply be authenticated'
+    return Response(msg)
+@view_config(route_name='logoff')
+def logoff(request):
+    headers = forget(request)
+    loc = request.route_url('home')
+    return HTTPFound(location=loc, headers=headers)
+
+# normally use userid to lookup group list
+def groupfinder(userid, request):
+    return ['g:employee']
+class Root(object):
+    __acl__ = [(Allow, Authenticated, 'employee'),]
+    def __init__(self, request):
+        self.request = request
+def main():
+    authn_policy = AuthTktAuthenticationPolicy(
+        'the_seekrit',
+        callback=groupfinder,
+    )
+    authz_policy = ACLAuthorizationPolicy()
+    config = Configurator(
+        authentication_policy=authn_policy,
+        authorization_policy=authz_policy,
+        root_factory=Root,
+    )
+    # ... the rest of your main code
+#+END_SRC
+
+** authentication
+
+At some point in your application you will authenticate the 
+user.  You do this with the following lines of code:
+
+#+BEGIN_SRC python
+headers = remember(request, 'joe')
+url = request.route_url('company')
+return HTTPFound(url, headers=headers)
+#+END_SRC
+
+The `remember` method creates a cookie that gets sent back to 
+the client in the response:
+
+    return HTTPFound(url, headers=headers)
+
+** ACL
+
+Each request that comes through will look at the permission
+associated with the view.  It will then call the `callback`
+function: `groupfinder` passing in `userid` to get a list
+of groups back.  The list should prepend the group names 
+with `g:`.
+
+The `Root` class `__acl__` member will then be scanned.  It is 
+a list of tuples.  The tuple is: `Allow/Deny`, `group`, 
+`permission`.
+
+** Retrieve user id
+
+You can get the user id in a view with:
+
+    name = authenticated_userid(request)
+
+

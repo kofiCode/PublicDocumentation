@@ -1,0 +1,29 @@
+* Simple
+
+class User(Base):
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key=True)
+    name = Column(Text)
+
+    def __init__(self, name):
+        self.name = name
+
+
+* One to many
+
+User may have multiple email addresses:
+
+class User(Base):
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key=True)
+    name = Column(String, unique=True)
+    emails = relationship("Email", backref="user")
+
+class Email(Base):
+    __tablename__ = 'emails'
+    id = Column(Integer, primary_key=True)
+    email = Column(String)
+    user_id = Column(Integer, ForeignKey('users.id'))
+
+u = User(name="a")
+u.emails = [Email(email="abc.com")]

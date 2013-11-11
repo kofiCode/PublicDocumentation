@@ -405,7 +405,6 @@ Now lets assign it properly with:
 ```
 
 * Org Mode
-
 ** Common
 | A-Left/Right | promote/demote item |
 | S-Left/Right | todo/done/nothing   |
@@ -446,7 +445,6 @@ Agenda View
 
 Use Shift and arrows to skip days or weeks. Use the mouse on the
 calendar or press Enter on a specific day to choose it.
-
 
 ** Links
 
