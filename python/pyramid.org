@@ -3,7 +3,10 @@
 
 This time lets use =alchemy=, naming our project =pyr1=.
 
+Characters to use: alpha_numeric and '_' only.  Don't use '.'
+
  : % pcreate -s alchemy pyr1
+
 
 NOTE: to see a list of project types do:
 
