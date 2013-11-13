@@ -1,4 +1,4 @@
-## run solr as a service on linux
+** run solr as a service on linux
 
 [ref][r1]
 
@@ -33,13 +33,13 @@ $ sudo sv start solr
 $ sudo sv status solr
 ```
 
-### Test
+*** Test
 
 ```
 http://127.0.0.1:8983/solr/admin/
 ```
 
-### Logging
+*** Logging
  
 By default, Solr logs to STD ERROR. You likely want to add a log
 configuration file to have the most control over how Solr logs – see
@@ -87,7 +87,7 @@ sudo chmod +x /etc/sv/solr/log/run
 The next time runit starts, Solr logs will be logged to the
 /etc/sv/solr/log/current file and auto rolled for you.
 
-## Install solr
+** Install solr
 
 
 ```bash
@@ -104,7 +104,7 @@ copy in the schema.xml document into: example/solr/conf/schema.xml
 Ctrl-c and restart solr to pickup the new schema.
 
 
-## Delete the index
+** Delete the index
 
 clean, scrub, empty
 
@@ -112,12 +112,12 @@ clean, scrub, empty
 http://127.0.0.1:8983/solr/update?commit=true&stream.body=<delete><query>*:*</query></delete>
 ```
 
-## Highlighting found terms
+** Highlighting found terms
 
 ```
 http://192.168.0.22:8983/solr/select?q=fenton&hl=true&hl.fl=*
 ```
-# Publishing System Architecture
+* Publishing System Architecture
 
 Source files are edited using [markdown][md] syntax.  They are stored
 in a git project, `documentation`, that is expected to be here:

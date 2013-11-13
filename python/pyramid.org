@@ -91,7 +91,7 @@ file: =<proj>/<proj>/templates/base_layout.pt=
 </html>
 #+END_SRC
 
-Then we can use this layout template to create an 'about us' page.  In
+Then we can use this layout template to create an =about us= page.  In
 file: =.../templates/about_us.pt= put:
 
 #+BEGIN_SRC html
@@ -140,10 +140,12 @@ a list of friends:
 | fenton | 10  |
 | annie  | 30  |
 
-friends = [{"name": "fenton, "age": 10},
-           {"name": "annie,  "age": 30}]
+#+BEGIN_SRC python
+friends = [{"name": "fenton", "age": 10},
+           {"name": "annie",  "age": 30}]
+#+END_SRC
 
-We use 'tal:repeat="curr list", where list would be 'friends'
+We use tal:repeat="curr list", where list would be =friends=
 in this case, and curr holds the current friend.
 
 You could use this in a table like so:
@@ -183,7 +185,7 @@ This is fine as as we can move to PostgreSQL at a
 later date.
 
 A script is installed into your virtual environment
-called: 'initialize_<project_name>_db'.  Run that 
+called: =initialize_<project_name>_db=.  Run that 
 now like so:
 
  : % initialize_<proj>_db development.ini
@@ -215,11 +217,11 @@ to have your friends table be created.
 
 * add some data
 
-My project is called: 'sierraspicevancom', so replace those
+My project is called: =sierraspicevancom=, so replace those
 strings with your own project name.
 
 Lets add some data into the database by hand.  First add
-the following into 'development.ini'
+the following into =development.ini=
 
 #+BEGIN_SRC conf
 [pshell]
@@ -229,7 +231,7 @@ t = transaction
 #+END_SRC
 ```
 
-Now start up the 'pshell'
+Now start up the =pshell=
 
  : % pshell development.ini
 
@@ -467,11 +469,12 @@ def setup(env):
 here we get access to a 'TestApp' variable 'testapp' that lets us interact
 with our application from the command line.
 * Security
+
 ** first cut
 
 Put the following into: =<proj>/<app>/__init__.py=
 
-#+BEGIN_SRC python -n
+#+BEGIN_SRC python -n -r
 def groupfinder(userid, request):
     return ['g:employee']
 class Root(object):
@@ -480,7 +483,7 @@ class Root(object):
         self.request = request
 def main():
     authn_policy = AuthTktAuthenticationPolicy(
-        'the_seekrit',
+        'the_seekrit', (ref:secret)
         callback=groupfinder,
     )
     authz_policy = ACLAuthorizationPolicy()
@@ -492,13 +495,11 @@ def main():
     # ... the rest of your main code
 #+END_SRC
 
-#+BEGIN_SRC python
-
-#+END_SRC
+In line: [[(secret)]] you would normally put a value you pull from your settings file.
 
 ** the code
 
-#+BEGIN_SRC python
+#+BEGIN_SRC python -n
 # ----- SOME VIEWS -----
 @view_config(route_name='home')
 def home(request):
@@ -576,3 +577,4 @@ You can get the user id in a view with:
     name = authenticated_userid(request)
 
 
+#+OPTIONS: ^:nil
