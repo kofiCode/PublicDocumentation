@@ -1,13 +1,10 @@
 *~
-#*
 .#*
 log.txt
-#*
-#*
-#*
 /emacs.html
 /#emacs.org#
 *.fasl
 index.org
+*.pyc
+*.html
 /python/__init__.py
-/python/__pycache__/helper.cpython-33.pyc

@@ -18,7 +18,7 @@ NOTE: to see a list of project types do:
 
 ** run
 
-   % pserve development.ini
+ : % pserve development.ini
 
 ** set port
 
@@ -443,6 +443,84 @@ see: [[*routes][routes]], [[*views][views]] and [[*templating][templating]] for 
 ** run tests
 
  : % nosetests . 
+
+** integration testing views
+
+Normally we'd like to find a way to test our webapp that doesn't 
+require parsing resulting HTML.  Views *DONT* return HTML, but
+they return the state that we are interested in testing in a 
+programmatically easy format, the =dict= object. 
+
+*** Modify __init.py__
+
+Move your =add_route()= and =scan()= calls to the config object
+into a function called: =includeme()=, example:
+
+#+BEGIN_SRC python -r
+def includeme(config):
+    config.add_static_view('static', 'static', cache_max_age=3600)
+    config.add_route('home', '/')
+    config.scan()
+#+END_SRC
+
+*** Modify your tests.py
+
+Now update your tests.py =setUp()= to include your [[(ref:includeme)][includeme]]
+configuration, from =__init.py__=:
+
+#+BEGIN_SRC python -r
+class TestMyViews(unittest.TestCase):
+    def setUp(self):
+        import my_app                                     (ref:myapp)            
+        self.config = testing.setUp()
+        self.config.include('my_app')                     (ref:includeme)
+#+END_SRC 
+
+Don't forget to modify the references to =my_app=, [[(ref:myapp)][here]] and [[(ref:includeme)][here]].
+
+*** Setup your test DB
+
+Here we continue the =setUp()= method adding in code to initialize
+a testing database.
+
+#+BEGIN_SRC python -r
+class TestMyViews(unittest.TestCase):
+    def setUp(self):
+        # ... the include code above ...
+        from sqlalchemy import create_engine
+        engine = create_engine('sqlite:///my_app.sqlite') (ref:myapp3)
+        from .models import (
+            Base,
+            MyModel, (ref:model)
+            )
+        DBSession.configure(bind=engine)
+        Base.metadata.create_all(engine)
+    def tearDown(self):
+        DBSession.remove()
+        testing.tearDown()
+#+END_SRC 
+
+Modify the reference to =my_app= [[(ref:myapp3)][here]] to reflect the name of your
+application.
+
+Import the models you want to test [[(ref:model)][here]].
+
+*** Test the view
+
+#+BEGIN_SRC python -r
+def test_home_view(self):
+    from .views import home_view         (ref:view_name)
+    request = testing.DummyRequest()
+    with transaction.manager:            (ref:with_transaction)
+        result = home_view(request)
+        self.assertEqual(result['name'], "fenton")
+#+END_SRC
+
+Import the function name of the view you want to test [[(ref:view_name)][here]].
+
+If you are testing an aspect of your view that interacts
+with the DB, then run it inside a [[(ref:with_transaction)][with transaction]].
+
 * shell
 There is a REPL shell.  'pshell'.
 
@@ -469,37 +547,119 @@ def setup(env):
 here we get access to a 'TestApp' variable 'testapp' that lets us interact
 with our application from the command line.
 * Security
-
 ** first cut
 
 Put the following into: =<proj>/<app>/__init__.py=
 
-#+BEGIN_SRC python -n -r
+#+BEGIN_SRC python  -r
+from pyramid.authentication import AuthTktAuthenticationPolicy
+from pyramid.authorization import ACLAuthorizationPolicy
+from pyramid.security import Allow, Authenticated, ALL_PERMISSIONS
 def groupfinder(userid, request):
-    return ['g:employee']
+    return ['g:user']
 class Root(object):
-    __acl__ = [(Allow, Authenticated, 'employee'),]
+    __acl__ = [
+        (Allow, Authenticated, 'view'),      (ref:authenticated)
+        (Allow, 'g:user', 'edit'),           (ref:user_edit)
+        (Allow, 'g:admin', ALL_PERMISSIONS), (ref:all_permissions)
+    ]
     def __init__(self, request):
         self.request = request
 def main():
+    # ...
     authn_policy = AuthTktAuthenticationPolicy(
-        'the_seekrit', (ref:secret)
-        callback=groupfinder,
+        'the_seekrit',
+        callback=groupfinder, (ref:group_callback)
     )
     authz_policy = ACLAuthorizationPolicy()
     config = Configurator(
         authentication_policy=authn_policy,
         authorization_policy=authz_policy,
-        root_factory=Root,
+        root_factory=Root, (ref:root_factory),
+        settings=settings
     )
-    # ... the rest of your main code
+    # ...
 #+END_SRC
 
-In line: [[(secret)]] you would normally put a value you pull from your settings file.
+
+** authenticate
+
+In your =views.py= file, your view method should have code like:
+
+#+BEGIN_SRC python  -r 
+from pyramid.security import remember, forget
+from pyramid.httpexceptions import HTTPFound, HTTPForbidden
+
+security_cookie_http_header = remember(request, 'joe') (ref:username)
+url = request.route_url('success_page')
+return HTTPFound(url, headers=security_cookie_http_header) (ref:add_headers)
+#+END_SRC
+
+The key is to create a security cookie with the [[(username)][remember()]] function, 
+and then send the cookie back by setting the [[(add_headers)][headers argument]] in 
+the =HTTPFound= constructor.  
+
+** Authorize (ACL)
+
+Now we've created a security cookie that will be passed back with each
+additional request to the server.  When a piece of view code has a
+permission set like so:
+
+#+BEGIN_SRC python -r 
+@view_config(route_name='edit_customer', permission='edit', renderer='templates/add_friend.pt') (ref:group)
+def edit_customer_view(request):
+#+END_SRC
+
+The first thing that happens is the [[(group_callback)][group callback function: groupfinder]]
+is called.  The function will be passed the [[(username)][username you stored]] 
+with the =remember()= function.  This is normally where you'd lookup
+the user in a database and return a list of groups they belonged
+to.  Remember to prepend group names with the =g:= string.
+
+The next step is to look for a tuple in the =__acl__= member list 
+of the class you provided as the [[(root_factory)][root factory]] of the =Configurator=.
+This tuple has three elements.  
+
+#+ATTR_HTML: border="2" rules="all" frame="border"
+| Allow/Deny | user/group | permission |
+
+The first indicates whether to
+=Allow= or =Deny=.  The second element is the *who*, so it could be
+your username, it could be a group you belong to, or it could simply
+be any =Authenticated= user.  The last part is the permission name.
+This is the name you put above your [[(group)][view function]].
+
+We have three rules in our example:  Any [[(authenticated)][authenticated]] user gets the
+=view= permission.  If a user belongs to the group =user=, then they
+get the =edit= [[(user_edit)][permission]].  Finally, users belonging to the =admin=
+group get [[(all_permissions)][all permissions]].
+
+** logout / de-authorize
+
+Use the =forget()= function to create headers that will cause the 
+auth cookie to be expired:
+
+#+BEGIN_SRC python -r
+headers = forget(request)
+loc = request.route_url('home')
+return HTTPFound(location=loc, headers=headers)
+#+END_SRC
+
+** Retrieve user id
+
+Since this is a web-app, and therefore stateless, if we need to 
+figure out which user is making any given request, we can do so 
+by putting the following in your view/template code:
+
+#+BEGIN_SRC python
+name = authenticated_userid(request)
+#+END_SRC
 
 ** the code
 
-#+BEGIN_SRC python -n
+Here is a longer sample:
+
+#+BEGIN_SRC python 
 # ----- SOME VIEWS -----
 @view_config(route_name='home')
 def home(request):
@@ -542,39 +702,6 @@ def main():
     # ... the rest of your main code
 #+END_SRC
 
-** authentication
-
-At some point in your application you will authenticate the 
-user.  You do this with the following lines of code:
-
-#+BEGIN_SRC python
-headers = remember(request, 'joe')
-url = request.route_url('company')
-return HTTPFound(url, headers=headers)
-#+END_SRC
-
-The `remember` method creates a cookie that gets sent back to 
-the client in the response:
-
-    return HTTPFound(url, headers=headers)
-
-** ACL
-
-Each request that comes through will look at the permission
-associated with the view.  It will then call the `callback`
-function: `groupfinder` passing in `userid` to get a list
-of groups back.  The list should prepend the group names 
-with `g:`.
-
-The `Root` class `__acl__` member will then be scanned.  It is 
-a list of tuples.  The tuple is: `Allow/Deny`, `group`, 
-`permission`.
-
-** Retrieve user id
-
-You can get the user id in a view with:
-
-    name = authenticated_userid(request)
 
 
 #+OPTIONS: ^:nil
