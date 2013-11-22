@@ -1,3 +1,49 @@
+* Daily Start Steps
+
+** Start pServer
+
++ Open Terminal
+
++ Start virtual env
+
+ : % v pyr
+
++ cd to home folder
+
+ : % cd ~/projects/python/junk2_auth
+
++ start pserve
+
+ : % pserve --reload development.ini
+
+** Start livereload
+
++ Open Terminal
+
++ Start virtual env
+
+ : % v pyr
+
++ cd to home folder
+
+ : % cd ~/projects/python/junk2_auth
+
++ start livereload
+
+ : % livereload
+
+** Open URL
+
+ : 0.0.0.0:6543
+
+** Open Emacs
+
+| routes    | <proj>/__init.py__ |
+| views     | <proj>/views.py    |
+| models    | <proj>/models.py   |
+| templates | <proj>/templates/* |
+| tests     | <proj>/tests.py    |
+
 * start project
 ** create
 
@@ -705,3 +751,116 @@ def main():
 
 
 #+OPTIONS: ^:nil
+* i18n
+
+*SECTIONS STATUS*:
+
+When I run the translate command at the end of the *dependencies*
+section below.  the =pot= file doesn't contain any strings to
+be translated.
+
+*FIX SUGGESTIONS*: 
+
++ Understand better what =*.pot= files are.
++ Read more thoroughly the pyramid translation webpage:
+  [[http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/i18n.html][i18n ref]].
+
+** dependencies
+
++ See [[http://stackoverflow.com/questions/14892977/internationalization-with-pyramid-and-python-3][this answer]] in StackOverflow to get the right version of 
+dependent libraries.  Make sure to get the answer that has a 
+checkmark (not the first answer)!!!
+
++ Addendum to his answer.  File locations:
+
+=<proj>/<app>/scripts/translate.py=
+
++ modify =translate.py= with:
+
+#+BEGIN_SRC python
+python27 = '/home/fenton/.virtualenvs/p2/bin/python'
+setup_file = 'setup_i18n.py'
+#+END_SRC
+
++ modify the =entry_points= in =setup.py= so the line says:
+
+#+BEGIN_SRC 
+junk2_auth_translate = junk2_auth.scripts.translate:main 
+#+END_SRC
+
+*NOTE:* Change =junk2_auth= to be your <app> name.
+
++ re-install with:
+
+Ensure you are in your Python 3 virtual environment.
+
+ : % python setup.py develop
+
++ template
+
+Sample content for: =<proj>/<app>/templates/mytemplate.pt=:
+
+#+BEGIN_SRC html
+<html><body><span tal:content="my_translation_string"/></body></html>
+#+END_SRC
+
++ execute translation:
+
+ : % junk2_auth_translate
+
+** setup.py
+
+in =setup.py= put:
+
+#+BEGIN_SRC python -r
+setup(name="mypackage",
+      # ...
+      install_requires = [
+            # ...
+            'Babel',
+            'lingua',
+            ],
+      message_extractors = { '.': [
+            ('**.py',   'lingua_python', None ),
+            ('**.pt',   'lingua_xml', None ),
+            ]},
+      )
+#+END_SRC
+
+** development.ini
+
+#+BEGIN_SRC conf
+pyramid.default_locale_name = en
+#+END_SRC
+
+** In templates
+
++ [[http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/i18n.html#chameleon-template-support-for-translation-strings][ref]]
+
+You can put *any* of the following in your Chameleon templates:
+
+#+BEGIN_SRC html -r
+<span tal:content="some_translation_string"/>
+<span tal:replace="some_translation_string"/>
+<span>${some_translation_string}</span>
+<a tal:attributes="href some_translation_string">Click here</a>
+#+END_SRC
+
+so lets put:
+
+#+BEGIN_SRC html
+<span tal:content="my_translation_string"/>
+#+END_SRC
+
+into =<proj>/<app>/templates/mytemplate.pt=.
+
+** Extract Translation Strings
+
+ensure folder: =<proj>/<app>/locale= exists.
+
+#+BEGIN_SRC sh
+% cd <proj>
+% python setup.py extract_messages 
+#+END_SRC
+
+

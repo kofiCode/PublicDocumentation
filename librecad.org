@@ -3,7 +3,7 @@
 These notes are designed around the use case of drawing house plans.
 Units will be feet and inches.
 
-* setting units
+* Setting Units
 
 Edit > Current Drawing Preferences > Units (tab) > 
 
@@ -13,6 +13,7 @@ Length:
   Precision: 0 1/4
 
 * Drawing our first room
+
 
 So we'll draw a room.  First lets draw one wall.
 
