@@ -752,115 +752,146 @@ def main():
 
 #+OPTIONS: ^:nil
 * i18n
+** Definitions
 
-*SECTIONS STATUS*:
++ extract_messages -> *.pot
 
-When I run the translate command at the end of the *dependencies*
-section below.  the =pot= file doesn't contain any strings to
-be translated.
-
-*FIX SUGGESTIONS*: 
-
-+ Understand better what =*.pot= files are.
-+ Read more thoroughly the pyramid translation webpage:
-  [[http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/i18n.html][i18n ref]].
-
-** dependencies
-
-+ See [[http://stackoverflow.com/questions/14892977/internationalization-with-pyramid-and-python-3][this answer]] in StackOverflow to get the right version of 
-dependent libraries.  Make sure to get the answer that has a 
-checkmark (not the first answer)!!!
-
-+ Addendum to his answer.  File locations:
-
-=<proj>/<app>/scripts/translate.py=
-
-+ modify =translate.py= with:
-
-#+BEGIN_SRC python
-python27 = '/home/fenton/.virtualenvs/p2/bin/python'
-setup_file = 'setup_i18n.py'
-#+END_SRC
-
-+ modify the =entry_points= in =setup.py= so the line says:
+ : (p2)% python setup_i18n.py extract_messages
 
 #+BEGIN_SRC 
-junk2_auth_translate = junk2_auth.scripts.translate:main 
+`-- junk2_auth
+    `-- locale
+        `-- junk2_auth.pot
 #+END_SRC
 
-*NOTE:* Change =junk2_auth= to be your <app> name.
+When you run 'extract message', a =*.pot= file is created.  Don't
+edit it.  It just has all your strings, but no connection
+to a given language yet.
 
-+ re-install with:
++ init_catalog -> *.po
 
-Ensure you are in your Python 3 virtual environment.
+Now you can create files, from the =*.pot= file, for a given 
+language.  Below we use french =fr=.  These *.po files are what
+your translators will edit.
 
- : % python setup.py develop
+*NOTE*: you only do this =init_catalog= step once per language.
+Subsequent times use =update_catalog= or you will over-write
+existing translations!
 
-+ template
+ : (p2)% python setup_i18n.py init_catalog -l fr
 
-Sample content for: =<proj>/<app>/templates/mytemplate.pt=:
-
-#+BEGIN_SRC html
-<html><body><span tal:content="my_translation_string"/></body></html>
+#+BEGIN_SRC 
+junk2_auth
+`-- locale
+    |-- fr
+    |   `-- LC_MESSAGES
+    |       `-- junk2_auth.po
+    `-- junk2_auth.pot
 #+END_SRC
 
-+ execute translation:
++ update_catalog *.pot -> *.po
 
- : % junk2_auth_translate
+ : (p2)% python setup_i18n.py update_catalog -l fr
 
-** setup.py
++ compile_catalog *.po -> *.mo
 
-in =setup.py= put:
+=*.mo= files are *machine* files, which are compiled from your
+=*.po= files.  You run this anytime you have new translations.
 
-#+BEGIN_SRC python -r
-setup(name="mypackage",
-      # ...
-      install_requires = [
-            # ...
-            'Babel',
-            'lingua',
-            ],
-      message_extractors = { '.': [
-            ('**.py',   'lingua_python', None ),
-            ('**.pt',   'lingua_xml', None ),
-            ]},
+ : (p2)% python setup_i18n.py compile_catalog -l en 
+
+#+BEGIN_SRC 
+junk2_auth
+`-- locale
+    |-- fr
+    |   `-- LC_MESSAGES
+    |       |-- junk2_auth.mo
+    |       `-- junk2_auth.po
+    `-- junk2_auth.pot
+#+END_SRC
+
+** setup_i18n.py
+
+Babel and other packages for extracting translation strings
+doesn't work with Python 3, only Python 2.  So when we are
+working with i18n we use a terminal that is using a Python 2
+virtualenv.
+
+Create a file, =setup_i18n.py= that contains the following:
+
+#+BEGIN_SRC python
+from setuptools import setup, find_packages
+requires = [
+    'Babel',
+    'lingua',
+]
+setup(name='my_project',
+      packages=find_packages(),
+      install_requires=requires,
+      message_extractors={'.': [
+          ('**.py', 'lingua_python', None),
+          ('**.pt', 'lingua_xml', None),
+          ]},
       )
 #+END_SRC
 
-** development.ini
-
-#+BEGIN_SRC conf
-pyramid.default_locale_name = en
-#+END_SRC
+Now you can run the various extract, update, compile catalog 
+commands.
 
 ** In templates
 
-+ [[http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/i18n.html#chameleon-template-support-for-translation-strings][ref]]
-
-You can put *any* of the following in your Chameleon templates:
-
-#+BEGIN_SRC html -r
-<span tal:content="some_translation_string"/>
-<span tal:replace="some_translation_string"/>
-<span>${some_translation_string}</span>
-<a tal:attributes="href some_translation_string">Click here</a>
-#+END_SRC
-
-so lets put:
-
 #+BEGIN_SRC html
-<span tal:content="my_translation_string"/>
+<html xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      i18n:domain="junk2_auth">
+  <body>
+    <h2 i18n:translate="search_documentation">Search documentation</h2>
+  </body>
+</html>
 #+END_SRC
 
-into =<proj>/<app>/templates/mytemplate.pt=.
+make sure the =domain= matches folder where your *.pot files is.
 
-** Extract Translation Strings
+** add the translation dir
 
-ensure folder: =<proj>/<app>/locale= exists.
+in =__init.py__= put:
 
-#+BEGIN_SRC sh
-% cd <proj>
-% python setup.py extract_messages 
+#+BEGIN_SRC python
+config.add_translation_dirs('junk2_auth:locale/')
 #+END_SRC
 
+best is probably in the =includeme(config)= function
 
+** activate a locale
+
+in view you can do:
+
+#+BEGIN_SRC python
+request._LOCALE_ = 'fr'
+#+END_SRC
+
+or set a cookie:
+
+#+BEGIN_SRC python
+response = Response()
+loc = request.route_url('home')
+response.set_cookie('_LOCALE_',
+                    value='fr',
+                    max_age=31536000)  # max_age = year
+return HTTPFound(loc, headers=response.headers) 
+#+END_SRC
+
+* debugging
+
+** instrument
+
+#+BEGIN_SRC python -r
+from pudb import set_trace as trace
+trace() (ref:trace)
+#+END_SRC
+
+Just stick your  [[(ref:trace)][trace()]] command wherever you want your PuDB debugger
+to stop (a breakpoint).
+
+** PuDB Cheatsheet
+
+You can inspect (drill into) variables in the top right box with =\= key.
