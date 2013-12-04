@@ -1309,3 +1309,6 @@ Then login to server with `-X` flag:
     ssh -X user@server.com
 
 Now launch an xwindow application and should show up on local laptop. 
+* ethernet
+
+To setup an ethernet connect do the following:

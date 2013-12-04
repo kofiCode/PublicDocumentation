@@ -581,3 +581,32 @@ the single word list: `(World)`.
 . We don't need any message here because no menu 
 will be shown as there is only one option.                
                     
+* if/else
+
++ numeric comparison 
+
+#+BEGIN_SRC sh
+if [[ 2 -gt 3]]; then
+    echo "weird!"
+fi
+#+END_SRC
+
++ string comparison
+
+#+BEGIN_SRC sh
+if [[ "two" == "$number" ]]; then
+    echo "number is two!"
+fi
+#+END_SRC
+
++ if elif else
+
+#+BEGIN_SRC sh
+if [[ $# -ge 3 ]]; then
+    echo cd: too many arguments >&2
+elif [[ $# -eq 2 ]]; then
+    builtin cd $newdir
+else
+    builtin cd
+fi
+#+END_SRC
