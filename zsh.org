@@ -96,6 +96,14 @@ RPROMPT='${vcs_info_msg_1_}'
     % echo $myarr[-1]
     3
 
++ append
+
+#+BEGIN_SRC sh
+var=1
+myarr=()
+myarr+=($var)
+#+END_SRC
+
 + delete element
 
     % myarr[2]=()
