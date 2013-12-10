@@ -1,3 +1,9 @@
+* Mark Ring
+
+| C-SPC C-SPC | push mark                           |
+| C-u C-SPC   | return to last mark                 |
+| C-x C-d     | kill current mark (custom function) |
+
 * Reference
 
 [GNU Emacs Manuals Online](http://www.gnu.org/software/emacs/manual/)

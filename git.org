@@ -10,7 +10,8 @@ Now to find out what is in that stash that you might need you can do:
 
 * gitolite for security
 
-more maintained that gitosis
++ [[https://wiki.archlinux.org/index.php/gitolite][Reference]]
+
 
 
 * Adding a new Repository
