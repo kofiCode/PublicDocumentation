@@ -1,5 +1,69 @@
+* setting up a networked peer server
+
+** static ip on network
+
+First you need to give yourself a static ip when you are on certain
+networks.
+
+: /etc/netctl/
+
+#+BEGIN_SRC conf
+Interface=wlan0
+Connection=wireless
+Security=wpa
+ESSID='MyNetwork'
+Key='WirelessKey'
+IP=static
+Address='192.168.1.23/24'
+Gateway='192.168.1.1'
+DNS=('192.168.1.1')
+#+END_SRC
+
+** config router port 22
+
+you need to point port 22 on router to your ip address port 22
+
+** ddns updater
+
+forgot, login to bangkok to figure out how this is done
+
+** setup gitolite
+
+all host might as well be git repositories as well right!
+
+** setup pyramid, pserve and nginx
+
+can write applications others can use that will act like photo
+libraries etc and that they can access over the network.
+
+* FUTURE networked peer servers
+
+** get photos from phone to sync up to servers
+
+Might have to write an android app for this so that when pictures are
+taken they auto sync to your computer.
+
+** display photo library publically
+
+setup an app on machine so your photos are visible on the net...of
+course password protected.
+
+** setup peer registration
+
++ find peers to backup folders
+
+so people can find each other and then nominate each others computers
+to be the backup for their computer.  People would nominate folders
+are their computer that should be backed up.
+
++ truecrypt
+
+There could be a folder that is nominated as a truecrypt, so others
+can't see contents.
+
 * software architecture
 ** nginx
+
 nginx is the load balancer
 
 configuration [[file:/etc/nginx/conf.d/sierra.conf][/etc/nginx/conf.d/sierra.conf]]
@@ -7,6 +71,7 @@ configuration [[file:/etc/nginx/conf.d/sierra.conf][/etc/nginx/conf.d/sierra.con
 access logs: [[file:/sudo:qa@localhost:/home/qa/logs/sierra.spicevan.com/access.log][/home/qa/logs/sierra.spicevan.com/access.log]]
 
 ** pserve
+
 pserve actually serves up the python code
 
 startup script: [[file:/sudo:qa@localhost:/home/qa/projects/python/sierra.spicevan.com/scripts/prod_deamon_start.sh][/home/qa/projects/python/sierra.spicevan.com/scripts/prod_deamon_start.sh]]
@@ -19,8 +84,8 @@ logs:
  [[file:/sudo:qa@localhost:/home/qa/projects/python/sierra.spicevan.com/pyramid_5001.log][/home/qa/projects/python/sierra.spicevan.com/pyramid_5001.log]]
 
 ** supervisor
-supervisor starts up 2 pserves and ensures they stay running
 
+supervisor starts up 2 pserves and ensures they stay running
 
 conf: [[file:/sudo:root@b-dell:/etc/supervisor.d/sierra.spicevan.com.ini][/etc/supervisor.d/sierra.spicevan.com.ini]]
 log files: 
@@ -28,24 +93,17 @@ log files:
    [[file:/sudo:qa@localhost:/home/qa/sierra.spicevan.com-1.log][/home/qa/sierra.spicevan.com-1.log]]
 
 * deployment steps
-
 ** developer edits code
 
 ** log in as qa
-
-
-
 
 * bangkok router
 
 Only works with windows 8 and 
 192.168.2.1
 
-* nginx reverse proxy / load balancer
 
-+ [[http://www.cyberciti.biz/tips/using-nginx-as-reverse-proxy.html][reference]]
-
-* Dynamic DNS
+* Dynamic DNS (MISSING INFO)
 
 username: ftravers
 
@@ -73,6 +131,9 @@ bkk.webhostsunshine.com
 
 on each of these hosts there will be users: `prod` and `qa`.
 
+* nginx reverse proxy / load balancer
+
++ [[http://www.cyberciti.biz/tips/using-nginx-as-reverse-proxy.html][reference]]
 
 * OLD:
 ** Steel Bank Common Lisp

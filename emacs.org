@@ -436,6 +436,14 @@ Agenda View
 |---------+-----------------|
 | C-c RET | Horizontal Rule |
 
+*** sum a column of numbers:
+
+The following sums the rows 1->10.
+
+ : =vsum(@1..@10)
+
+*** re-calculate formulas: C-c *
+
 ** Export as HTML
 
 | Keys      | Description    |
