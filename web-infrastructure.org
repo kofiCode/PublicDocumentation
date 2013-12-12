@@ -110,9 +110,14 @@ username/password: admin/gumnuts8
 
 * Dynamic DNS (MISSING INFO)
 
+** linux box setup
+
++ 
 username: ftravers
 
 see: [[file:arch.org::*Get%20Dyn%20DNS%20URL][Get Dyn DNS URL]]
+
+
 
 ** Name servers
 
