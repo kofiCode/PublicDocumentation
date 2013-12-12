@@ -102,6 +102,11 @@ log files:
 Only works with windows 8 and 
 192.168.2.1
 
+* vancouver
+** router
+
+IP: 192.168.1.1
+username/password: admin/gumnuts8
 
 * Dynamic DNS (MISSING INFO)
 
@@ -228,3 +233,6 @@ from emacs, choose the local host: `127.0.0.1` and port `4081`.
 To quit:
 
     A-x slime-disconnect
+
+
+604-707-2290
